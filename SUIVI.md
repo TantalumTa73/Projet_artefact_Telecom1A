@@ -1,4 +1,4 @@
-#								 Suivi du projet
+# Suivi du projet
 
 
 *Texte en italique*
@@ -12,7 +12,7 @@ ___Texte en italique et en gras___
 ## 23/09/2024:
 Installation de l’OS sur la Raspberry Pi
 
-e nom **de** notre raspberry est “strawberry”. Le mot de passe est “raspberry”.
+Le nom de notre raspberry est “strawberrypi”. Le mot de passe est “pa1LLeB@ie”.
 
 
 utiliser le github
@@ -20,9 +20,8 @@ utiliser le github
 
 ### Connecter les appareils au routeur
 
-raspbery pi connecté en filiaire au serveur tp-link
-pour connecter un ordinateur au routeur sans fil : 
-se connecter par wifi au routeur:
+On connecte la raspberry pi en filaire au serveur tp-link.
+Pour connecter un ordinateur au routeur sans fil par wifi
 	clé de sécurité réseau : 53119193
 
 
@@ -37,9 +36,9 @@ Remarque : le serveur a interdit tous les accès administrateur à cause d’un 
 
 *version 2 :*
 pour rechercher toutes les adresses ip des appareils connectés:
-nmap 192.168.0.1/24
+	nmap 192.168.0.1/24
 le masque /24 indique qu’il faut chercher toutes les adresse IP commençant par 192.168.
-Cela nous donne une liste de 4 appareils. On ping chacune en débranchant puis rebranchant notre raspberry pour identifier la bonne adresse IP. On trouve que notre raspberry a l’adresse IP 192.168.0.114
+Cela nous donne une liste de 4 appareils. On ping chacune en débranchant puis rebranchant notre raspberry pour identifier la bonne adresse IP. On trouve que notre raspberry a l’adresse IP 192.168.0.100
 
 ### Se connecter en ssh à la raspberry
 
