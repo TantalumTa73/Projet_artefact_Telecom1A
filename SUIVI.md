@@ -42,3 +42,5 @@ Cela nous donne une liste de 4 appareils. On ping chacune en débranchant puis r
 
 ### Se connecter en ssh à la raspberry
 
+	
+	ssh strawberrypi@192.168.0.100
