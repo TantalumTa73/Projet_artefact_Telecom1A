@@ -44,3 +44,20 @@ Cela nous donne une liste de 4 appareils. On ping chacune en débranchant puis r
 
 	
 	ssh strawberrypi@192.168.0.100
+	
+	
+## 27/09/2024:
+
+### TESTS DES CAMERAS (Joshua, Alice)
+
+On a branché la caméra à l'ordinateur par cable USB. On peut voir l'image en tant réél, la caméra fonctionne. On a testé la librairie python open-cv pour récupérer les images de la caméra sous forme de tableau numpy. Problème : sur l'ordinateur, la capture d'une image prend 18 secondes (contre quelques instants pour capturer une image avec la webcam). 
+
+### TESTS DES MOTEURS (Martin)
+
+On a branché l'alimentation des motuers à la carte de controle et branché la carte de controle à la batterie. 
+
+### DESIGN DU ROBOT (Edouard)
+
+On a mesuré les différents éléments qui seront sur le chassis et fais un plan au brouillon de leur disposition sur le chassis.
+
+
