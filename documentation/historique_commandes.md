@@ -41,3 +41,29 @@ timedatectl list-timezones
 timedatectl set-timezone Europe/Paris
 ```
 
+# Mettre en route les moteurs 
+
+Quand connecté à la raspberry en ssh:
+```bash
+sudo apt install i2c-tools
+i2cdetect -y 1
+#Si i2cdetect ne fonctionne pas et ne renvoie pas l'adresse i2c: il faut activer i2c dans la config interface de la raspberrypi:
+sudo raspi-config
+interface options
+I2C
+enable
+#Ensuite, la commande i2cdetect -y 1 devrait renvoyer l'adresse i2c
+#Installation de la librairie DFRobot_RaspberryPi_Motor:
+sudo git clone https://github.com/DFRobot/DFRobot_RaspberryPi_Motor
+#Installation de la librairie libmraa: 
+sudo apt-get install git build-essential swig3.0 python-dev nodejs-dev cmake libjson-c-dev
+cd /tmp
+git clone https://github.com/intel-iot-devkit/mraa
+cd mraa
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+```
