@@ -1,3 +1,4 @@
+# Se connecter à la Raspberry
 Les commands éxécutés pour configurer et se connecter à la raspberrypi
 
 ```bash
@@ -26,3 +27,17 @@ Après avoir débranché la carte du routeur, on s'y connect grâce à:
 ```bash
 ssh strawberrypi@robotpi-61.enst.fr
 ```
+
+# Mettre la Raspberry à l'heure
+
+```bash
+sudo vi /etc/systemd/timesyncd.conf
+# ajout de NTP=ntp.enst.fr
+
+sudo systemctl enable systemd-timesynced.service
+sudo systemctl restart systemd-timesynced.service
+
+timedatectl list-timezones 
+timedatectl set-timezone Europe/Paris
+```
+
