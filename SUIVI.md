@@ -44,3 +44,13 @@ Cela nous donne une liste de 4 appareils. On ping chacune en débranchant puis r
 
 	
 	ssh strawberrypi@192.168.0.100
+	
+	
+## 27/09/2024:
+
+### TESTS DES CAMERAS (Joshua, Alice)
+
+On a branché la caméra à l'ordinateur par cable USB. On peut voir l'image en tant réél, la caméra fonctionne. On a testé la librairie python open-cv pour récupérer les images de la caméra sous forme de tableau numpy. Problème : sur l'ordinateur, la capture d'une image prend 18 secondes (contre quelques instants pour capturer une image avec la webcam). 
+
+
+
