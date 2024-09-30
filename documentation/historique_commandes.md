@@ -52,18 +52,7 @@ sudo raspi-config
 interface options
 I2C
 enable
-#Ensuite, la commande i2cdetect -y 1 devrait renvoyer l'adresse i2c
-#Installation de la librairie DFRobot_RaspberryPi_Motor:
-sudo git clone https://github.com/DFRobot/DFRobot_RaspberryPi_Motor
-#Installation de la librairie libmraa: 
-sudo apt-get install git build-essential swig3.0 python-dev nodejs-dev cmake libjson-c-dev
-cd /tmp
-git clone https://github.com/intel-iot-devkit/mraa
-cd mraa
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
+#installation de smbus
+sudo apt install python3-smbus
 
 ```
