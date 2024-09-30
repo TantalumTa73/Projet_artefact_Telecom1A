@@ -54,7 +54,8 @@ On a branché la caméra à l'ordinateur par cable USB. On peut voir l'image en 
 
 ### TESTS DES MOTEURS (Martin)
 
-On a branché l'alimentation des motuers à la carte de controle et branché la carte de controle à la batterie. 
+On a branché l'alimentation des moteurs à la carte de controle et branché la carte de controle à la batterie. 
+On a ensuite testé les moteurs avec un script python de base.
 
 ### DESIGN DU ROBOT (Edouard)
 
