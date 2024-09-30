@@ -52,7 +52,10 @@ sudo raspi-config
 interface options
 I2C
 enable
+
 #installation de smbus
 sudo apt install python3-smbus
 
+#résolution de bug
+#Lors du lancement du code de test, le code essayait d'accéder au port i2c-8, qui nétait pas un port que nous possédions sur notre raspberry pi. Les ports à notre disposition étaient les ports 1, 20 et 21, après deux test rapide en changeant le port 8 pour les ports 20 et 21 qui ont tous les deux résultés en des erreurs, nous avons essayé de changer le port 8 pour le port 1, ce qui a fonctionné car le moteur tournait lorsqu'on le lui demandait.
 ```
