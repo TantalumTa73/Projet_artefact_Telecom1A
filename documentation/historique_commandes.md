@@ -64,3 +64,18 @@ sudo apt install python3-smbus
 scp dc-motor-hat-tpt.tar.gz strawberrypi@robotpi-61.enst.fr
 python3 check-wiring.py
 ```
+
+# Page web pour contrôller les moteurs 
+On utilise une page web python utilisant flask pour interagire avec la raspberry sans avoir besoin de se connecter en ssh
+La page web est hosté sur http://137.194.173.61:5000/
+Les commandes exécuté pour la mettre en place sont 
+```bash
+sudo apt install flask 
+
+# Puis on a crée webpage.py et templates/page.html dans dc-motor-hat-tpt (pour avoir acces a controller.py) 
+# Pour lancer la pageweb:
+
+python webpage.py 
+```
+
+On utilise des bouttons avec des methodes post pour activer les moteurs de la raspberry
