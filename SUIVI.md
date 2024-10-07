@@ -9,6 +9,18 @@ __Texte en gras__
 ___Texte en italique et en gras___
 ~~Ce texte est barré.~~ mais pas celui-là.
 
+
+##REPARTITION DES TACHES
+
+controle des moteurs : Martin
+interface web simplifié : Jeffrey
+mini serveur permettant le controle manuel du robot : Joshua
+dialogue avec le serveur web de suivi de déplacement : Jeffrey
+Reconnaissance des codes ArUco via la caméra, évaluation de la distance : Alice
+design du robot : Edouard
+
+
+
 ## 23/09/2024:
 Installation de l’OS sur la Raspberry Pi
 
