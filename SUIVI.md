@@ -64,3 +64,12 @@ Suite à cela, on a dénudé les cables des encodeurs afin d'être capable de br
 On a mesuré les différents éléments qui seront sur le chassis et fais un plan au brouillon de leur disposition sur le chassis.
 
 
+	
+	
+## 07/10/2024:
+
+### TESTS DETECTION ARUCO (Alice)
+
+J'utilise la librairie cv2 de python pour capturer les images de la caméra et détecter les markers aruco. Il se trouve que si le marker est trop près 
+(s'il prend presque tout l'écran), le programme ne le reconnait pas. J'ai ensuite utilisé la librairie pygame pour créer une fenetre
+qui affiche en temps réel l'image de la caméra et affiche la distance estimée au marker si un marker est détecté. 
