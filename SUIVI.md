@@ -56,6 +56,8 @@ On a branché la caméra à l'ordinateur par cable USB. On peut voir l'image en 
 
 On a branché l'alimentation des moteurs à la carte de controle et branché la carte de controle à la batterie. 
 On a ensuite testé les moteurs avec un script python de base.
+Suite à cela, on a dénudé les cables des encodeurs afin d'être capable de brancher ces derniers. Une fois branchés, on a relancé d'autres tests afin de s'assurer de leur bon fonctionnement, tout en profitant de cette occasion pour faire des tests plus poussés sur le fonctionnement des moteurs en essayant de les faire tourner simultanément, à des vitesses différentes, de faire en sorte que l'un des  deux s'arrête pendant que l'autre continue à tourner etc.
+
 
 ### DESIGN DU ROBOT (Edouard)
 
