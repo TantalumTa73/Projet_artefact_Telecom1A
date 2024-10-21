@@ -79,3 +79,67 @@ python webpage.py
 ```
 
 On utilise des bouttons avec des methodes post pour activer les moteurs de la raspberry
+
+# Mise de la carte raspberry sur le gitlab
+
+Sur gitlab dans `setting > access token` on a crée un token d'authentication pour la raspbery  
+Puis on a crée un `.gitconfig` pour la raspberry
+```gitconfig
+[remote "origin"]
+  url = https://oauth2:[le token d'authentication]@gitlab.telecom-paris.fr/proj103/2425/gr6/team1.git
+[user]
+        email = Raspberry\n@project_7776_bot_6d5a4dffd92789fc507b95a2ecbf920
+        name = Raspberry
+```
+L'address email à été trouvé dans la liste des membres du gitlab
+
+On a ensuit fait 
+```bash
+git clone git@gitlab.enst.fr:proj103/2425/gr6/team1.git
+
+git config --global user.email "Raspberry@project_7776_bot_6d5a4dffd92789fc507b95a2ecbf920"
+git config --global user.name "Raspberry"
+
+git add code_raspberry/*
+
+git commit -m "Ajout du code de la raspberry"
+git push
+```
+
+# Automatisation de demarage de la page web et git pull
+
+On utilise un script bash qui est lancé par un service systemd au démarage de la raspberry pour faire un `git pull` et lancer la pageweb
+
+Le code bash en question s'appelle `raspberry_start_up.sh` et contient
+```bash
+#!/bin/bash
+
+cd /home/strawberrypi/team1/code_raspberry/
+git pull
+python webpage.py
+```
+Le fichier service est `/etc/systemd/system/start_up_pull_webpage.service` et contient 
+```service
+[Unit]
+Description=Git pull and start webpage
+After=network.target
+
+[Service]
+ExecStart=/bin/bash /home/strawberrypi/team1/raspberry_start_up.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Les commandes éxécutés pour configurer pour configurer le service sont:
+```bash
+chmod +x raspberry_start_up.sh
+sudo systemctl daemon-reload
+sudo systemctl enable start_up_pull_webpage.service
+sudo systemctl start start_up_pull_webpage.service
+```
+
+
+
+
