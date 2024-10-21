@@ -90,6 +90,13 @@ qui affiche en temps réel l'image de la caméra et affiche la distance estimée
 
 J'ai écrit une pageweb rudimentaire en python avec flask sur la raspberry pour contrôller les moteurs à distance.
 
+
+### ASSEMBLAGE DU ROBOT (Edouard, Martin)
+
+Decoupage des pièces en bois puis assemblage des différentes parties.
+Problème : le support de la caméra est trop haut et les roues trop basses par rapport à la roue libre.
+
+
 ## 21/10/2024:
 
 ### AJOUT DU GIT SUR LA RASPBERRY ET CONFIGURATION DE LA PAGEWEB POUR CONTROLLER LA RASPBERY (Jeffrey)
