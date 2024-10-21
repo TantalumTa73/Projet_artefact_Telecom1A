@@ -104,3 +104,13 @@ Problème : le support de la caméra est trop haut et les roues trop basses par 
 J'ai utilisé un token d'accès gitlab que j'ai mis sur la raspberry pour mettre son code dans le repisitory.
 La pageweb est construit en python avec flask afin de pouvoir utilisé les commandes python qui controle les moteurs.
 La pageweb est ébergé sur http://137.194.173.61:5000/
+
+### TEST MODULE CAMERA (Alice)
+
+Première version du module caméra dans le dossier caméra.
+Problème de version du module opencv, pour se faire, on décide d'utiliser des environnements virtuels (voir ci-dessous)
+
+### CREATION D'ENVIRONNEMENT VIRTUEL PYTHON (Alice, Jeffrey)
+
+création de req.txt, lancer_python.sh et setup.sh qui premettent l'utilisation d'un environnement
+
