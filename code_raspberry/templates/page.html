@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Strawberrypi!</title>
+</head>
+<body>
+<h1><i> Welcome to the raspberry page!</i></h1>
+    <form method="POST" action ="">
+	<button type="submit" formaction="" name="button" value="1">Avancer les moteurs</button>
+	<button type="submit" formaction="" name="button" value="2">Arrêter les moteurs</button>
+  </form>
+
+<form method="POST">
+  <div class="rangeslider">
+	<input type="range" min="-127" max="127" value="0" class="slider" id="sliderRange">
+  </div>
+<script> 
+    const Http = new XMLHttpRequest();
+    var rangeslider = document.getElementById("sliderRange"); 
+    var current;
+		
+    rangeslider.oninput = function() {
+	current = this.value;
+	
+	Http.open('POST', 'slider', true);
+	Http.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+	Http.send("valeur=" + current)
+    }
+</script>
+</form>
+</body>
+</html>
