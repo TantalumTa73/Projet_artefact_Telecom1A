@@ -15,6 +15,21 @@
   <div class="rangeslider">
 	<input type="range" min="-127" max="127" value="0" class="slider" id="sliderRange">
   </div>
+
+<span id="time"><span>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+
+<script type="text/javascript">
+function updater() {
+  $.get('/update', function(data) {
+    $('#time').html(data);  // update page with new data
+  });
+};
+
+setInterval(updater, 1000);  // run `updater()` every 1000ms (1s)
+</script>
+
 <script> 
     const Http = new XMLHttpRequest();
     var rangeslider = document.getElementById("sliderRange"); 

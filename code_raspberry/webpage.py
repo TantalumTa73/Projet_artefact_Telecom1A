@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request
 import controller
 import time
+import datetime
 
 
 # Moteurs 
@@ -44,6 +45,13 @@ def slider():
 		number = int(request.form['valeur'])
 		c.set_raw_motor_speed(-number,number)
 	return render_template("page.html")	
+
+
+@app.route('/update')
+def update():
+    """send current content"""
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
 
 # main driver function
 if __name__ == '__main__':
