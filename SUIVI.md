@@ -85,3 +85,15 @@ On a mesuré les différents éléments qui seront sur le chassis et fais un pla
 J'utilise la librairie cv2 de python pour capturer les images de la caméra et détecter les markers aruco. Il se trouve que si le marker est trop près 
 (s'il prend presque tout l'écran), le programme ne le reconnait pas. J'ai ensuite utilisé la librairie pygame pour créer une fenetre
 qui affiche en temps réel l'image de la caméra et affiche la distance estimée au marker si un marker est détecté. 
+
+### TESTS DE PAGEWEB RASPBERRY (Jeffrey)
+
+J'ai écrit une pageweb rudimentaire en python avec flask sur la raspberry pour contrôller les moteurs à distance.
+
+## 21/10/2024:
+
+### AJOUT DU GIT SUR LA RASPBERRY ET CONFIGURATION DE LA PAGEWEB POUR CONTROLLER LA RASPBERY (Jeffrey)
+
+J'ai utilisé un token d'accès gitlab que j'ai mis sur la raspberry pour mettre son code dans le repisitory.
+La pageweb est construit en python avec flask afin de pouvoir utilisé les commandes python qui controle les moteurs.
+La pageweb est ébergé sur http://137.194.173.61:5000/
