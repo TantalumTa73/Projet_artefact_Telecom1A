@@ -123,3 +123,7 @@ Changement du module caméra pour que sa taille soit mieux adaptée, tentative d
 ### REPARATION ROBOT (MARTIN, EDOUARD)
 
 Suite de la réparation de roue après que les dernières solutions aient échoué lamentablement.
+
+### AJOUT MODULE CAMERA (Alice, Jeffrey)
+
+On a ajouté sur le git dans le dossier code_raspberry le module pour utiliser la camera et modifier la page web pour pouvoir y faire des tests. Problème : on a push alors que l'ordinateur était dans l'environnement python. On a du supprimer ensuite les fichiers inutiles, ce qui nous a fait perdre du temps. On a ajouté ensuite tout le dossier mon_env dans le .gitignore . 

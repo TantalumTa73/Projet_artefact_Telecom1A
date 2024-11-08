@@ -54,7 +54,7 @@ def update():
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 @app.route('/camera_update')
-def update():
+def camera_update():
     """send current content"""
     return "test camera"
 
