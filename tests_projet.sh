@@ -106,7 +106,7 @@ moteur)
 	echo "Test des moteurs avec la séquence $param_moteurs"
 
 	#ajoutez ici votre code de test, e.g. python my_test $param_moteurs et retournez 0 si pas d'erreur
-
+	python test_moteur $param_moteurs
 	exit 0
 	;;
 
