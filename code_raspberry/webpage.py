@@ -66,12 +66,15 @@ def update():
 	global last_update_time, nb_request_per_sec, users_connected
 	"""send current content"""
 
+	now = time.time()
+
 	# Determination du nombre d'utilisateur connecte 
-	if abs(time.time() - last_update_time) < 1:
+	if abs(now - last_update_time) < 1:
 		nb_request_per_sec+=1
 	else:
-		last_update_time = time.time()
+		last_update_time = now
 		users_connected = nb_request_per_sec
+		nb_request_per_sec = 0
 
 	connexion = module_camera.check_connexion()
 	aruco_detected = module_camera.check_aruco()
