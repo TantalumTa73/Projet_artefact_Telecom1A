@@ -132,6 +132,6 @@ j
 
 ### AJOUT DE L AFFICHAGE DU NIVEAU DE BATTERIE SUR LE SITE WEB (Jeffrey)
 
-
+Abandon très rapide car la raspberry n'a pas de moyen d'accéder au niveau de batterie
 
 
