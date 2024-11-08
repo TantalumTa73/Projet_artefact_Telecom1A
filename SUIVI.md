@@ -123,6 +123,7 @@ Changement du module caméra pour que sa taille soit mieux adaptée, tentative d
 ### REPARATION ROBOT (MARTIN, EDOUARD)
 
 Suite de la réparation de roue après que les dernières solutions aient échoué lamentablement.
+Utilisation de colle forte pour stabiliser les roues qui commencaient à se détacher du support de la raspberrypi.
 
 ### AJOUT MODULE CAMERA (Alice, Jeffrey)
 
