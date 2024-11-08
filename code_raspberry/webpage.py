@@ -5,6 +5,11 @@ import controller
 import time
 import datetime
 import module_camera
+<<<<<<< HEAD
+import os
+import moteur
+=======
+>>>>>>> main
 
 
 # Moteurs 
@@ -51,6 +56,14 @@ def slider():
 		c.set_raw_motor_speed(-number,number)
 	return render_template("page.html")	
 
+@app.route('/test_calibrage', methods=['POST'])
+def test_calibrage():
+    moteur_princ = request.form.get('text')
+    ratio = request.form.get('num2')
+
+	moteur.avance_corrige(moteur_princ, ratio, 100)
+
+	return render_template("page.html")
 
 @app.route('/update')
 def update():
