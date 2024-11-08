@@ -51,12 +51,9 @@ def slider():
 @app.route('/update')
 def update():
     """send current content"""
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    #return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+	return "test camera"
 
-@app.route('/camera_update')
-def camera_update():
-    """send current content"""
-    return "test camera"
 
 
 # main driver function
