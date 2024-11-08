@@ -5,11 +5,18 @@ import controller
 import time
 import datetime
 import module_camera
+<<<<<<< HEAD
 import os
 import moteur
+=======
+>>>>>>> main
 
 
 # Moteurs 
+
+last_update_time = time.time()
+users_connected = 0
+nb_request_per_sec = 0
 
 c = controller.Controller()
 c.set_motor_shutdown_timeout(2)
@@ -23,9 +30,6 @@ app = Flask(__name__)
 # which tells the application which URL should call 
 # the associated function.
 
-def batterie_level():
-    with open('/sys/class/power_supply/BAT0/capacity', 'r') as file:
-        return sum( line.strip() for line in file)
 
 @app.route('/', methods=['GET','POST'])
 def page():
@@ -63,8 +67,22 @@ def test_calibrage():
 
 @app.route('/update')
 def update():
-    """send current content"""
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + batterie_level()
+	global last_update_time, nb_request_per_sec, users_connected
+	"""send current content"""
+
+	# Determination du nombre d'utilisateur connecte 
+	if time.time() - last_update_time < 1000:
+		nb_request_per_sec+=1
+	else:
+		last_update_time = time.time()
+		users_connected = nb_request_per_sec
+
+	connexion = module_camera.check_connexion()
+	aruco_detected = module_camera.check_aruco()
+	if connexion :
+		module_camera.save_image()
+
+	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected} {nb_request_per_sec} {last_update_time}"
 
 
 
