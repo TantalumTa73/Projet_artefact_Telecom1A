@@ -74,8 +74,8 @@ def update():
 		nb_request_per_sec+=1
 	else:
 		last_update_time = now
-        last_five_nb.pop(0)
-        last_five_nb.append(nb_request_per_sec)
+		last_five_nb.pop(0)
+		last_five_nb.append(nb_request_per_sec)
 		users_connected = sum(last_five_nb)//5
 		nb_request_per_sec = 0
 
