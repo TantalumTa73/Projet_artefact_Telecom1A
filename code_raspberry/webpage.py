@@ -70,7 +70,7 @@ def update():
 	now = time.time()
 
 	# Determination du nombre d'utilisateur connecte 
-	if abs(now - last_update_time) <= 1:
+	if abs(now - last_update_time) <= 1.2:
 		nb_request_per_sec+=1
 	else:
 		last_update_time = now
