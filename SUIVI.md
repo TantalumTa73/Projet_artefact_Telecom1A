@@ -114,3 +114,12 @@ Problème de version du module opencv, pour se faire, on décide d'utiliser des 
 
 création de req.txt, lancer_python.sh et setup.sh qui premettent l'utilisation d'un environnement
 
+### AJUSTEMENT ROBOT (EDOUARD, MARTIN)
+
+Changement du module caméra pour que sa taille soit mieux adaptée, tentative de réparation des roues qui n'étaient pas alignées ce qui entraînait empêchait le robort d'avancer droit.
+
+## 08/11/2024:
+
+### REPARATION ROBOT (MARTIN, EDOUARD)
+
+Suite de la réparation de roue après que les dernières solutions aient échoué lamentablement.
