@@ -5,12 +5,8 @@ import controller
 import time
 import datetime
 import module_camera
-<<<<<<< HEAD
 import os
 import moteur
-=======
->>>>>>> main
-
 
 # Moteurs 
 
@@ -58,8 +54,8 @@ def slider():
 
 @app.route('/test_calibrage', methods=['POST'])
 def test_calibrage():
-    moteur_princ = request.form.get('text')
-    ratio = request.form.get('num2')
+	moteur_princ = request.form.get('text')
+	ratio = request.form.get('num2')
 
 	moteur.avance_corrige(moteur_princ, ratio, 100)
 
@@ -67,7 +63,6 @@ def test_calibrage():
 
 @app.route('/update')
 def update():
-	global last_update_time, nb_request_per_sec, users_connected
 	"""send current content"""
 
 	# Determination du nombre d'utilisateur connecte 
@@ -82,7 +77,7 @@ def update():
 	if connexion :
 		module_camera.save_image()
 
-	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected} {nb_request_per_sec} {last_update_time}"
+	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected} {nb_request_per_sec} {last_update_time} {time.time()}"
 
 
 
