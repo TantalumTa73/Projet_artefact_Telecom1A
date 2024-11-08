@@ -10,6 +10,10 @@ import os
 
 # Moteurs 
 
+last_update_time = time.time()
+users_connected = 0
+nb_request_per_sec = 0
+
 c = controller.Controller()
 c.set_motor_shutdown_timeout(2)
 c.standby()
@@ -52,8 +56,16 @@ def slider():
 @app.route('/update')
 def update():
     """send current content"""
+
+    # Determination du nombre d'utilisateur connecte 
+    if time.time() - last_update_time < 1000:
+        nb_request_per_sec+=1
+    else:
+        last_update_time = time.time()
+        users_connected = nb_request_per_sec
+
     connexion = module_camera.check_connexion()
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+"coonnexion camera : {}".format(connexion)
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"coonnexion camera : {connexion}\n nombre d'utilisateurs connecter {users_connected}"
 
 
 
