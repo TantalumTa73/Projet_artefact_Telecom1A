@@ -61,7 +61,7 @@ def test_calibrage():
 	try:
 		moteur.avance_corrige(moteur_princ, ratio, 100)
 	except:
-		continue
+		return render_template("page.html")
 
 	return render_template("page.html")
 
