@@ -62,7 +62,7 @@ def test_calibrage():
 		moteur.avance_corrige(moteur_princ, ratio, 100)
 	except Exception as e:
 		error_message = str(e)
-        return render_template('page.html', error=error_message)
+		return render_template('page.html', error=error_message)
 
 	return render_template("page.html")
 
