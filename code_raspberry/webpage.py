@@ -52,7 +52,7 @@ def slider():
 def update():
     """send current content"""
     #return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
-	return "test camera"
+    return "test_camera"
 
 
 
