@@ -54,20 +54,20 @@ def slider():
 
 @app.route('/update')
 def update():
-    global last_update_time, nb_request_per_sec, users_connected
-    """send current content"""
+	global last_update_time, nb_request_per_sec, users_connected
+	"""send current content"""
 
-    # Determination du nombre d'utilisateur connecte 
-    if time.time() - last_update_time < 1000:
-        nb_request_per_sec+=1
-    else:
-        last_update_time = time.time()
-        users_connected = nb_request_per_sec
+	# Determination du nombre d'utilisateur connecte 
+	if time.time() - last_update_time < 1000:
+		nb_request_per_sec+=1
+	else:
+		last_update_time = time.time()
+		users_connected = nb_request_per_sec
 
-    connexion = module_camera.check_connexion()
+	connexion = module_camera.check_connexion()
 	aruco_detected = module_camera.check_aruco()
 
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected}"
+	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected} {nb_request_per_sec} {last_update_time}"
 
 
 
