@@ -84,8 +84,8 @@ try :
             
             #convertion en png
             if result is not None:
-                print("image capturée")
                 cv2.imwrite("templates/image.png", image)
+                print("image capturée")
             else:
                 print("image non capturée")
                 return 1
