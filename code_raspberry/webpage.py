@@ -63,10 +63,11 @@ def test_calibrage():
 
 @app.route('/update')
 def update():
+	global last_update_time, nb_request_per_sec, users_connected
 	"""send current content"""
 
 	# Determination du nombre d'utilisateur connecte 
-	if time.time() - last_update_time < 1000:
+	if abs(time.time() - last_update_time) < 1000:
 		nb_request_per_sec+=1
 	else:
 		last_update_time = time.time()
