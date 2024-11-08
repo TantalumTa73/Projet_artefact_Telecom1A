@@ -12,7 +12,6 @@ def action_moteur(type_action):
 
         dist = int(type_action[1:])
         # CALCUL SAVANT POUR CONVERTIR CENTIMETRE EN TICK
-        print("C un peu bien")
         avance_corrige("left", 1, dist)
 
 
@@ -24,6 +23,7 @@ def avance_corrige(moteur_princ, ratio, vitesse):
     if moteur_princ == "left":
 
         print("C presque ça")
+        print(moteur_princ, ratio, vitesse)
         moteur.set_motor_speed(vitesse, ratio * vitesse)
     else:
 
