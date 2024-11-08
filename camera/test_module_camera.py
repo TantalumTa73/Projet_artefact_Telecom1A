@@ -48,19 +48,19 @@ try :
 
     def check_aruco():
         """renvoie True si au moins un aruco est détecté, False sinon"""
-        # try :
-        #     cam = cv2.VideoCapture(cam_port)
-        #     result, image = cam.read()
-        #     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
-        #     corners, ids, rejected = detector.detectMarkers(gray)
-        #     if ids is not None:
-        #         return True 
-        #     return False
+        try :
+            cam = cv2.VideoCapture(cam_port)
+            result, image = cam.read()
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
+            corners, ids, rejected = detector.detectMarkers(gray)
+            if ids is not None:
+                return True 
+            return False
 
 
-        # except :
-        #     print("erreur lors de la capture d'image")
-        #     return False
+        except :
+            print("erreur lors de la capture d'image")
+            return False
         return get_id_aruco() != -1
 
     
@@ -69,6 +69,7 @@ try :
         print("\nconnexion avec la caméra établie")
     else:
         print("\nproblème de connexion à la caméra")
+    
 
 except ModuleNotFoundError:
     print("\nmodule cv2 non trouvé")

@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 import controller
 import time
 import datetime
+import module_camera
 
 
 # Moteurs 
@@ -51,6 +52,11 @@ def slider():
 def update():
     """send current content"""
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+@app.route('/camera_update')
+def update():
+    """send current content"""
+    return "test camera"
 
 
 # main driver function
