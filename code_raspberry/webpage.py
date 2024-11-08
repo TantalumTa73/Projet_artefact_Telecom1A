@@ -67,7 +67,7 @@ def update():
 	"""send current content"""
 
 	# Determination du nombre d'utilisateur connecte 
-	if abs(time.time() - last_update_time) < 1000:
+	if abs(time.time() - last_update_time) < 1:
 		nb_request_per_sec+=1
 	else:
 		last_update_time = time.time()
