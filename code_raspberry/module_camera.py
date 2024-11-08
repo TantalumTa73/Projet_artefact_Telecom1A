@@ -22,16 +22,24 @@ try :
 
     def check_connexion():
         """renvoie True si la caméra est connecté, False sinon"""
-        for cam_port_test in [0, 5]:
-            try :
-                cam = cv2.VideoCapture(cam_port_test)
-                result, image = cam.read()
-                if result:
-                    print("cam_port_test = {}".format(cam_port_test))
-                    return result
-            except :
-                #print("erreur lors de la capture d'image")
-                return False
+        # for cam_port_test in [0, 5]:
+        #     try :
+        #         cam = cv2.VideoCapture(cam_port_test)
+        #         result, image = cam.read()
+        #         if result:
+        #             print("cam_port_test = {}".format(cam_port_test))
+        #             return result
+        #     except :
+        #         #print("erreur lors de la capture d'image")
+        #         return False
+        try :
+            cam = cv2.VideoCapture(cam_port)
+            result, image = cam.read()
+            if result:
+                return result
+        except :
+            #print("erreur lors de la capture d'image")
+            return False
         return False
 
     def get_id_aruco():
