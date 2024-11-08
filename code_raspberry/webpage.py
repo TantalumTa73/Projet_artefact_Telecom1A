@@ -57,10 +57,6 @@ def update():
     """send current content"""
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + batterie_level()
 
-@app.route('/camera_update')
-def update():
-    """send current content"""
-    return "test camera"
 
 
 # main driver function
