@@ -125,6 +125,8 @@ Description=Git pull and start webpage
 After=network.target
 
 [Service]
+User=root
+Group=root
 ExecStart=/bin/bash /home/strawberrypi/team1/raspberry_start_up.sh
 Restart=always
 
@@ -139,7 +141,3 @@ sudo systemctl daemon-reload
 sudo systemctl enable start_up_pull_webpage.service
 sudo systemctl start start_up_pull_webpage.service
 ```
-
-
-
-

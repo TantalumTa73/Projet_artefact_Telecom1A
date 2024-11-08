@@ -5,6 +5,7 @@ import controller
 import time
 import datetime
 import module_camera
+import os
 
 
 # Moteurs 
@@ -21,6 +22,9 @@ app = Flask(__name__)
 # which tells the application which URL should call 
 # the associated function.
 
+def batterie_level():
+    with open('/sys/class/power_supply/BAT0/capacity', 'r') as file:
+        return sum( line.strip() for line in file)
 
 @app.route('/', methods=['GET','POST'])
 def page():
@@ -51,7 +55,7 @@ def slider():
 @app.route('/update')
 def update():
     """send current content"""
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + batterie_level()
 
 @app.route('/camera_update')
 def update():
