@@ -66,6 +66,8 @@ def update():
 
 	connexion = module_camera.check_connexion()
 	aruco_detected = module_camera.check_aruco()
+	if connexion :
+		module_camera.save_image()
 
 	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected} {nb_request_per_sec} {last_update_time}"
 
