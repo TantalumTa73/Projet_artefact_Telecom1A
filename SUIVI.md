@@ -128,7 +128,8 @@ Utilisation de colle forte pour stabiliser les roues qui commencaient à se dét
 ### AJOUT MODULE CAMERA (Alice, Jeffrey)
 
 On a ajouté sur le git dans le dossier code_raspberry le module pour utiliser la camera et modifier la page web pour pouvoir y faire des tests. Problème : on a push alors que l'ordinateur était dans l'environnement python. On a du supprimer ensuite les fichiers inutiles, ce qui nous a fait perdre du temps. On a ajouté ensuite tout le dossier mon_env dans le .gitignore . 
-
+On voit désormais sur le site web si la caméra est connectée. Problème : le résultat n'est pas le même pour tous les utilisateurs (hypothèse : on cherche à accéder à la caméra trop de fois par seconde).
+On essaye aussi de sauvegarder l'image capturée sur la raspberry et d'afficher l'image sur le site web. Problème : on n'arrive pas à afficher des images sur le site (le fichier n'est pas trouvé alors qu'il s'y trouve).
 
 
 
