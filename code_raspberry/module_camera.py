@@ -63,6 +63,22 @@ try :
             return False
         return get_id_aruco() != -1
 
+    def save_image():
+        """sauvegarde l'image dans le fichier 'image.png'
+        Return 0 s'il n'y a pas eu d'erreur, 1 sinon"""
+        try:
+            cam = cv2.VideoCapture(cam_port)
+            result, image = cam.read()
+            
+            #convertion en png
+            if result is not None:
+                cv2.imwrite("image.png", image)
+            else:
+                return 1
+            return 0
+        except:
+            return 1
+
     
 
 except ModuleNotFoundError:
