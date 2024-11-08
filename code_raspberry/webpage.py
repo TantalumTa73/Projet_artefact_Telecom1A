@@ -52,7 +52,8 @@ def slider():
 @app.route('/update')
 def update():
     """send current content"""
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	connexion = module_camera.check_connexion()
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+"coonnexion camera : {}".format(connexion)
 
 
 
