@@ -27,7 +27,7 @@ def avance_corrige(moteur_princ, ratio, vitesse):
 
         print("C presque ça")
         print(moteur_princ, ratio, vitesse)
-        moteur.set_motor_speed(vitesse, ratio * vitesse)
+        moteur.set_motor_speed(vitesse, int(ratio * vitesse))
     else:
 
-        moteur.set_motor_speed(ratio * vitesse, vitesse)
+        moteur.set_motor_speed(int(ratio * vitesse), vitesse)
