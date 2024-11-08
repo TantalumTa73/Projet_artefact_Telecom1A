@@ -6,9 +6,14 @@ import time
 import datetime
 import module_camera
 import os
-
+import moteur
 
 # Moteurs 
+
+last_update_time = time.time()
+users_connected = 0
+nb_request_per_sec = 0
+last_five_nb = [0,0,0,0,0]
 
 c = controller.Controller()
 c.set_motor_shutdown_timeout(2)
@@ -48,12 +53,38 @@ def slider():
 		c.set_raw_motor_speed(-number,number)
 	return render_template("page.html")	
 
+@app.route('/test_calibrage', methods=['POST'])
+def test_calibrage():
+	moteur_princ = request.form.get('text')
+	ratio = request.form.get('num2')
+
+	moteur.avance_corrige(moteur_princ, ratio, 100)
+
+	return render_template("page.html")
 
 @app.route('/update')
 def update():
-    """send current content"""
-    connexion = module_camera.check_connexion()
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+"coonnexion camera : {}".format(connexion)
+	global last_update_time, nb_request_per_sec, users_connected
+	"""send current content"""
+
+	now = time.time()
+
+	# Determination du nombre d'utilisateur connecte 
+	if abs(now - last_update_time) <= 1:
+		nb_request_per_sec+=1
+	else:
+		last_update_time = now
+		last_five_nb.pop(0)
+		last_five_nb.append(nb_request_per_sec)
+		users_connected = sum(last_five_nb)//5
+		nb_request_per_sec = 0
+
+	connexion = module_camera.check_connexion()
+	aruco_detected = module_camera.check_aruco()
+	if connexion :
+		module_camera.save_image()
+
+	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected}"
 
 
 

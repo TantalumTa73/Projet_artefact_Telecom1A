@@ -128,7 +128,7 @@ Utilisation de colle forte pour stabiliser les roues qui commencaient à se dét
 ### AJOUT MODULE CAMERA (Alice, Jeffrey)
 
 On a ajouté sur le git dans le dossier code_raspberry le module pour utiliser la camera et modifier la page web pour pouvoir y faire des tests. Problème : on a push alors que l'ordinateur était dans l'environnement python. On a du supprimer ensuite les fichiers inutiles, ce qui nous a fait perdre du temps. On a ajouté ensuite tout le dossier mon_env dans le .gitignore . 
-j
+
 
 ### AJOUT DE L AFFICHAGE DU NIVEAU DE BATTERIE SUR LE SITE WEB (Jeffrey)
 
