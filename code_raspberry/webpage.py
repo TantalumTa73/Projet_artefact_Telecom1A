@@ -58,7 +58,10 @@ def test_calibrage():
 	moteur_princ = request.form.get('text')
 	ratio = request.form.get('num2')
 
-	moteur.avance_corrige(moteur_princ, ratio, 100)
+	try:
+		moteur.avance_corrige(moteur_princ, ratio, 100)
+	except:
+		continue
 
 	return render_template("page.html")
 
