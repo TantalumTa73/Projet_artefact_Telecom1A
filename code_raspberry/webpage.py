@@ -5,7 +5,6 @@ import controller
 import time
 import datetime
 import module_camera
-import os
 
 
 # Moteurs 
@@ -55,6 +54,7 @@ def slider():
 
 @app.route('/update')
 def update():
+    global last_update_time, nb_request_per_sec, users_connected
     """send current content"""
 
     # Determination du nombre d'utilisateur connecte 
