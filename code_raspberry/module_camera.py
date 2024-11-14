@@ -79,7 +79,9 @@ try :
         """sauvegarde l'image dans le fichier 'image.png'
         Return 0 s'il n'y a pas eu d'erreur, 1 sinon"""
         try:
+            print("is about to try to save image")
             cam = cv2.VideoCapture(cam_port)
+            print("had tried to save image")
             result, image = cam.read()
             
             #convertion en png
