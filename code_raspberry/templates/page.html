@@ -42,6 +42,40 @@
 </form>
 
 
+<button id="myButton">Press and Hold Me</button>
+
+<script>
+    // The URL for the POST requests
+    const urlPress = '/button-press';  // URL to send when the button is pressed
+    const urlRelease = '/button-release'; // URL to send when the button is released
+
+    // Function to send a POST request
+    function sendPostRequest(url) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'button-activated' })
+        })
+        .then(response => response.json());
+    }
+
+    const button = document.getElementById('myButton');
+
+    // When the button is pressed
+    button.addEventListener('mousedown', function() {
+        console.log('Button Pressed');
+        sendPostRequest(urlPress);  // Send POST request when pressed
+    });
+
+    // When the button is released
+    button.addEventListener('mouseup', function() {
+        console.log('Button Released');
+        sendPostRequest(urlRelease);  // Send a different POST request when released
+    });
+
+</script>
 
 <span id="time"></span>
 

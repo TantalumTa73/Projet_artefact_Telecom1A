@@ -14,7 +14,6 @@ last_update_time = time.time()
 users_connected = dict() 
 
 c = controller.Controller()
-c.set_motor_shutdown_timeout(2)
 c.standby()
 
 # Flask constructor takes the name of 
@@ -89,20 +88,24 @@ def update():
 			del users_connected[user]
 
 
+
+	module_camera.save_image()
 	connexion = module_camera.check_connexion()
 	print("connexion camera : ", connexion)
-	aruco_detected = module_camera.check_aruco()
 	if connexion :
+		print("try to save the image")
 		module_camera.save_image()
 
+	aruco_detected = module_camera.check_aruco()
 	updated_content=f"""
 <p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
 <p>connexion camera : {connexion}</p>
 <p>aruco détecté: {aruco_detected}</p>
+<p>aruco détecté: {aruco_detected}</p>
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
 """
 
-	return render_template("updated.html", content=updated_content)
+	return updated_content
 
 
 
