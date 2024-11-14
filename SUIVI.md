@@ -133,7 +133,7 @@ On essaye aussi de sauvegarder l'image capturée sur la raspberry et d'afficher 
 
 ### CALIBRAGE CAMERA (Joshua)
 
-Ecriture d'un code python permettant d'obtenir les coordonnées, l'inclinaison et la distance à la caméra d'un QR code observé par cette dernière.
+Ecriture d'un code python permettant d'obtenir les coordonnées, l'inclinaison et la distance à la caméra d'un QR code observé par cette dernière. J'observe à la fin de la séance que j'ai besoin de trouver la matrice intrinsèque de la caméra afin de continuer à coder.
 
 
 ## 14/11/2024: 
@@ -141,6 +141,8 @@ Ecriture d'un code python permettant d'obtenir les coordonnées, l'inclinaison e
 ### DEBUGGAGE DU SITE (Alice, Jeffrey)
 
 ### CALIBRAGE DES ROUES / PROGRAMME MOTEUR (Edouard)
+
+Les deux roues du robot ne tournent pas à la même vitesse et ne commence ni ne termine de tourner en même temps. Le but de la séance est premièrement de proposer un ratio de vitesse entre les deux roues permettant d'atteindre une marche rectiligne. Une fois que cela est fait, je pourrais vérifier les résultats donnés par les encodeurs après une ligne droite pour regarder comment calibrer les moteurs pour qu'il commence et finisse de tourner en même temps.
 
 ### CALIBRAGE DE LA CAMERA (Joshua)
 
