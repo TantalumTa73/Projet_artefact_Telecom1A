@@ -97,12 +97,16 @@ try :
             return 1
 
     
+    save_image()
+
+    
 
 except ModuleNotFoundError:
     print("\nmodule cv2 non trouvé")
     
 except:
     print("\nerreur lors de l'ouverture du module")
+
 
 
 
