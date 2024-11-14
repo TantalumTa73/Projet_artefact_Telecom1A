@@ -140,10 +140,12 @@ Ecriture d'un code python permettant d'obtenir les coordonnées, l'inclinaison e
 
 ### DEBUGGAGE DU SITE (Alice, Jeffrey)
 
-### CALIBRAGE DES ROUES / PROGRAMME MOTEUR (Edouard)
+Tentative de faire apparaitre le flux caméra sur le site web. Les images prises par la caméra peuvent être récupérés sans souci, mais il y a une certaine latence entre deux images (de plusieurs dizaines de seconde) empêchant d'avoir un flux fluide.
 
-Les deux roues du robot ne tournent pas à la même vitesse et ne commence ni ne termine de tourner en même temps. Le but de la séance est premièrement de proposer un ratio de vitesse entre les deux roues permettant d'atteindre une marche rectiligne. Une fois que cela est fait, je pourrais vérifier les résultats donnés par les encodeurs après une ligne droite pour regarder comment calibrer les moteurs pour qu'il commence et finisse de tourner en même temps.
+### CALIBRAGE DES ROUES / PROGRAMME MOTEUR (Edouard, Martin)
+
+Les deux roues du robot ne tournent pas à la même vitesse et ne commence ni ne termine de tourner en même temps. Le but de la séance est premièrement de proposer un ratio de vitesse entre les deux roues permettant d'atteindre une marche rectiligne. Une fois que cela est fait, je pourrais vérifier les résultats donnés par les encodeurs après une ligne droite pour regarder comment calibrer les moteurs pour qu'il commence et finisse de tourner en même temps. Ajout de quatre boutons permettant d'avancer, reculer ou tourner à gauche et à droite. Le robot a l'air d'avancer droit, mais recule en tournant un peu. Edouard a ajouté le dépôt git sur son PC afin d'arrêter de devoir coder avec le PC de Martin.
 
 ### CALIBRAGE DE LA CAMERA (Joshua)
 
-Prise de différentes photos avec la caméra afin de trouver la matrice intrinsèque de la caméra, ce qui permettra ensuite de la calibrer.
+Prise de différentes photos avec la caméra afin de trouver la matrice intrinsèque de la caméra, ce qui permettra ensuite de la calibrer. Des résultats sont trouvés mais aucun n'est vraiment concluant (test surtout effectués pour l'évaluation de la distance du QR code à la aruco).
