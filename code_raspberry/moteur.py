@@ -1,4 +1,5 @@
 import controller as c
+import time as t
 
 # Moteurs 
 
@@ -27,7 +28,10 @@ def avance_corrige(moteur_princ, ratio, vitesse):
 
         print("C presque ça")
         print(moteur_princ, ratio, vitesse)
+        print(moteur.get_encoder_ticks())
         moteur.set_motor_speed(vitesse, int(ratio * vitesse))
+        t.wait(2)
+        print(moteur.get_encoder_ticks())
     else:
 
         moteur.set_motor_speed(int(ratio * vitesse), vitesse)

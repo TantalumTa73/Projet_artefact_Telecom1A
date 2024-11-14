@@ -4,7 +4,8 @@
 <script> 
   function changeImage(element)
   {
-    var x = element.getElementsById("image_camera");
+    //var x = element.getElementsById("image_camera");
+    var x = element;
     var v = x.getAttribute("src");
     if(v == "{{url_for('static', filename='image.png')}}")
       v = "{{url_for('static', filename='image_lion.jpeg')}}";
@@ -40,6 +41,8 @@
     <button type="submit">Test avance corigée</button>
 </form>
 
+
+
 <span id="time"></span>
 
 <img
@@ -47,6 +50,10 @@
   src="{{url_for('static', filename='image.png')}}"
   alt="Ici doit se trouver l'image capturée par la caméra" 
   onclick="changeImage(this);"/>
+
+  <form name="alternate" method="POST" action="">
+    <input type="button" value="Change" onclick="changeImage(document.getElementById("image_camera");">
+ </form>
 
 
 
