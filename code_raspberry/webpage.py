@@ -88,7 +88,7 @@ def update():
 
 	connexion = module_camera.check_connexion()
 	print("connexion camera : ", connexion)
-	aruco_detected = module_camera.check_aruco()
+	#aruco_detected = module_camera.check_aruco()
 	if connexion :
 		module_camera.save_image()
 
