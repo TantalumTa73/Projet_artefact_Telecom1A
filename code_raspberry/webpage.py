@@ -105,7 +105,7 @@ def test_button_release():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected
+	global last_update_time, users_connected, cam
 	"""send current content"""
 
 	now = time.time()
