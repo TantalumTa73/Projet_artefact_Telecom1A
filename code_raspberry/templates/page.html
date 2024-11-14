@@ -17,11 +17,16 @@
     <button type="submit">Test avance corigée</button>
 </form>
 
+<form action="/change-speed" method="POST">
+    <label for="speed">Vitesse (entière): </label>
+    <input type="number" id="speed" name="speed" required><br><br>
+    <button type="submit">Change vitesse</button>
+</form>
 
 <button id="forward">Avancer</button>
 <button id="backward">Reculer</button>
-<button id="right">Droite</button>
 <button id="left">Gauche</button>
+<button id="right">Droite</button>
 
 <script>
     // The URL for the POST requests
