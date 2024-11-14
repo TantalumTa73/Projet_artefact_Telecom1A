@@ -131,7 +131,10 @@ On a ajouté sur le git dans le dossier code_raspberry le module pour utiliser l
 
 
 
+## 14/11/2024: 
 
+### DEBUGGAGE DU SITE (Alice, Jeffrey)
 
+### CALIBRAGE DES ROUES / PROGRAMME MOTEUR (Edouard)
 
-
+### CALIBRAGE DE LA CAMERA (Joshua)
