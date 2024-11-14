@@ -8,16 +8,6 @@
 </head>
 <body>
 <h1><i> Welcome to the raspberry page!</i></h1>
-    <form method="POST" action ="">
-	<button type="submit" formaction="" name="button" value="1">Avancer les moteurs</button>
-	<button type="submit" formaction="" name="button" value="2">Arrêter les moteurs</button>
-  </form>
-
-<form method="POST">
-  <div class="rangeslider">
-	<input type="range" min="-127" max="127" value="0" class="slider" id="sliderRange">
-  </div>
-</form>
 
 <form action="/test_calibrage" method="POST">
     <label for="text">Moteur principal:</label>
@@ -100,12 +90,7 @@
     <input type="button" value="Change" onclick="changeImage(document.getElementById('image_camera');">
  </form>
 
-
-
-
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-
-
 
 <script type="text/javascript">
 function updater() {
@@ -116,20 +101,5 @@ function updater() {
 
 setInterval(updater, 1000);  // run `updater()` every 1000ms (1s)
 </script>
-
-<script> 
-    const Http = new XMLHttpRequest();
-    var rangeslider = document.getElementById("sliderRange"); 
-    var current;
-		
-    rangeslider.oninput = function() {
-	current = this.value;
-	
-	Http.open('POST', 'slider', true);
-	Http.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-	Http.send("valeur=" + current)
-    }
-</script>
-</form>
 </body>
 </html>
