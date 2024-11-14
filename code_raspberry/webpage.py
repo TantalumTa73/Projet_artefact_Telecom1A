@@ -10,6 +10,9 @@ import moteur
 
 # Moteurs 
 
+global vitesse
+vitesse = 0
+
 last_update_time = time.time()
 users_connected = dict() 
 cam = module_camera.connect()
@@ -70,21 +73,30 @@ def test_calibrage():
 		print(error_message)
 		return render_template('page.html', error=error_message)
 
+@app.route('/change-speed', methods=['POST'])
+def change_speed():
+	global vitesse
+	vitesse = request.form.get('speed')
+
 @app.route('/forward-press', methods=['POST'])
 def forward():
-	moteur.avance_corrige("left", 1, 100)
+	global vitesse
+	moteur.avance_corrige("left", 1, vitesse)
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
-	moteur.avance_corrige("left", 1, -100)
+	global vitesse
+	moteur.avance_corrige("left", 1, -vitesse)
 
 @app.route('/right-press', methods=['POST'])
 def right():
-	moteur.avance_corrige("left", -1, 100)
+	global vitesse
+	moteur.avance_corrige("left", -1, vitesse)
 
 @app.route('/left-press', methods=['POST'])
 def left():
-	moteur.avance_corrige("right", -1, 100)
+	global vitesse
+	moteur.avance_corrige("right", -1, vitesse)
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
