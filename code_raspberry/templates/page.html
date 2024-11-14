@@ -42,11 +42,14 @@
 </form>
 
 
-<button id="myButton">Press and Hold Me</button>
+<button id="forward">Avancer</button>
+<button id="backward">Reculer</button>
+<button id="right">Droite</button>
+<button id="left">Gauche</button>
 
 <script>
     // The URL for the POST requests
-    const urlPress = '/button-press';  // URL to send when the button is pressed
+    const urlForward = '/forward-press';  // URL to send when the button is pressed
     const urlRelease = '/button-release'; // URL to send when the button is released
 
     // Function to send a POST request
@@ -61,15 +64,36 @@
         .then(response => response.json());
     }
 
-    const button = document.getElementById('myButton');
+    const buttonForward = document.getElementById('forward');
+    const buttonBackward = document.getElementById('backward');
+    const buttonRight = document.getElementById('right');
+    const buttonLeft = document.getElementById('left');
 
     // When the button is pressed
-    button.addEventListener('mousedown', function() {
-        sendPostRequest(urlPress);  // Send POST request when pressed
+    buttonForward.addEventListener('mousedown', function() {
+        sendPostRequest(urlForward);  // Send POST request when pressed
+    });
+    buttonBackward.addEventListener('mousedown', function() {
+        sendPostRequest(urlBackward);  // Send POST request when pressed
+    });
+    buttonRight.addEventListener('mousedown', function() {
+        sendPostRequest(urlRight);  // Send POST request when pressed
+    });
+    buttonLeft.addEventListener('mousedown', function() {
+        sendPostRequest(urlLeft);  // Send POST request when pressed
     });
 
     // When the button is released
-    button.addEventListener('mouseup', function() {
+    buttonForward.addEventListener('mouseup', function() {
+        sendPostRequest(urlRelease);  // Send a different POST request when released
+    });
+    buttonBackward.addEventListener('mouseup', function() {
+        sendPostRequest(urlRelease);  // Send a different POST request when released
+    });
+    buttonRight.addEventListener('mouseup', function() {
+        sendPostRequest(urlRelease);  // Send a different POST request when released
+    });
+    buttonLeft.addEventListener('mouseup', function() {
         sendPostRequest(urlRelease);  // Send a different POST request when released
     });
 
