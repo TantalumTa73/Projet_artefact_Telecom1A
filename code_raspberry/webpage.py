@@ -86,6 +86,8 @@ def update():
 		users_connected = sum(last_five_nb)//5
 		nb_request_per_sec = 0
 
+
+	module_camera.save_image()
 	connexion = module_camera.check_connexion()
 	print("connexion camera : ", connexion)
 	if connexion :
