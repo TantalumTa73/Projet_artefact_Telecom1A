@@ -10,7 +10,7 @@ Ce module permet d'interagir avec la caméra
 """
 
 import cv2
-cam_port=0
+cam_port=-1
 
 #outils de detection de aruco
 
