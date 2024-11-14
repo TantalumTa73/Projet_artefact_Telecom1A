@@ -20,9 +20,14 @@ def avance_corrige(moteur_princ, ratio, vitesse):
     """ Fait avancer le robot en imposant un ratio (entre 0 et 1) entre les vitesses des moteurs, 
         le moteur le plus rapide est moteur_prin entre left et right """
 
+    ratio = float(ratio)
+    vitesse = int(vitesse)
+
     if moteur_princ == "left":
 
-        moteur.set_motor_speed(vitesse, ratio * vitesse)
+        print("C presque ça")
+        print(moteur_princ, ratio, vitesse)
+        moteur.set_motor_speed(vitesse, int(ratio * vitesse))
     else:
 
-        moteur.set_motor_speed(ratio * vitesse, vitesse)
+        moteur.set_motor_speed(int(ratio * vitesse), vitesse)

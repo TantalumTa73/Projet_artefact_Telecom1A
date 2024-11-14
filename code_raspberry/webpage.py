@@ -21,7 +21,7 @@ c.standby()
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static/')
 
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
@@ -60,8 +60,12 @@ def test_calibrage():
 
 	try:
 		moteur.avance_corrige(moteur_princ, ratio, 100)
-	except:
-		return render_template("page.html")
+		print("C bien")
+	except Exception as e:
+		error_message = str(e)
+		print("C pas bien")
+		print(error_message)
+		return render_template('page.html', error=error_message)
 
 	return render_template("page.html")
 
@@ -91,10 +95,11 @@ def update():
 
 
 
+
 # main driver function
 if __name__ == '__main__':
 	# run() method of Flask class runs the application 
 	# on the local development server.
 	#app.run()
-	app.run(debug=False,host="0.0.0.0")
+	app.run(debug=True,host="0.0.0.0")
 
