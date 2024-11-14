@@ -12,6 +12,7 @@ import moteur
 
 last_update_time = time.time()
 users_connected = dict() 
+cam = module_camera.connect()
 
 c = controller.Controller()
 c.standby()
@@ -112,13 +113,13 @@ def update():
 
 
 
-	module_camera.save_image()
-	connexion = module_camera.check_connexion()
+	module_camera.save_image(cam)
+	connexion = module_camera.check_connexion(cam)
 	if connexion :
 		print("try to save the image")
-		module_camera.save_image()
+		module_camera.save_image(cam)
 
-	aruco_detected = module_camera.check_aruco()
+	aruco_detected = module_camera.check_aruco(cam)
 	updated_content=f"""
 <p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
 <p>connexion camera : {connexion}</p>

@@ -18,7 +18,10 @@ aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
 parameters = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
 
-def check_connexion():
+def connect():
+    return cv2.VideoCapture(cam_port)
+
+def check_connexion(cam):
     """renvoie True si la caméra est connecté, False sinon"""
     # for cam_port_test in [0, 5]:
     #     try :
@@ -31,7 +34,6 @@ def check_connexion():
     #         #print("erreur lors de la capture d'image")
     #         return False
     try :
-        cam = cv2.VideoCapture(cam_port)
         result, image = cam.read()
         if result:
             return result
@@ -40,10 +42,9 @@ def check_connexion():
         return False
     return False
 
-def get_id_aruco():
+def get_id_aruco(cam):
     """renvoie l'id du premier aruco détecté, -1 si aucun n'est détécté"""
     try :
-        cam = cv2.VideoCapture(cam_port)
         result, image = cam.read()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
         corners, ids, rejected = detector.detectMarkers(gray)
@@ -56,10 +57,9 @@ def get_id_aruco():
         #print("erreur lors de la capture d'image")
         return -1
 
-def check_aruco():
+def check_aruco(cam):
     """renvoie True si au moins un aruco est détecté, False sinon"""
     try :
-        cam = cv2.VideoCapture(cam_port)
         result, image = cam.read()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
         corners, ids, rejected = detector.detectMarkers(gray)
@@ -73,12 +73,10 @@ def check_aruco():
         return False
     return get_id_aruco() != -1
 
-def save_image():
+def save_image(cam):
     """sauvegarde l'image dans le fichier 'image.png'
     Return 0 s'il n'y a pas eu d'erreur, 1 sinon"""
     try:
-        print("is about to try to save image")
-        cam = cv2.VideoCapture(cam_port)
         print("had tried to save image")
         result, image = cam.read()
         
