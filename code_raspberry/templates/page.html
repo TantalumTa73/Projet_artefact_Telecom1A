@@ -6,14 +6,9 @@
   {
     //var x = element.getElementsById("image_camera");
     var x = element;
-    var v = x.getAttribute("src");
-    if(v == "{{url_for('static', filename='image.png')}}")
-      v = "{{url_for('static', filename='image_lion.jpeg')}}";
-    else
-      v = "{{url_for('static', filename='image.png')}}";
-    x.setAttribute("src", v);	
+    x.setAttribute("src", {{url_for('static', filename='image.png')}});	
+	x.src += '?nocache=' + Math.random();
   }
-  
   </script>
 
 <head>
