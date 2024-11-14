@@ -86,6 +86,7 @@ try :
             
             #convertion en png
             if result is not None:
+                print("essaye d'écrire l'image dans image.png")
                 cv2.imwrite("image.png", image)
                 print("image capturée")
             else:
