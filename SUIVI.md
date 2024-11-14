@@ -132,7 +132,10 @@ On voit désormais sur le site web si la caméra est connectée. Problème : le 
 On essaye aussi de sauvegarder l'image capturée sur la raspberry et d'afficher l'image sur le site web. Problème : on n'arrive pas à afficher des images sur le site (le fichier n'est pas trouvé alors qu'il s'y trouve).
 
 
+## 14/11/2024: 
 
+### DEBUGGAGE DU SITE (Alice, Jeffrey)
 
+### CALIBRAGE DES ROUES / PROGRAMME MOTEUR (Edouard)
 
-
+### CALIBRAGE DE LA CAMERA (Joshua)
