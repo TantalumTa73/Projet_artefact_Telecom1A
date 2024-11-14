@@ -77,7 +77,7 @@ def update():
 	"""send current content"""
 
 	now = time.time()
-	current_user = request.remote_addr()
+	current_user = request.remote_addr
 
 	# Determination du nombre d'utilisateur connecte 
 	if current_user not in users_connected.keys():
