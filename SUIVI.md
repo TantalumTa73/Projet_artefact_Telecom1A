@@ -114,13 +114,13 @@ Problème de version du module opencv, pour se faire, on décide d'utiliser des 
 
 création de req.txt, lancer_python.sh et setup.sh qui premettent l'utilisation d'un environnement
 
-### AJUSTEMENT ROBOT (EDOUARD, MARTIN)
+### AJUSTEMENT ROBOT (Edouard, Martin)
 
 Changement du module caméra pour que sa taille soit mieux adaptée, tentative de réparation des roues qui n'étaient pas alignées ce qui entraînait empêchait le robort d'avancer droit.
 
 ## 08/11/2024:
 
-### REPARATION ROBOT (MARTIN, EDOUARD)
+### REPARATION ROBOT (Martin, Edouard)
 
 Suite de la réparation de roue après que les dernières solutions aient échoué lamentablement.
 Utilisation de colle forte pour stabiliser les roues qui commencaient à se détacher du support de la raspberrypi.
@@ -131,6 +131,10 @@ On a ajouté sur le git dans le dossier code_raspberry le module pour utiliser l
 On voit désormais sur le site web si la caméra est connectée. Problème : le résultat n'est pas le même pour tous les utilisateurs (hypothèse : on cherche à accéder à la caméra trop de fois par seconde).
 On essaye aussi de sauvegarder l'image capturée sur la raspberry et d'afficher l'image sur le site web. Problème : on n'arrive pas à afficher des images sur le site (le fichier n'est pas trouvé alors qu'il s'y trouve).
 
+### CALIBRAGE CAMERA (Joshua)
+
+Ecriture d'un code python permettant d'obtenir les coordonnées, l'inclinaison et la distance à la caméra d'un QR code observé par cette dernière. J'observe à la fin de la séance que j'ai besoin de trouver la matrice intrinsèque de la caméra afin de continuer à coder.
+
 
 ## 14/11/2024: 
 
@@ -138,4 +142,8 @@ On essaye aussi de sauvegarder l'image capturée sur la raspberry et d'afficher 
 
 ### CALIBRAGE DES ROUES / PROGRAMME MOTEUR (Edouard)
 
+Les deux roues du robot ne tournent pas à la même vitesse et ne commence ni ne termine de tourner en même temps. Le but de la séance est premièrement de proposer un ratio de vitesse entre les deux roues permettant d'atteindre une marche rectiligne. Une fois que cela est fait, je pourrais vérifier les résultats donnés par les encodeurs après une ligne droite pour regarder comment calibrer les moteurs pour qu'il commence et finisse de tourner en même temps.
+
 ### CALIBRAGE DE LA CAMERA (Joshua)
+
+Prise de différentes photos avec la caméra afin de trouver la matrice intrinsèque de la caméra, ce qui permettra ensuite de la calibrer.

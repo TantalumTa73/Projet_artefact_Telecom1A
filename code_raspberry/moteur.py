@@ -29,8 +29,9 @@ def avance_corrige(moteur_princ, ratio, vitesse):
         print("C presque ça")
         print(moteur_princ, ratio, vitesse)
         print(moteur.get_encoder_ticks())
+        print("test")
         moteur.set_motor_speed(vitesse, int(ratio * vitesse))
-        t.wait(2)
+        t.sleep(2)
         print(moteur.get_encoder_ticks())
     else:
 
