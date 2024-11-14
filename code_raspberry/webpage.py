@@ -11,9 +11,7 @@ import moteur
 # Moteurs 
 
 last_update_time = time.time()
-users_connected = 0
-nb_request_per_sec = 0
-last_five_nb = [0,0,0,0,0]
+users_connected = dict() 
 
 c = controller.Controller()
 c.set_motor_shutdown_timeout(2)
@@ -27,6 +25,11 @@ app = Flask(__name__, static_url_path='/static/')
 # which tells the application which URL should call 
 # the associated function.
 
+def get_index(elm,tab):
+	for i in range(len(tab)):
+		if elm == tab[i]:
+			return i
+	return None
 
 @app.route('/', methods=['GET','POST'])
 def page():
@@ -71,20 +74,20 @@ def test_calibrage():
 
 @app.route('/update')
 def update():
-	global last_update_time, nb_request_per_sec, users_connected
+	global last_update_time, users_connected
 	"""send current content"""
 
 	now = time.time()
+	current_user = request.remote_addr()
 
 	# Determination du nombre d'utilisateur connecte 
-	if abs(now - last_update_time) <= 1.2:
-		nb_request_per_sec+=1
-	else:
-		last_update_time = now
-		last_five_nb.pop(0)
-		last_five_nb.append(nb_request_per_sec)
-		users_connected = sum(last_five_nb)//5
-		nb_request_per_sec = 0
+	if current_user not in users_connected.keys():
+		users_connected[current_user] = now
+
+	for user in users_connected.keys():
+		if now - users_connected[user] > 2:
+			del users_connected[user]
+
 
 	connexion = module_camera.check_connexion()
 	print("connexion camera : ", connexion)
@@ -92,7 +95,14 @@ def update():
 	if connexion :
 		module_camera.save_image()
 
-	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+f"connexion camera : {connexion}; aruco détecté: {aruco_detected}; nombre d'utilisateurs connectés {users_connected}"
+	updated_content=f"""
+<p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
+<p>connexion camera : {connexion}</p>
+<p>aruco détecté: {aruco_detected}</p>
+<p>nombre d'utilisateurs connectés {len(users_connected)}</p>
+"""
+
+	return render_template("updated.html", content=updated_content)
 
 
 
