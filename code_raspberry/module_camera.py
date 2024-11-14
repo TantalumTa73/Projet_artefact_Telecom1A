@@ -72,10 +72,9 @@ def save_image(cam):
 
     result, image = cam.read()
     
-    print(os.path.dirname(os.path.realpath(__file__)))
     #convertion en png
     if result:
-        if not cv2.imwrite("static/image.png", image):
+        if not cv2.imwrite(os.path.dirname(os.path.realpath(__file__))+"/static/image.png", image):
             print("writing image failed")
     else:
         print("image non capturée")
