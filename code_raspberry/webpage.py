@@ -69,19 +69,19 @@ def test_calibrage():
 		print(error_message)
 		return render_template('page.html', error=error_message)
 
-@app.route('/forward', methods=['POST'])
+@app.route('/forward-press', methods=['POST'])
 def forward():
 	moteur.avance_corrige("left", 1, 100)
 
-@app.route('/backward', methods=['POST'])
+@app.route('/backwardp-press', methods=['POST'])
 def backward():
 	moteur.avance_corrige("left", 1, -100)
 
-@app.route('/right', methods=['POST'])
+@app.route('/right-press', methods=['POST'])
 def right():
 	moteur.avance_corrige("right", 0, 100)
 
-@app.route('/left', methods=['POST'])
+@app.route('/left-press', methods=['POST'])
 def left():
 	moteur.avance_corrige("left", 0, 100)
 
