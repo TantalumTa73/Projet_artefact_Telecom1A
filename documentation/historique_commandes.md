@@ -108,21 +108,46 @@ git push
 
 # Automatisation de demarage de la page web et git pull
 
-On utilise un script bash qui est lancé par un service systemd au démarage de la raspberry pour faire un `git pull` et lancer la pageweb
+On utilise des scripts bash qui sont lancé par des services systemd au démarage de la raspberry pour faire un `git pull` et lancer la pageweb
 
-Le code bash en question s'appelle `raspberry_start_up.sh` et contient
+Le premier code bash s'appelle `raspberry_pull.sh` et contient
 ```bash
 #!/bin/bash
 
 cd /home/strawberrypi/team1/code_raspberry/
 git pull
-python webpage.py
 ```
-Le fichier service est `/etc/systemd/system/start_up_pull_webpage.service` et contient 
+Le fichier service correspondant est `/etc/systemd/system/pull_git.service` et contient 
 ```service
 [Unit]
-Description=Git pull and start webpage
+Description=Pull code from gitlab
 After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/bin/bash /home/strawberrypi/team1/raspberry_pull.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+Le deuxième code bash s'appelle `raspberry_start_up.sh` et contient
+```bash
+#!/bin/bash
+
+cd /home/strawberrypi/team1/
+source notre_env/bin/activate
+cd code_raspberry/
+nohup python webpage.py &
+```
+Le service correspondant est `start_webpage.service`
+```service
+[Unit]
+Description=Start webpage
+After=network.target pull_git.service
 
 [Service]
 User=root
@@ -134,10 +159,15 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
+
+
 Les commandes éxécutés pour configurer pour configurer le service sont:
 ```bash
 chmod +x raspberry_start_up.sh
+chmod +x raspberry_pull.sh
 sudo systemctl daemon-reload
-sudo systemctl enable start_up_pull_webpage.service
-sudo systemctl start start_up_pull_webpage.service
+sudo systemctl enable pull_git.service
+sudo systemctl enable start_webpage.service
+sudo systemctl start pull_git.service
+sudo systemctl start start_webpage.service
 ```
