@@ -73,17 +73,17 @@ def test_calibrage():
 def forward():
 	moteur.avance_corrige("left", 1, 100)
 
-@app.route('/backwardp-press', methods=['POST'])
+@app.route('/backward-press', methods=['POST'])
 def backward():
 	moteur.avance_corrige("left", 1, -100)
 
 @app.route('/right-press', methods=['POST'])
 def right():
-	moteur.avance_corrige("right", 0, 100)
+	moteur.avance_corrige("left", -1, 100)
 
 @app.route('/left-press', methods=['POST'])
 def left():
-	moteur.avance_corrige("left", 0, 100)
+	moteur.avance_corrige("right", -1, 100)
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
