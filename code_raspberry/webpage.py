@@ -69,9 +69,21 @@ def test_calibrage():
 		print(error_message)
 		return render_template('page.html', error=error_message)
 
-@app.route('/button-press', methods=['POST'])
-def test_button_press():
+@app.route('/forward', methods=['POST'])
+def forward():
 	moteur.avance_corrige("left", 1, 100)
+
+@app.route('/backward', methods=['POST'])
+def backward():
+	moteur.avance_corrige("left", 1, -100)
+
+@app.route('/right', methods=['POST'])
+def right():
+	moteur.avance_corrige("right", 0, 100)
+
+@app.route('/left', methods=['POST'])
+def left():
+	moteur.avance_corrige("left", 0, 100)
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
