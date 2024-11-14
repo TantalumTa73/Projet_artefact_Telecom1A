@@ -70,11 +70,11 @@ def test_calibrage():
 		return render_template('page.html', error=error_message)
 
 @app.route('/button-press', methods=['POST'])
-def test_calibrage():
+def test_button_press():
 	moteur.avance_corrige("left", 1, 100)
 
 @app.route('/button-release', methods=['POST'])
-def test_calibrage():
+def test_button_release():
 	moteur.avance_corrige("left", 1, 0)
 
 
