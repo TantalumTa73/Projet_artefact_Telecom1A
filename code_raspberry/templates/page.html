@@ -6,8 +6,7 @@
   {
     //var x = element.getElementsById("image_camera");
     var x = element;
-    x.setAttribute("src", {{url_for('static', filename='image.png')}});	
-	x.src += '?nocache=' + Math.random();
+    x.setAttribute("src", {{url_for('static', filename='image.png?nocache=' + Math.random())}});	
   }
   </script>
 
