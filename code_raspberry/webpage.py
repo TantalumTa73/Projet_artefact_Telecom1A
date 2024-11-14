@@ -126,7 +126,7 @@ def update():
 
 
 	module_camera.save_image(cam)
-	connexion = module_camera.check_connexion(cam)
+	connexion = module_camera.check_camera_status(cam)
 	if connexion :
 		print("try to save the image")
 		module_camera.save_image(cam)

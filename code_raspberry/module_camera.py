@@ -19,28 +19,21 @@ parameters = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
 
 def connect():
-    return cv2.VideoCapture(cam_port)
+    return cv2.VideoCapture('/dev/video0',cv2.CAP_V4L2)
 
-def check_connexion(cam):
-    """renvoie True si la caméra est connecté, False sinon"""
-    # for cam_port_test in [0, 5]:
-    #     try :
-    #         cam = cv2.VideoCapture(cam_port_test)
-    #         result, image = cam.read()
-    #         if result:
-    #             print("cam_port_test = {}".format(cam_port_test))
-    #             return result
-    #     except :
-    #         #print("erreur lors de la capture d'image")
-    #         return False
-    try :
-        result, image = cam.read()
-        if result:
-            return result
-    except :
-        #print("erreur lors de la capture d'image")
+def check_camera_status(cam,verbose=False):
+    if not cam.isOpened():
+        if verbose:
+            print("Camera not opened")
         return False
-    return False
+    if not cam.grab():
+        if verbose:
+            print("Camera can't grab")
+        return False
+    if verbose:
+        print("Camera working")
+    return True
+
 
 def get_id_aruco(cam):
     """renvoie l'id du premier aruco détecté, -1 si aucun n'est détécté"""
@@ -76,21 +69,16 @@ def check_aruco(cam):
 def save_image(cam):
     """sauvegarde l'image dans le fichier 'image.png'
     Return 0 s'il n'y a pas eu d'erreur, 1 sinon"""
-    try:
-        print("had tried to save image")
-        result, image = cam.read()
-        
-        #convertion en png
-        if result is not None:
-            print("essaye d'écrire l'image dans image.png")
-            cv2.imwrite("static/image.png", image)
-            print("image capturée")
-        else:
-            print("image non capturée")
-            return 1
-        return 0
-    except:
+
+    result, image = cam.read()
+    
+    #convertion en png
+    if result:
+        cv2.imwrite("static/image.png", image)
+    else:
+        print("image non capturée")
         return 1
+    return 0
 
 
 
