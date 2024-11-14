@@ -97,7 +97,6 @@ try :
             return 1
 
     
-    save_image()
 
     
 
@@ -107,6 +106,6 @@ except ModuleNotFoundError:
 except:
     print("\nerreur lors de l'ouverture du module")
 
-
+save_image()
 
 
