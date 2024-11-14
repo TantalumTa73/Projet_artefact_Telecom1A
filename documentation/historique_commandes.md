@@ -127,7 +127,7 @@ After=network.target
 User=root
 Group=root
 ExecStart=/bin/bash /home/strawberrypi/team1/raspberry_pull.sh
-Restart=always
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
@@ -153,7 +153,7 @@ After=network.target pull_git.service
 User=root
 Group=root
 ExecStart=/bin/bash /home/strawberrypi/team1/raspberry_start_up.sh
-Restart=always
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
