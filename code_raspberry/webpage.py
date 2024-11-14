@@ -16,7 +16,6 @@ nb_request_per_sec = 0
 last_five_nb = [0,0,0,0,0]
 
 c = controller.Controller()
-c.set_motor_shutdown_timeout(2)
 c.standby()
 
 # Flask constructor takes the name of 
