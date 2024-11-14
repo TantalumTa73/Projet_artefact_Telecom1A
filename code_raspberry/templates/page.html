@@ -65,13 +65,11 @@
 
     // When the button is pressed
     button.addEventListener('mousedown', function() {
-        console.log('Button Pressed');
         sendPostRequest(urlPress);  // Send POST request when pressed
     });
 
     // When the button is released
     button.addEventListener('mouseup', function() {
-        console.log('Button Released');
         sendPostRequest(urlRelease);  // Send a different POST request when released
     });
 
