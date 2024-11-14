@@ -90,9 +90,13 @@ def update():
 	if current_user not in users_connected.keys():
 		users_connected[current_user] = now
 
+	to_remove = []
 	for user in users_connected.keys():
 		if now - users_connected[user] > 2:
-			del users_connected[user]
+			to_remove.append(user)
+
+	for user in to_remove:
+		del users_connected[user]
 
 
 
