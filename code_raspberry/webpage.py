@@ -15,7 +15,7 @@ vitesse = 0
 
 last_update_time = time.time()
 users_connected = dict() 
-cam = module_camera.connect()
+cam = None 
 
 c = controller.Controller()
 c.standby()
@@ -126,6 +126,8 @@ def update():
 
 
     # Capture de l'image de la camera et sauvegarde 
+	if cam is None:
+		cam = module_camera.connect()
 	aruco_detected = module_camera.check_aruco(cam)
 	connexion = module_camera.check_camera_status(cam,verbose=True)
 	print("try to save the image")
