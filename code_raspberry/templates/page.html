@@ -84,7 +84,6 @@
   id = "image_camera"
   src="{{url_for('static', filename='image.png')}}"
   alt="Ici doit se trouver l'image capturée par la caméra" 
-  onclick="this.setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());"/>
 
   <form name="alternate" method="POST" action="">
     <input type="button" value="Change" onclick="changeImage(document.getElementById('image_camera');">
@@ -98,6 +97,7 @@ function updater() {
     $('#time').html(data);  // update page with new data
   });
 };
+document.getElementById('image_camera').setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());
 
 setInterval(updater, 1000);  // run `updater()` every 1000ms (1s)
 </script>
