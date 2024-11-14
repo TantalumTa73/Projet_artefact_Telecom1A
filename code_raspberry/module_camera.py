@@ -10,6 +10,7 @@ Ce module permet d'interagir avec la caméra
 """
 
 import cv2
+import os 
 
 #outils de detection de aruco
 
@@ -71,6 +72,7 @@ def save_image(cam):
 
     result, image = cam.read()
     
+    print(os.path.dirname(os.path.realpath(__file__)))
     #convertion en png
     if result:
         if not cv2.imwrite("static/image.png", image):
