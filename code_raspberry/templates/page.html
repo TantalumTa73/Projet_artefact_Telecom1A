@@ -10,7 +10,7 @@
     if(v == "{{url_for('static', filename='image.png')}}")
       v = "{{url_for('static', filename='image_lion.jpeg')}}";
     else
-      v = "{{url_for('static', filename='image.png')}}";
+      v = "{{url_for('static', filename='image.png')}}?time=<?php echo time(); ?";
     x.setAttribute("src", v);	
   }
   
