@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<script> 
-  function changeImage(element)
-  {
-    //var x = element.getElementsById("image_camera");
-    var x = element;
-	  x.setAttribute("src", {{url_for('static', filename='image.png')}} + '?nocache=' + Math.random());	
-  }
-  </script>
 
 <head>
     <meta charset="UTF-8">
@@ -102,10 +94,10 @@
   id = "image_camera"
   src="{{url_for('static', filename='image.png')}}"
   alt="Ici doit se trouver l'image capturée par la caméra" 
-  onclick="changeImage(this);"/>
+  onclick="this.setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());"/>
 
   <form name="alternate" method="POST" action="">
-    <input type="button" value="Change" onclick="changeImage(document.getElementById("image_camera");">
+    <input type="button" value="Change" onclick="changeImage(document.getElementById('image_camera');">
  </form>
 
 
