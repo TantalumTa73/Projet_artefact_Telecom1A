@@ -249,9 +249,9 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
 		print("curr", curr_ticks)     
-		speed_left = - int((- supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
+		speed_left = int((- supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
-		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		print("tickgap",  - supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
