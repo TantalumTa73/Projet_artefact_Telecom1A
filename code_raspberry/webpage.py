@@ -95,6 +95,16 @@ def toggle_image_view():
 	return render_template("page.html")	
 
 
+@app.route('/aruco', methods=['POST'])
+def aruco_detect():
+	global cam
+	image, result = module_camera.get_image(cam)
+	if result:
+		#module_camera.save_image(image)
+		print(analyse_image.detect_aruco_markers(image))
+	return render_template("page.html")	
+
+
 @app.route('/update')
 def update():
 	global last_update_time, users_connected, cam
