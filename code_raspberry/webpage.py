@@ -125,9 +125,15 @@ def update():
 	for user in to_remove:
 		del users_connected[user]
 
+	# Connection de la camera
+	if cam is None:
+		cam = module_camera.connect()
+	aruco_detected = module_camera.check_aruco(cam)
+	connexion = module_camera.check_camera_status(cam,verbose=True)
 
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 1:
+        print(now)
 		# Envoi vers l'api 
 		url = "http://proj103.r2.enst.fr/api/pos?x=100&y=20"
 		r = requests.post(url)
@@ -136,14 +142,11 @@ def update():
 
 
 
-		# Capture de l'image de la camera et sauvegarde 
-		if cam is None:
-			cam = module_camera.connect()
-		aruco_detected = module_camera.check_aruco(cam)
-		connexion = module_camera.check_camera_status(cam,verbose=True)
+		# Saving image
 		print("try to save the image")
 		module_camera.save_image(cam)
 
+		last_update_time = time.time()
 	#####################################################
 
 		
@@ -156,7 +159,6 @@ def update():
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
 """
 
-	last_update_time = time.time()
 	return updated_content
 
 
