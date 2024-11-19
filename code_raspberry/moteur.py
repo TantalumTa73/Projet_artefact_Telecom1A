@@ -130,7 +130,6 @@ def avance_test():
 	
 	val.append(moteur.get_encoder_ticks())
 	real_ticks.append(acceleration(vitesse,time_step))
-	t.sleep(attente)
 	val.append(moteur.get_encoder_ticks())
 	moteur.set_motor_speed(0,0)
 	"""val.append(moteur.get_encoder_ticks())
