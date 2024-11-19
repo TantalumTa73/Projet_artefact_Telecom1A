@@ -1,6 +1,6 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 import controller
 import time
 import datetime
@@ -69,42 +69,42 @@ def test_calibrage():
 		print("C pas bien")
 		print(error_message)
 		return render_template('page.html', error=error_message)
-	return True
+	return Response(status=200)
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
 	vitesse = request.form.get('speed')
-	return True
+	return Response(status=200)
 
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
 	moteur.avance_corrige("left", 1, vitesse)
-	return True
+	return Response(status=200)
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
 	global vitesse
 	moteur.avance_corrige("left", 1, -vitesse)
-	return True
+	return Response(status=200)
 
 @app.route('/right-press', methods=['POST'])
 def right():
 	global vitesse
 	moteur.avance_corrige("left", -1, vitesse)
-	return True
+	return Response(status=200)
 
 @app.route('/left-press', methods=['POST'])
 def left():
 	global vitesse
 	moteur.avance_corrige("right", -1, vitesse)
-	return True
+	return Response(status=200)
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
 	moteur.avance_corrige("left", 1, 0)
-	return True
+	return Response(status=200)
 
 
 @app.route('/update')
