@@ -133,7 +133,7 @@ def update():
 
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 1:
-        print(now)
+		print(now)
 		# Envoi vers l'api 
 		url = "http://proj103.r2.enst.fr/api/pos?x=100&y=20"
 		r = requests.post(url)
