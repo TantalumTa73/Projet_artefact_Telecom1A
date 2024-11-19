@@ -291,17 +291,48 @@ def rota_16_angles(time_step, temps_accel_decel):
 	supposed_ticks = [tick_per_turn * i for i in range(17)]
 	supposed_ticks.append(tot_tick)
 	poss_speed = [20,15,12,10,5,3]
-	curr_tick = 0
+	curr_tick = [0,0]
 	for k in range(18):
 		tick = supposed_ticks[k] - curr_tick
 		print(tick)
 		for spd in poss_speed:
 			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
 			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
-			tick_parc = tick - acc_tick - dec_tick
-			if tick_parc > 0:
-				temps_parc = tick_parc/(100*spd)
-				res = rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, "right")
+			tick_parc_left = supposed_ticks[k] - curr_tick[0] - acc_tick - dec_tick
+			tick_parc_right = supposed_ticks[k] - curr_tick[1] - acc_tick - dec_tick
+			if tick_parc_left > 0 and tick_parc_right > 0:
+				temps_parc_left = tick_parc_left/(100*spd)
+				temps_parc_right = tick_parc_right/(100*spd)
+				moteur.get_encoder_ticks()
+
+				n = int(temps_accel_decel/time_step)
+				n_parcours = int((temps_parc_left + temps_parc_right) / (time_step * 2))
+				real_ticks = [0,0]
+				curr_ticks_int = [0,0]
+				supposed_ticks = [0]
+				for k in range(0,n + 1):
+					dvitesse = int(k * spd / n)
+					supposed_ticks.append(dvitesse*time_step*100 + supposed_ticks[-1])
+				for k in range(0,n_parcours):
+					supposed_ticks.append(dvitesse*time_step*100 + supposed_ticks[-1])
+				for k in range(0,n + 1):
+					dvitesse = int(k * spd / n)
+					supposed_ticks.append((spd -dvitesse)*time_step*100 + supposed_ticks[-1])
+				print(supposed_ticks)
+
+				for k in range(0, n_accel + n_parcours + n_decel + 2):
+					ticks = moteur.get_encoder_ticks()
+					curr_ticks[0] += ticks[0]
+					curr_ticks[1] += ticks[1]
+					print("curr", curr_ticks)     
+					speed_left = int((- supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
+					speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
+					print("tickgap",  - supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+					print("speed", [speed_left, speed_right])
+					moteur.set_motor_speed(speed_left, speed_right)
+					t.sleep(time_step)
+				moteur.set_motor_speed(0,0)
+				t.sleep(0.5)
 				curr_tick += res[1]
 				break
 	moteur.set_motor_speed(0,0)
