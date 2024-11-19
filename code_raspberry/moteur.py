@@ -68,7 +68,7 @@ def deceleration(vitesse,time_step):
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return supposed_ticks[-1], curr
+	return supposed_ticks[-1], curr_ticks
 
 def straight_line(vitesse, time_step, temps):
 	n = int(temps / time_step)
@@ -90,7 +90,7 @@ def straight_line(vitesse, time_step, temps):
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return supposed_ticks[-1], curr
+	return supposed_ticks[-1], curr_ticks
 
 
     
