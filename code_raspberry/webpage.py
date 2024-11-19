@@ -103,7 +103,7 @@ def update():
 	now = time.time()
 	current_user = request.remote_addr
 
-	update_content = f"<p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>"
+	updated_content = f"<p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>"
 
 
 	# Determination du nombre d'utilisateur connecte 
