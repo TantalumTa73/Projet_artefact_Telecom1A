@@ -31,12 +31,6 @@ app = Flask(__name__, static_url_path='/static/')
 # which tells the application which URL should call 
 # the associated function.
 
-def get_index(elm,tab):
-	for i in range(len(tab)):
-		if elm == tab[i]:
-			return i
-	return None
-
 @app.route('/', methods=['GET','POST'])
 def page():
 	global c 
@@ -75,35 +69,42 @@ def test_calibrage():
 		print("C pas bien")
 		print(error_message)
 		return render_template('page.html', error=error_message)
+	return True
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
 	vitesse = request.form.get('speed')
+	return True
 
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
 	moteur.avance_corrige("left", 1, vitesse)
+	return True
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
 	global vitesse
 	moteur.avance_corrige("left", 1, -vitesse)
+	return True
 
 @app.route('/right-press', methods=['POST'])
 def right():
 	global vitesse
 	moteur.avance_corrige("left", -1, vitesse)
+	return True
 
 @app.route('/left-press', methods=['POST'])
 def left():
 	global vitesse
 	moteur.avance_corrige("right", -1, vitesse)
+	return True
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
 	moteur.avance_corrige("left", 1, 0)
+	return True
 
 
 @app.route('/update')
@@ -144,7 +145,7 @@ def update():
 
 
 		# Saving image
-		print("try to save the image")
+		print("Attempt to save image")
 		module_camera.save_image(cam)
 
 		last_update_time = now
