@@ -281,4 +281,5 @@ def rota_deg(deg, time_step, temps_accel_decel):
 			temps_parc = tick_parc/(100 * spd)
 			rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, side)
 			break
+	moteur.set_motor_speed(0,0)
 	t.sleep(2)
