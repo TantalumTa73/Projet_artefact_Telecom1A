@@ -35,8 +35,8 @@ def acceleration(vitesse,time_step):
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
 		print("curr", curr_ticks)     
-		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
-		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
+		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)) + 3
+		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)) + 3
 		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
@@ -61,11 +61,14 @@ def deceleration(vitesse,time_step):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]      
-		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
-		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
+		print("curr", curr_ticks)     
+		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)) + 3
+		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)) + 3
+		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return supposed_ticks[-1]
+	return supposed_ticks[-1], curr
 
 def straight_line(vitesse, time_step, temps):
 	n = int(temps / time_step)
@@ -80,11 +83,14 @@ def straight_line(vitesse, time_step, temps):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
-		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
-		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
+		print("curr", curr_ticks)     
+		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)) + 3
+		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)) + 3
+		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return supposed_ticks[-1]
+	return supposed_ticks[-1], curr
 
 
     
@@ -133,14 +139,15 @@ def avance_test():
 	real_ticks.append(res[0])
 	val.append(res[1])
 	val.append(moteur.get_encoder_ticks())
+	res = straight_line(vitesse,time_step*3,temps_parcours)
+	real_ticks.append(res[0])
+	val.append(res[1])
+	val.append(moteur.get_encoder_ticks())
+	res = deceleration(vitesse,time_step)
+	real_ticks.append(res[0])
+	val.append(res[1])
+	val.append(moteur.get_encoder_ticks())
 	moteur.set_motor_speed(0,0)
-	"""val.append(moteur.get_encoder_ticks())
-	real_ticks.append(straight_line(vitesse,time_step*3,temps_parcours))
-	val.append(moteur.get_encoder_ticks())
-	real_ticks.append(deceleration(vitesse,time_step))
-	t.sleep(attente)
-	val.append(moteur.get_encoder_ticks())
-	moteur.set_motor_speed(0,0)"""
 
 	print(val[1::])
 	print(sum(map(lambda x : x[0], val[1::])))
