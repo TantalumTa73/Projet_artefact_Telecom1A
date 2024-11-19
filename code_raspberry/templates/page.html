@@ -2,103 +2,51 @@
 <html lang="en">
 
 
-<head>
-    <meta charset="UTF-8">
-    <title>Strawberrypi!</title>
-</head>
-<body>
-<h1><i> Welcome to the raspberry page!</i></h1>
-
-<form action="/toggle-image-view" method="POST">
-    <button type="submit">Afficher/caché l'image</button>
-</form>
-
-<form action="/aruco" method="POST">
-    <button type="submit">aruco test</button>
-</form>
-
-<form action="/test_calibrage" method="POST">
-    <label for="text">Moteur principal:</label>
-    <input type="text" id="text" name="text" required><br><br>
-    <label for="ratio">Ratio:</label>
-    <input type="number" id="ratio" step="any" name="num2" required><br><br>
-    <button type="submit">Test avance corigée</button>
-</form>
-
-<form action="/change-speed" method="POST">
-    <label for="speed">Vitesse (entière): </label>
-    <input type="number" id="speed" name="speed" required><br><br>
-    <button type="submit">Change vitesse</button>
-</form>
-
-<form action="/avance-test" method="POST">
-    <button type="submit">Test avance</button>
-</form>
-
-<button id="forward">Avancer</button>
-<button id="backward">Reculer</button>
-<button id="left">Gauche</button>
-<button id="right">Droite</button>
-
-<script>
-    // The URL for the POST requests
-    const urlForward = '/forward-press';  // URL to send when the button is pressed
-    const urlBackward= '/backward-press';  // URL to send when the button is pressed
-    const urlRight = '/right-press';  // URL to send when the button is pressed
-    const urlLeft = '/left-press';  // URL to send when the button is pressed
-    const urlRelease = '/button-release'; // URL to send when the button is released
-
-    // Function to send a POST request
-    function sendPostRequest(url) {
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ action: 'button-activated' })
-        })
-        .then(response => response.json());
-    }
-
-    const buttonForward = document.getElementById('forward');
-    const buttonBackward = document.getElementById('backward');
-    const buttonRight = document.getElementById('right');
-    const buttonLeft = document.getElementById('left');
-
-    // When the button is pressed
-    buttonForward.addEventListener('mousedown', function() {
-        sendPostRequest(urlForward);  // Send POST request when pressed
-    });
-    buttonBackward.addEventListener('mousedown', function() {
-        sendPostRequest(urlBackward);  // Send POST request when pressed
-    });
-    buttonRight.addEventListener('mousedown', function() {
-        sendPostRequest(urlRight);  // Send POST request when pressed
-    });
-    buttonLeft.addEventListener('mousedown', function() {
-        sendPostRequest(urlLeft);  // Send POST request when pressed
-    });
-
-    // When the button is released
-    buttonForward.addEventListener('mouseup', function() {
-        sendPostRequest(urlRelease);  // Send a different POST request when released
-    });
-    buttonBackward.addEventListener('mouseup', function() {
-        sendPostRequest(urlRelease);  // Send a different POST request when released
-    });
-    buttonRight.addEventListener('mouseup', function() {
-        sendPostRequest(urlRelease);  // Send a different POST request when released
-    });
-    buttonLeft.addEventListener('mouseup', function() {
-        sendPostRequest(urlRelease);  // Send a different POST request when released
-    });
-
-</script>
-
 <div style="width: 100%;">
 	<div style="width: 50%; height: 100px; float: left;"> 
+
+		<head>
+			<meta charset="UTF-8">
+			<title>Strawberrypi!</title>
+		</head>
+		<body>
+		<h1><i> Welcome to the raspberry page!</i></h1>
+
+		<form action="/toggle-image-view" method="POST">
+			<button type="submit">Afficher/caché l'image</button>
+		</form>
+
+		<form action="/aruco" method="POST">
+			<button type="submit">aruco test</button>
+		</form>
+
+		<form action="/test_calibrage" method="POST">
+			<label for="text">Moteur principal:</label>
+			<input type="text" id="text" name="text" required><br><br>
+			<label for="ratio">Ratio:</label>
+			<input type="number" id="ratio" step="any" name="num2" required><br><br>
+			<button type="submit">Test avance corigée</button>
+		</form>
+
+		<form action="/change-speed" method="POST">
+			<label for="speed">Vitesse (entière): </label>
+			<input type="number" id="speed" name="speed" required><br><br>
+			<button type="submit">Change vitesse</button>
+		</form>
+
+		<form action="/avance-test" method="POST">
+			<button type="submit">Test avance</button>
+		</form>
+
+		<button id="forward">Avancer</button>
+		<button id="backward">Reculer</button>
+		<button id="left">Gauche</button>
+		<button id="right">Droite</button>
+
 		<span id="time"></span>
+
 	</div>
+
 	<div style="margin-left: 50%; height: 100px"> 
 		<img
 		  id = "image_camera"
@@ -110,15 +58,70 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
 
-<script type="text/javascript">
-function updater() {
-  $.get('/update', function(data) {
-    $('#time').html(data);  // update page with new data
-	document.getElementById('image_camera').setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());
-  });
-};
+<script>
+	// The URL for the POST requests
+	const urlForward = '/forward-press';  // URL to send when the button is pressed
+	const urlBackward= '/backward-press';  // URL to send when the button is pressed
+	const urlRight = '/right-press';  // URL to send when the button is pressed
+	const urlLeft = '/left-press';  // URL to send when the button is pressed
+	const urlRelease = '/button-release'; // URL to send when the button is released
 
-setInterval(updater, 1000);  // run `updater()` every 1000ms (1s)
+	// Function to send a POST request
+	function sendPostRequest(url) {
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ action: 'button-activated' })
+		})
+		.then(response => response.json());
+	}
+
+	const buttonForward = document.getElementById('forward');
+	const buttonBackward = document.getElementById('backward');
+	const buttonRight = document.getElementById('right');
+	const buttonLeft = document.getElementById('left');
+
+	// When the button is pressed
+	buttonForward.addEventListener('mousedown', function() {
+		sendPostRequest(urlForward);  // Send POST request when pressed
+	});
+	buttonBackward.addEventListener('mousedown', function() {
+		sendPostRequest(urlBackward);  // Send POST request when pressed
+	});
+	buttonRight.addEventListener('mousedown', function() {
+		sendPostRequest(urlRight);  // Send POST request when pressed
+	});
+	buttonLeft.addEventListener('mousedown', function() {
+		sendPostRequest(urlLeft);  // Send POST request when pressed
+	});
+
+	// When the button is released
+	buttonForward.addEventListener('mouseup', function() {
+		sendPostRequest(urlRelease);  // Send a different POST request when released
+	});
+	buttonBackward.addEventListener('mouseup', function() {
+		sendPostRequest(urlRelease);  // Send a different POST request when released
+	});
+	buttonRight.addEventListener('mouseup', function() {
+		sendPostRequest(urlRelease);  // Send a different POST request when released
+	});
+	buttonLeft.addEventListener('mouseup', function() {
+		sendPostRequest(urlRelease);  // Send a different POST request when released
+	});
 </script>
+
+<script type="text/javascript">
+	function updater() {
+		$.get('/update', function(data) {
+			$('#time').html(data);  // update page with new data
+			document.getElementById('image_camera').setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());
+		});
+	};
+
+	setInterval(updater, 1000);  // run `updater()` every 1000ms (1s)
+</script>
+
 </body>
 </html>
