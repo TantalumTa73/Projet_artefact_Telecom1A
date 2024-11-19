@@ -259,9 +259,14 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 	print([supposed_ticks[-1], curr_ticks])
 
 
-def rota_deg(deg, time_step, temps_accel_decel, side):
+def rota_deg(deg, time_step, temps_accel_decel):
+	deg = deg%360
+	side = "right"
+	if deg > 180:
+		deg = 360 - deg
+		side = "left"
 	ticks = int((deg * 185.72 * 2 * 3.141592 * 7.85) / 360)
-	asserv_decel = {10:30}
+	asserv_decel = {10:240}
 	poss_speed = [10]
 	for spd in poss_speed:
 		print('patate')
