@@ -162,8 +162,8 @@ def update():
 <ul>
 """
 	for user in users_connected:
-		updated_content += "<li>{user]</li>"
-	update_content += "</ul>"
+		updated_content += f"<li>{user}</li>"
+	updated_content += "</ul>"
 
 	return updated_content
 
