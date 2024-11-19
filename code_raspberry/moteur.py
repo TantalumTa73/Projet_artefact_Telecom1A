@@ -159,6 +159,7 @@ def avance_test():
 	print(sum(real_ticks))
 
 def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel):
+	moteur.get_encoder_ticks()
 	vitesse = int(vitesse)
 	n_accel = int(temps_accel/time_step)
 	n_decel = int(temps_decel/time_step)
