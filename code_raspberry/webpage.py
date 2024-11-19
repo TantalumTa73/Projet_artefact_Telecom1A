@@ -135,7 +135,6 @@ def update():
 
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
-		print(now,now-last_update_time)
 		# Envoi vers l'api 
 		r = requests.post(url)
 
@@ -148,7 +147,7 @@ def update():
 		print("try to save the image")
 		module_camera.save_image(cam)
 
-		last_update_time = time.time()
+		last_update_time = now
 	#####################################################
 
 		
