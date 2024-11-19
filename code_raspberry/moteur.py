@@ -41,7 +41,7 @@ def acceleration(vitesse,time_step):
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return supposed_ticks[-1]
+	return supposed_ticks[-1], curr_ticks
 
 def deceleration(vitesse,time_step):
 
@@ -129,7 +129,9 @@ def avance_test():
 	real_ticks = [] 
 	
 	val.append(moteur.get_encoder_ticks())
-	real_ticks.append(acceleration(vitesse,time_step))
+	res = acceleration(vitesse,time_step)
+	real_ticks.append(res[0])
+	val.append(res[1])
 	val.append(moteur.get_encoder_ticks())
 	moteur.set_motor_speed(0,0)
 	"""val.append(moteur.get_encoder_ticks())
