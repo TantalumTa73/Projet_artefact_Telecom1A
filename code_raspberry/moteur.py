@@ -44,6 +44,15 @@ def acceleration(vitesse,time_step, temps_accel):
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
 
+def calc_tick_accel(vitesse, time_step, temps_accel):
+	vitesse = int(vitesse)
+	n = int(temps_accel/time_step)
+	tick = 0
+	for k in range(0, n + 1):
+		dvitesse = int(k * vitesse / n)
+		tick += dvitesse*time_step*100
+	return tick
+
 def deceleration(vitesse,time_step, temps_decel):
 
 	""" Décélère de façon progressive jusqu'à l'arrêt depuis une certaine vitesse """
@@ -71,6 +80,15 @@ def deceleration(vitesse,time_step, temps_decel):
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
+
+def calc_tick_decel(vitesse, time_step, temps_accel):
+	vitesse = int(vitesse)
+	n = int(temps_accel/time_step)
+	tick = 0
+	for k in range(0, n + 1):
+		dvitesse = int(k * vitesse / n)
+		tick += (vitesse-dvitesse)*time_step*100
+	return tick
 
 def straight_line(vitesse, time_step, temps):
 	n = int(temps / time_step)
@@ -190,3 +208,18 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 		t.sleep(time_step)
 	moteur.set_motor_speed(0,0)
 	print([supposed_ticks[-1], curr_ticks])
+
+def avance_cm(dist, time_step, temps_accel_decel):
+	ticks = int(dist * 185.72)
+	asserv_decel = {10:30, 20:60, 30:80, 40:115, 50:115, 60:135, 70:155}
+	poss_speed = [70, 60, 50, 40, 30, 20, 10]
+	for spd in poss_speed:
+        print('patate')
+		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
+		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
+		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
+		if tick_parc > 0:
+			temps_parc = tick_parc/(100 * spd)
+			avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
+		else:
+			break

@@ -49,6 +49,40 @@ def found_flag(marquer_id,col,row):
 	if r.status_code != 200: 
 		print(f"Failed to send data to server {r.status_code}")
 
+def case_to_pos(case):
+	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
+	i,j = case 
+	return (25+i*50, 25+j*50)
+
+def pos_to_case(pos):
+	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
+	x,y = pos 
+	return (x//50, y//50)
+
+def case_to_string(case):
+	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
+	i,j = case 
+	if i<0 or i>3 or j<0 or j>6:
+		return "Hors du terrain"
+	string = "GFEDCBA"[j]
+	return string+str(i+1)
+
+def string_to_case(string)
+	"""renvoie la case (i,j) correspondant au string
+	None si le format est incorrect"""
+	if len(string!=2):
+		return None
+	j = "GFEDCBA".find(string[0])
+	if j==-1:
+		"gfedcba".find(string[0])
+	if j==-1:
+		return None 
+	if not string[1] in "0123456789":
+		return None 
+	return (j, int(string[1]))
+	
+	
+
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
