@@ -8,6 +8,7 @@ import module_camera
 import os
 import moteur
 import requests
+import analyse_image
 
 # Moteurs 
 
@@ -19,6 +20,7 @@ url = "https://comment.requestcatcher.com/"
 last_update_time = time.time()
 users_connected = dict() 
 cam = None 
+image_view = True
 
 c = controller.Controller()
 c.standby()
@@ -86,6 +88,12 @@ def test_button_release():
 	moteur.avance_corrige("left", 1, 0)
 	return render_template("page.html")	
 
+@app.route('/toggle-image-view', methods=['POST'])
+def toggle_image_view():
+	global image_view
+	image_view = not image_view
+	return render_template("page.html")	
+
 
 @app.route('/update')
 def update():
@@ -128,6 +136,7 @@ def update():
 		image, result = module_camera.get_image(cam)
 		if result:
 			module_camera.save_image(image)
+			print(analyse_image.detect_aruco_markers(image))
 		else:
 			print("Image did not save")
 
