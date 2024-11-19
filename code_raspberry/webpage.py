@@ -103,6 +103,8 @@ def update():
 	now = time.time()
 	current_user = request.remote_addr
 
+	update_content = f"<p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>"
+
 
 	# Determination du nombre d'utilisateur connecte 
 	if current_user not in users_connected.keys():
@@ -117,10 +119,13 @@ def update():
 		del users_connected[user]
 
 	# Connection de la camera
-	if cam is None:
-		cam = module_camera.connect()
-	aruco_detected = module_camera.check_aruco(cam)
-	connexion = module_camera.check_camera_status(cam,verbose=True)
+	if image_view:
+		if cam is None:
+			cam = module_camera.connect()
+		aruco_detected = module_camera.check_aruco(cam)
+		connexion = module_camera.check_camera_status(cam,verbose=True)
+		updated_content+=f"<p>Connexion camera : {connexion}</p>"
+		updated_content+=f"<p>Aruco détecté: {aruco_detected}</p>"
 
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
@@ -133,27 +138,23 @@ def update():
 
 
 		# Saving image
-		image, result = module_camera.get_image(cam)
-		if result:
-			module_camera.save_image(image)
-			print(analyse_image.detect_aruco_markers(image))
-		else:
-			print("Image did not save")
+		if image_view:
+			image, result = module_camera.get_image(cam)
+			if result:
+				module_camera.save_image(image)
+				print(analyse_image.detect_aruco_markers(image))
+			else:
+				print("Image did not save")
 
 		last_update_time = now
 	#####################################################
 
 		
 	# Contenu renvoier
-	updated_content=f"""
-<p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
-<p>Connexion camera : {connexion}</p>
-<p>Aruco détecté: {aruco_detected}</p>
-<p>Vitesse actuelle: {vitesse}</p>
-<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>
-<p>Utilisateurs connectés</p>
-"""
-	updated_content += "<ul>"
+	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
+	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
+	updated_content+="<p>Utilisateurs connectés</p>"
+	updated_content+="<ul>"
 	for user in users_connected:
 		updated_content += f"<li>{user}</li>"
 	updated_content += "</ul>"
