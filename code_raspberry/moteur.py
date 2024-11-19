@@ -301,6 +301,7 @@ def rota_16_angles(time_step, temps_accel_decel):
 			tick_parc = tick - acc_tick - dec_tick
 			if tick_parc > 0:
 				temps_parc = tick_parc/(100*spd)
-				curr_tick += (rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, "right"))[1]
+				res = rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, "right")
+				curr_tick += res[1]
 				break
 	moteur.set_motor_speed(0,0)
