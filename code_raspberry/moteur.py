@@ -64,5 +64,11 @@ def rotation_test(temps, vitesse, côté):
     t.sleep(temps)
     print(moteur.get_encoder_ticks())
     
-
-
+def avance_test():
+    print(moteur.get_encoder_ticks)
+    acceleration(30)
+    print(moteur.get_encoder_ticks)
+    sleep(3)
+    print(moteur.get_encoder_ticks)
+    deceleration(30)
+    print(moteur.get_encoder_ticks)
