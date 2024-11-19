@@ -23,12 +23,16 @@ def acceleration(vitesse,time_step):
 	vitesse = int(vitesse)
 
 	real_ticks = 0
+    supposed_ticks = []
 	for k in range(0, 11):
-		dvitesse = int(k * vitesse / 10) 
-
-		moteur.set_motor_speed(dvitesse, dvitesse)
-		real_ticks += dvitesse*time_step*100
-		t.sleep(time_step)
+		dvitesse = int(k * vitesse / 10)
+		supposed_ticks.append(dvitesse*time_step*100)
+    for k in range(0,11):
+        curr_ticks = moteur.get_encoder_ticks()
+        speed_right = (supposed_ticks[k] - curr_ticks[0]) / (time_step * 100)
+        spped_left = (supposed_ticks[k] - curr_ticks[1]) / (time_step * 100)
+    moteur.set_motor_speed(speed_left, speed_right)
+    t.sleep(time_step)
 	return real_ticks
 
 def deceleration(vitesse,time_step):
