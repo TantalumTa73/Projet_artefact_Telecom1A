@@ -52,29 +52,29 @@ def found_flag(marquer_id,col,row):
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
 	i,j = case 
-	return (25+i*50, 25+j*50)
+	return (25+i*50, -25+j*50)
 
 def pos_to_case(pos):
 	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
 	x,y = pos 
-	return (x//50, y//50)
+	return (x//50, (25+y)//50)
 
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
 	i,j = case 
-	if not 0<i<7 or 0<j<7:
+	if not (0<=i<7 or 0<=j<7):
 		return "Hors du terrain"
 		print("Hors du terrain")
-	string = "ABACDEFG"[j]
+	string = "GFEDCBA"[j]
 	return (string,str(i+1))
 
 def string_to_case(case):
 	"""renvoie la case (i,j) correspondant au string
 	None si le format est incorrect"""
-	j = "ABCDEFG".find(case[0])
+	j = "GFEDCBA".find(case[0])
 	if j==-1:
-		"abcdefg".find(case[0])
-	return (j, int(case[1])-1)
+		"gfedcba".find(case[0])
+	return (int(case[1])-1,j)
 	
 	
 
@@ -100,6 +100,7 @@ def init_position():
 
 	current_x, current_y = case_to_pos(string_to_case((case_x,case_y)))
 
+	send_position(current_x,current_y)
 	return render_template("page.html")	
 
 
@@ -230,7 +231,8 @@ def update():
 	# Contenu renvoier
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
 	updated_content+=f"<p>Position actuelle (cm) x:{current_x} y:{current_y} angle:{current_angle}</p>"
-	str_x, str_y = case_to_string(pos_to_case((current_x,current_y)))
+	case_x,case_y= pos_to_case((current_x,current_y))
+	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
