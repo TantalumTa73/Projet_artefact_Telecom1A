@@ -99,6 +99,7 @@ def init_position():
 
 	current_x, current_y = case_to_pos(string_to_case((case_x,case_y)))
 
+	return render_template("page.html")	
 
 
 @app.route('/go_to', methods=['POST'])
@@ -109,6 +110,7 @@ def go_to():
 
 	x, y = case_to_pos(string_to_case((case_x,case_y)))
 
+	return render_template("page.html")	
 
 @app.route('/test_calibrage', methods=['POST'])
 def test_calibrage():
