@@ -271,7 +271,7 @@ def rota_deg(deg, time_step, temps_accel_decel):
 		deg = 360 - deg
 		side = "left"
 	ticks = int((deg * 185.72 * 2 * 3.141592 * 7.85) / 360)
-	poss_speed = [10,5,3]
+	poss_speed = [20,15,12,10,5,3]
 	for spd in poss_speed:
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
 		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
