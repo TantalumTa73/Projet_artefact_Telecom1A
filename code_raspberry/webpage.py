@@ -17,6 +17,10 @@ vitesse = 0
 
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
+current_x = -100
+current_y = -100
+current_angle = 0
+
 last_distance = ""
 last_update_time = time.time()
 users_connected = dict() 
@@ -57,6 +61,24 @@ app = Flask(__name__, static_url_path='/static/')
 @app.route('/', methods=['GET','POST'])
 def page():
 	return render_template("page.html")	
+
+@app.route('/init_position', methods=['POST'])
+def init_position():
+	global current_x, current_y
+	case_x = request.form.get('x')
+	case_y = request.form.get('y')
+
+	current_x, current_y = case_to_pos(string_to_case((case_x,case_y)))
+
+
+
+@app.route('/go_to', methods=['POST'])
+def go_to():
+	global current_x, current_y
+	case_x = request.form.get('x')
+	case_y = request.form.get('y')
+
+	x, y = case_to_pos(string_to_case((case_x,case_y)))
 
 
 @app.route('/test_calibrage', methods=['POST'])
@@ -123,7 +145,7 @@ def toggle_image_view():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected, cam, last_distance
+	global last_update_time, users_connected, cam, last_distance, current_x, current_y, current_angle
 	"""send current content"""
 
 	now = time.time()
@@ -175,6 +197,9 @@ def update():
 		
 	# Contenu renvoier
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
+	updated_content+=f"<p>Position actuelle (cm) x:{current_x} y:{current_y} angle:{current_angle}</p>"
+	str_x,str_y = case_to_str(pos_to_case((current_x,current_y)))
+	updated_content+=f"<p>Position actuelle (case) x:{str_x} y:{str_y} angle:{current_angle}</p>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
