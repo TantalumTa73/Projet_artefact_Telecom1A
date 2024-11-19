@@ -40,8 +40,7 @@ def rotation_test(temps, vitesse, côté):
     if côté == "left":
         vitesse = -vitesse
     moteur.set_motor_speed(vitesse, -vitesse)
-    print(moteur.get_encoder_ticks())
     t.sleep(temps)
-    moteur.set_motor_speed(0,0)
+    print(moteur.get_encoder_ticks())
 
 
