@@ -18,6 +18,47 @@ def aller_case(x_dep, y_dep, x_dest, y_dest, orientation):
         if distX > 0:
             moteur.tourne(90)
             moteur.avance(distX)
+            return 1
         else:
             moteur.tourne(-90)
             moteur.avance(distX)
+            return 3
+    elif orientation == 2:
+        if distY < 0:
+            moteur.avance(distY)
+        else:
+            moteur.avance(-distY)
+        if distX > 0:
+            moteur.tourne(-90)
+            moteur.avance(distX)
+            return 1
+        else:
+            moteur.tourne(90)
+            moteur.avance(distX)
+            return 3
+    elif orientation == 3:
+        if distX < 0:
+            moteur.avance(distX)
+        else:
+            moteur.avance(-distX)
+        if distY > 0:
+            moteur.tourne(90)
+            moteur.avance(distY)
+            return 0
+        else:
+            moteur.tourne(-90)
+            moteur.avance(distY)
+            return 2
+    else:
+        if distX > 0:
+            moteur.avance(distX)
+        else:
+            moteur.avance(-distX)
+        if distY > 0:
+            moteur.tourne(-90)
+            moteur.avance(distY)
+            return 0
+        else:
+            moteur.tourne(90)
+            moteur.avance(distY)
+            return 2
