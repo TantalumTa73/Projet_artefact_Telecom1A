@@ -119,16 +119,17 @@ def update():
 		# Envoi vers l'api 
 		r = requests.post(url)
 
-		if r.status_code == 200: 
-			print("Data sent to server")
+		if r.status_code != 200: 
+			print(f"Data failed to send to sever {r.status_code}")
 
 
 
 		# Saving image
-		print("Attempt to save image")
 		image, result = module_camera.get_image(cam)
 		if result:
 			module_camera.save_image(image)
+		else:
+			print("Image did not save")
 
 		last_update_time = now
 	#####################################################
@@ -137,12 +138,13 @@ def update():
 	# Contenu renvoier
 	updated_content=f"""
 <p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
-<p>connexion camera : {connexion}</p>
-<p>aruco détecté: {aruco_detected}</p>
-<p>nombre d'utilisateurs connectés {len(users_connected)}</p>
-<p>vitesse actuelle: {vitesse}</p>
-<ul>
+<p>Connexion camera : {connexion}</p>
+<p>Aruco détecté: {aruco_detected}</p>
+<p>Vitesse actuelle: {vitesse}</p>
+<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>
+<p>Utilisateurs connectés</p>
 """
+	updated_content += "<ul>"
 	for user in users_connected:
 		updated_content += f"<li>{user}</li>"
 	updated_content += "</ul>"
