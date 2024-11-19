@@ -123,7 +123,7 @@ def avance_test():
 	moteur.set_motor_shutdown_timeout(10)
 
 	# 1,3,30,0.1
-	attente, temps_parcours, vitesse, time_step = (5.5,3,30,0.5) #*sys.argv[1::]
+	attente, temps_parcours, vitesse, time_step = (11,3,30,1) #*sys.argv[1::]
 
 	val = []
 	real_ticks = [] 
