@@ -53,7 +53,7 @@ class Controller:
     PID_COEFFICIENTS_FACTOR = 1 << 8
 
     def __init__(self, i2c_bus=8):
-        import smbus
+        import smbus2 as smbus
 
         self.i2c_bus = i2c_bus
         self.i2c = smbus.SMBus(self.i2c_bus)
