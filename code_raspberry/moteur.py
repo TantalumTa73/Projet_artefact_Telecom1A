@@ -23,14 +23,19 @@ def acceleration(vitesse,time_step):
 	vitesse = int(vitesse)
 
 	real_ticks = 0
-	supposed_ticks = []
+	curr_ticks = [0,0]
+	supposed_ticks = [0]
+
 	for k in range(0, 11):
 		dvitesse = int(k * vitesse / 10)
-		supposed_ticks.append(dvitesse*time_step*100)
+		supposed_ticks.append(dvitesse*time_step*100 + supposed_ticks[-1])
+
 	for k in range(0,11):
-		curr_ticks = moteur.get_encoder_ticks()
-		speed_right = (supposed_ticks[k] - curr_ticks[0]) / (time_step * 100)
-		spped_left = (supposed_ticks[k] - curr_ticks[1]) / (time_step * 100)
+		ticks = moteur.get_encoder_ticks()
+		curr_ticks[0] += ticks[0]
+		curr_ticks[1] += ticks[1]      
+		speed_right = (supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)
+		speed_left = (supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return real_ticks
@@ -42,13 +47,44 @@ def deceleration(vitesse,time_step):
 	vitesse = int(vitesse)
 
 	real_ticks = 0
+	curr_ticks = [0,0]
+	supposed_ticks = [0]
+
 	for k in range(0, 11):
 		dvitesse = int(k * vitesse / 10)
+		supposed_ticks.append((vitesse -dvitesse)*time_step*100 + supposed_ticks[-1])
 
-		moteur.set_motor_speed(vitesse - dvitesse, vitesse - dvitesse)
-		real_ticks += (vitesse - dvitesse)*time_step*100
+	for k in range(0,11):
+		ticks = moteur.get_encoder_ticks()
+		curr_ticks[0] += ticks[0]
+		curr_ticks[1] += ticks[1]      
+		speed_right = (supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)
+		speed_left = (supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)
+		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return real_ticks
+
+def straight_line(vitesse, time_step, temps):
+	n = int(temps / time_step)
+	real_ticks = 0
+	curr_ticks = [0,0]
+	supposed_ticks = [0]
+
+	for k in range(0,n):
+		supposed_ticks.append(vitesse*time_step*100 + supposed_ticks[-1])
+
+	for k in range(0,n):
+		ticks = moteur.get_encoder_ticks()
+		curr_ticks[0] += ticks[0]
+		curr_ticks[1] += ticks[1]
+		speed_right = (supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)
+		speed_left = (supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)
+		moteur.set_motor_speed(speed_left, speed_right)
+		t.sleep(time_step)
+
+
+    
+
 
 def avance_corrige(moteur_princ, ratio, vitesse):
 
