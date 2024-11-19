@@ -210,7 +210,7 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 	print([supposed_ticks[-1], curr_ticks])
 
 def avance_cm(dist, time_step, temps_accel_decel):
-	ticks = int(dist * 183.5)
+	ticks = int(dist * 183.6)
 	"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
 	poss_speed = [70, 60, 50, 40, 30, 20, 10]
 	if dist < 0:
@@ -270,7 +270,7 @@ def rota_deg(deg, time_step, temps_accel_decel):
 	if deg > 180:
 		deg = 360 - deg
 		side = "left"
-	ticks = int((deg * 183.5 * 2 * 3.141592 * 7.85) / 360)
+	ticks = int((deg * 183.6 * 2 * 3.141592 * 7.85) / 360)
 	poss_speed = [20,15,12,10,5,3]
 	for spd in poss_speed:
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
