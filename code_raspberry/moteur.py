@@ -270,7 +270,7 @@ def rota_deg(deg, time_step, temps_accel_decel):
 	if deg > 180:
 		deg = 360 - deg
 		side = "left"
-	ticks = int((deg * 184 * 2 * 3.141592 * 7.85) / 360)
+	ticks = int((deg * 183.5 * 2 * 3.141592 * 7.85) / 360)
 	poss_speed = [20,15,12,10,5,3]
 	for spd in poss_speed:
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
