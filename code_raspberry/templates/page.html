@@ -12,8 +12,8 @@
 <form action="/test_calibrage" method="POST">
     <label for="text">Moteur principal:</label>
     <input type="text" id="text" name="text" required><br><br>
-    <label for="num2">Ratio:</label>
-    <input type="number" id="num2" step="any" name="num2" required><br><br>
+    <label for="ratio">Ratio:</label>
+    <input type="number" id="ratio" step="any" name="num2" required><br><br>
     <button type="submit">Test avance corigée</button>
 </form>
 
@@ -83,17 +83,18 @@
 
 </script>
 
-<span id="time"></span>
-
-<img
-  id = "image_camera"
-  src="{{url_for('static', filename='image.png')}}"
-  alt="Ici doit se trouver l'image capturée par la caméra" 
-  onclick="this.setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());"/>
-
-  <form name="alternate" method="POST" action="">
-    <input type="button" value="Change" onclick="changeImage(document.getElementById('image_camera');">
- </form>
+<div style="width: 100%;">
+	<div style="width: 50%; height: 100px; float: left; background: green;"> 
+		<span id="time"></span>
+	</div>
+	<div style="margin-left: 50%; height: 100px; background: blue;"> 
+		<img
+		  id = "image_camera"
+		  src="{{url_for('static', filename='image.png')}}"
+		  alt="Ici doit se trouver l'image capturée par la caméra" 
+		  onclick="this.setAttribute('src', '{{url_for('static', filename='image.png')}}?nocache=' + Math.random());"/>
+	</div>
+</div>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
 

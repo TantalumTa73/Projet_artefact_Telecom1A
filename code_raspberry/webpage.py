@@ -33,33 +33,13 @@ app = Flask(__name__, static_url_path='/static/')
 
 @app.route('/', methods=['GET','POST'])
 def page():
-	global c 
-
-	if request.method == 'POST':
-		if request.form['button'] == '1':
-			c.set_raw_motor_speed(100,100)
-		if request.form['button'] == '2':
-			c.standby()
-
-	# If the method is GET,render the HTML page to the user
-	#if request.method == 'GET':
-	#return 
-
 	return render_template("page.html")	
 
-@app.route('/slider', methods=['POST'])
-def slider():
-	global c 
-
-	if request.method == 'POST':
-		number = int(request.form['valeur'])
-		c.set_raw_motor_speed(-number,number)
-	return render_template("page.html")	
 
 @app.route('/test_calibrage', methods=['POST'])
 def test_calibrage():
 	moteur_princ = request.form.get('text')
-	ratio = request.form.get('num2')
+	ratio = request.form.get('ratio')
 
 	try:
 		moteur.avance_corrige(moteur_princ, ratio, 100)
@@ -159,6 +139,7 @@ def update():
 <p>connexion camera : {connexion}</p>
 <p>aruco détecté: {aruco_detected}</p>
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
+<p>vitesse actuelle: {vitesse}</p>
 <ul>
 """
 	for user in users_connected:
