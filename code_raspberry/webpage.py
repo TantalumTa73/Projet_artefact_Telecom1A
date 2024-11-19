@@ -64,6 +64,7 @@ def case_to_string(case):
 	i,j = case 
 	if i<0 or i>3 or j<0 or j>6:
 		return "Hors du terrain"
+		print("Hors du terrain")
 	string = "ABACDEFG"[j]
 	return (string,str(i+1))
 
