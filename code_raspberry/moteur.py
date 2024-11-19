@@ -214,7 +214,7 @@ def avance_cm(dist, time_step, temps_accel_decel):
 	"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
 	poss_speed = [70, 60, 50, 40, 30, 20, 10]
 	if dist < 0:
-		poss_speed = [-70, -60, -50, -40, -30, -20, -10]
+		ticks = -ticks
 	for spd in poss_speed:
 		print('patate')
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
@@ -222,7 +222,10 @@ def avance_cm(dist, time_step, temps_accel_decel):
 		tick_parc = ticks - acc_tick - dec_tick
 		if tick_parc > 0:
 			temps_parc = tick_parc/(100 * spd)
-			avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
+			if dist < 0:
+				avance_asservi(-spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
+			else:
+				avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
 			break
         
 def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel, side):
