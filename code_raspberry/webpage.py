@@ -59,6 +59,10 @@ def change_speed():
 	print(f"Setting speed to {vitesse}")
 	return render_template("page.html")	
 
+@app.route('/avance-test', methods=['POST'])
+def avance_test():
+	moteur.avance_test()
+
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
