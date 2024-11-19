@@ -80,6 +80,7 @@ def change_speed():
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
+    print(vitesse)
 	moteur.avance_corrige("left", 1, vitesse)
 	return render_template("page.html")	
 
@@ -157,7 +158,6 @@ def update():
 	updated_content=f"""
 <p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
 <p>connexion camera : {connexion}</p>
-<p>aruco détecté: {aruco_detected}</p>
 <p>aruco détecté: {aruco_detected}</p>
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
 """
