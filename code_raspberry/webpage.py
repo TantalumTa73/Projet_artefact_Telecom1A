@@ -17,8 +17,8 @@ vitesse = 0
 
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
-current_x = -100
-current_y = -100
+current_x = 0
+current_y = 0
 current_angle = 0
 
 last_distance = ""
@@ -65,21 +65,15 @@ def case_to_string(case):
 	if i<0 or i>3 or j<0 or j>6:
 		return "Hors du terrain"
 	string = "GFEDCBA"[j]
-	return string+str(i+1)
+	return (string,str(i+1))
 
-def string_to_case(string)
+def string_to_case(case):
 	"""renvoie la case (i,j) correspondant au string
 	None si le format est incorrect"""
-	if len(string!=2):
-		return None
-	j = "GFEDCBA".find(string[0])
+	j = "GFEDCBA".find(case[0])
 	if j==-1:
-		"gfedcba".find(string[0])
-	if j==-1:
-		return None 
-	if not string[1] in "0123456789":
-		return None 
-	return (j, int(string[1]))
+		"gfedcba".find(case[0])
+	return (j, int(case[1]))
 	
 	
 
@@ -101,6 +95,7 @@ def init_position():
 	global current_x, current_y
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
+	print(case_x,case_y)
 
 	current_x, current_y = case_to_pos(string_to_case((case_x,case_y)))
 
@@ -232,8 +227,8 @@ def update():
 	# Contenu renvoier
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
 	updated_content+=f"<p>Position actuelle (cm) x:{current_x} y:{current_y} angle:{current_angle}</p>"
-	str_x,str_y = case_to_str(pos_to_case((current_x,current_y)))
-	updated_content+=f"<p>Position actuelle (case) x:{str_x} y:{str_y} angle:{current_angle}</p>"
+	str_x, str_y = case_to_string(pos_to_case((current_x,current_y)))
+	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
