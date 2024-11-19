@@ -39,9 +39,10 @@ def avance_corrige(moteur_princ, ratio, vitesse):
 def rotation_test(temps, vitesse, côté):
     if côté == "left":
         vitesse = -vitesse
-
-    print(moteur.get_encoder_ticks())
+    moteur.set_motor_shutdown_timeout(2)
     moteur.set_motor_speed(vitesse, -vitesse)
+    t.sleep(temps)
     print(moteur.get_encoder_ticks())
+    
 
 
