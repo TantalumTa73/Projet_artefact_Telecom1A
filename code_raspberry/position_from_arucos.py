@@ -3,12 +3,18 @@ grâce aux positions relatives des aruco présents autour de lui
 Fonction a utiliser : get_position_from_markers """
 
 import fonction_detection_aruco as detection_aruco
-from math import sqrt
+from math import sqrt, radians, degrees, tan, atan, acos, cos, sin
 import random
 
 dist_to_marker = [None, None, None, None, None] #la première valeur est inutile (id_marker=0 n'existe pas) 
                                                 #pour les autres valeurs, None signifie que la distance est inconnue
+angle_with_marker = [None, None, None, None, None] #les angles sont en degrés
 pos_marker = [None, (0, 350), (150, 350), (150, 50), (0, 50)] #coorodonées en cemtimètres des markers
+
+largeur_image = 640
+hauteur_image = 480
+angle_vue = 28 #degrés
+dist_foyer_ecran = (largeur_image//2)/tan(radians(angle_vue/2))
 
 ### UPDATE LA DISTANCE AUX MARKERS
 
@@ -105,13 +111,68 @@ def get_dist(pt_a, pt_b):
     xb, yb = pt_b
     return sqrt((xb-xa)**2+(yb-ya)**2)
 
-def get_markers_connus():
-    """return les ids des markers repère dont la distance ets connue"""
+def get_markers_dist_connus():
+    """return les ids des markers repère dont la distance est connue"""
     l = []
     for i in range(1, 5):
         if dist_to_marker[i] is not None:
             l.append(i)
     return l
+
+def get_markers_angle_connus():
+    """return les ids des markers repère dont l'angle est connu"""
+    l = []
+    for i in range(1, 5):
+        if angle_with_marker[i] is not None:
+            l.append(i)
+    return l
+
+def get_dist_to_terrain(pos_robot):
+    """renvoie la distance au terrain"""
+    # max_x = 150
+    # max_y = 350
+    # x, y = pos_robot 
+    # if x>=0 and x<=max_x:
+    #     if y>=0 and y<=max_y :
+    #         return 0 
+    #     if y<0 :
+    #         return -y 
+    #     else:
+    #         #y>max_y 
+    #         return y - max_y
+    # elif y>=0 and y<=max_y:
+    #     if x<0 :
+    #         return -x
+    #     else:
+    #         #x>max_x 
+    #         return x - max_x
+    # else: 
+    #     coins = [(0,0), (0,150), (350, 0), (350, 150)]
+    #     dist_coins = [] 
+    #     for i in range(4):
+    #         dist_coins.append(norme(sub(coins[i], pos_robot)))
+    #     min_dist = dist_coins[0]
+    #     for i in range(1, 4):
+    #         if dist_coins[i]<min_dist:
+    #             min_dist = dist_coins[i]
+    #     return min_dist
+    max_x = 150
+    max_y = 350
+    x, y = pos_robot 
+    coord = [x,y]
+    coord_max = [max_x,max_y]
+    coord_prime = [0,0]
+    for i in [0,1]:
+        if coord[i] <= 0:
+            coord_prime[i] = 0
+        elif 0 < coord[i] <= coord_max[i]:
+            coord_prime[i] = coord[i] 
+        else:
+            coord_prime[i] = coord_max[i]
+
+    return norme(sub_vect(coord,coord_prime))
+
+        
 
 def get_position_from_markers(info_images):
     """renvoie le couple (pos, erreur_distance) qui représente la 
@@ -119,7 +180,7 @@ def get_position_from_markers(info_images):
     None si la camera n'a pas détecté assez de markers pour déterminer
     sa position
     
-    Argument : liste de 8 listes (une pour chaque orientation du robot) 
+    Argument : liste de listes (une pour chaque orientation du robot) 
     qui contiennent des tuples de la forme (id_marker, dist_marker, angle_marker, pos_on_screen)
     pour chaque aruco détecté sur l'image 
     
@@ -129,11 +190,13 @@ def get_position_from_markers(info_images):
     
     set_dist_to_marker(info_images)
 
-    id_markers = get_markers_connus()
+    id_markers = get_markers_dist_connus()
     n = len(id_markers)
-    if n<3:
+    if n<2:
         print(f"get_position_from_arucos : {n} markers repères détectés n'est pas suffisant pour déterminer la position")
         return None
+
+    
 
     pt_a = pos_marker[id_markers[0]] #1er marker détecté
     pt_b = pos_marker[id_markers[1]] #2eme marker détecté
@@ -144,24 +207,34 @@ def get_position_from_markers(info_images):
         print("get_position_from_arucos : aucune position possible trouvée avec la triangulation")
         return None 
     elif len(pos_possibles) == 2:
-        #on a deux positions possibles. On les départage avec un troisieme marker
-        id_marker = id_markers[2]
-        #on regarde la difference entre la distance entre les positions possibles et le troisieme marker
-        #et la distance réelle entre le robot et le troisieme marker
-        diff_dist_0 = abs(get_dist(pos_possibles[0], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
-        diff_dist_1 = abs(get_dist(pos_possibles[1], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
-        if diff_dist_0 < diff_dist_1:
-            erreur_distance = diff_dist_0
-            pos = pos_possibles[0]
-        else:
-            erreur_distance = diff_dist_1
-            pos = pos_possibles[1]
-        if n == 4:
-            # on vérifie la position avec le 4eme marker 
+
+        if n==2 : 
+            #deux positions possibles, on doit choisir la plus logique
+            dist_0 = get_dist_to_terrain(pos_possibles[0])
+            dist_1 = get_dist_to_terrain(pos_possibles[1])
+            if dist_0<dist_1:
+                return pos_possibles[0], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
+            return pos_possibles[1], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
+        elif n>=3 : 
+
+            #on a deux positions possibles. On les départage avec un troisieme marker
             id_marker = id_markers[2]
-            diff_dist = abs(get_dist(pos, pos_marker[id_marker]) - dist_to_marker[id_marker]) 
-            erreur_distance = max(erreur_distance, diff_dist)
-        return (pos, erreur_distance)
+            #on regarde la difference entre la distance entre les positions possibles et le troisieme marker
+            #et la distance réelle entre le robot et le troisieme marker
+            diff_dist_0 = abs(get_dist(pos_possibles[0], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+            diff_dist_1 = abs(get_dist(pos_possibles[1], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+            if diff_dist_0 < diff_dist_1:
+                erreur_distance = diff_dist_0
+                pos = pos_possibles[0]
+            else:
+                erreur_distance = diff_dist_1
+                pos = pos_possibles[1]
+            if n == 4:
+                # on vérifie la position avec le 4eme marker 
+                id_marker = id_markers[2]
+                diff_dist = abs(get_dist(pos, pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+                erreur_distance = max(erreur_distance, diff_dist)
+            return (pos, erreur_distance)
 
     else:
         assert False, "get_position_from_arucos : erreur lors de la triangulation"
@@ -192,11 +265,155 @@ def test_get_position_from_markers():
         (pos, erreur_distance) = get_position_from_markers(info_images)
         assert vect_equal(pos, pos_robot), "erreur test_get_position_from_marker : position incorrecte"
         assert float_equal(erreur_distance, 0.0), "erreur test_get_position_from_marker : erreur_distance non nulle"
+
+
+### ORIENTATION
+
+def norme(u):
+    """renvoie la norme de u"""
+    x, y = u
+    return sqrt(x*x + y*y)
+
+def normalize(u):
+    """renvoie le vecteur u normalize"""
+    x, y = u 
+    n = norme(u)
+    if n!=0:
+        return (x/n, y/n)
+    assert False, "on ne peut pas normaliser le vecteur nul"
+
+def mult_scalar(l, u):
+    """renvoie u multiplié par le scalaire l"""
+    x,y = u 
+    return (l*x, l*y)
+
+def add_vect(u, v):
+    """renvoie la somme des deux vecteurs"""
+    x,y = u 
+    a,b = v 
+    return (x+a, y+b)
+
+def sub_vect(u, v):
+    """renvoie u-v"""
+    x,y = u 
+    a,b = v 
+    return (x-a, y-b)
+
+
+
+
+def get_angle_from_pos_on_screen(pos_on_screen):
+    """renvoie l'angle en degrés entre la direction vers 
+    laquelle regarde la caméra et un objet qui se trouve 
+    à la position pos_on_screen sur l'image en pixel"""
+    x, y = pos_on_screen 
+    alpha = atan(x/dist_foyer_ecran)
+    return degrees(alpha)
+
+
+
+def angle_vect(u,v):
+    """renvoie l'angle entre u et v en degrés
+    hypothèses : u et v sont normalisés"""
+    x,y = u 
+    a,b = v 
+    prod_scal = x*a + y*b
+    alpha = acos(prod_scal)
+    prod_vect_z = x*b -y*a 
+    if prod_vect_z >= 0 :
+        return degrees(-alpha)
+    else:
+        return degrees(alpha)
+
+def test_angle_vect():
+    assert float_equal(angle_vect((0, 1), (1, 0)), 90.0), "erreur tet_angle_vect (1)"
+    assert float_equal(angle_vect((0, 1), (-1, 0)), -90.0), "erreur tet_angle_vect (2)"
+    assert float_equal(angle_vect((1, 0), (0, 1)), -90.0), "erreur tet_angle_vect (3)"
+    assert float_equal(angle_vect((0, 1), (1/sqrt(2), 1/sqrt(2))), 45.0), "erreur tet_angle_vect (4)"
+
+
+def rotate_vect(u, deg):
+    """tourne le vecteur u de deg degrés dans le sens horaire"""
+    x,y = u
+    v = (y, -x) #u rotate de pi dans le sens horaire
+    alpha = radians(deg)
+    return add_vect(mult_scalar(cos(alpha), u), mult_scalar(sin(alpha), v))
+
+def vect_mean(directions:list):
+    """renvoie la 'moyenne' des vecteurs et le plus grand écart d'angle entre eux
+    hypothèses : tous les vecteurs sont normalises"""
+    n = len(directions)
+    if n<1:
+        return None
+    angles = [0] #angles par rapport à direction[0]
+    for i in range(1, n):
+        angles.append(angle_vect(directions[0], directions[i]))
+    s = 0
+    min_angle = 0
+    max_angle = 0
+    for i in range(n):
+        s+= angles[i]
+        if angles[i]>max_angle :
+            max_angle = angles[i]
+        if angles[i]<min_angle : 
+            min_angle = angles[i]
+    angle = s/(n) #moyenne des angles 
+    return rotate_vect(directions[0], angle), (max_angle-min_angle)
+
+def test_vect_mean():
+    direction, ecart_angle = vect_mean([(0,1), (0,1), (0,1)])
+    assert vect_equal(direction, (0,1)), "erreur test_vect_mean (1)"
+    assert float_equal(ecart_angle, 0.0), "erreur test_vect_mean (2)"
+    direction, ecart_angle = vect_mean([(1,0)])
+    assert vect_equal(direction, (1,0)), "erreur test_vect_mean (3)"
+    assert float_equal(ecart_angle, 0.0), "erreur test_vect_mean (4)"
+    direction, ecart_angle = vect_mean([(0,1), (1,0)])
+    assert vect_equal(direction, (1/sqrt(2),1/sqrt(2))), "erreur test_vect_mean (5)"
+    assert float_equal(ecart_angle, 90.0), "erreur test_vect_mean (6)"
+
     
+
+def get_orientation(pos_robot, info_image):
+    """renvoie le vecteur unitaire orientation qui indique la direction pointée par la caméra
+    ainsi qu'une erreur en degrés
+    renvoie None si aucun aruco n'est sur l'image
+    Argument : 
+        - la position en centimètres du robot
+        - liste de tuples de la forme (id_marker, dist_marker, angle_marker, pos_on_screen)"""
+    for (id_marker, dist_marker, angle_marker, pos_on_screen) in info_image :
+        if 1<=id_marker and id_marker <=4:
+            angle_with_marker[id_marker] = get_angle_from_pos_on_screen(pos_on_screen)
+    id_markers = get_markers_angle_connus()
+    directions = []
+    for id_marker in id_markers:
+        u = sub_vect(pos_marker[id_marker], pos_robot)
+        directions.append(normalize(rotate_vect(u, angle_with_marker[id_marker])))
+    direction, erreur_angle = vect_mean(directions)
+    return direction, erreur_angle
+        
+def test_get_orientation():
+    pos_robot = (50, 250)
+    x = dist_foyer_ecran*tan(radians(22.5))
+    info_image = [(1, 111.8, None, (x,0))]
+    direction, erreur = get_orientation(pos_robot, info_image)
+    assert vect_equal(direction, (0,1)), "erreur test_get_orientation (1)"
+    assert float_equal(erreur, 0.0), "erreur test_get_orientation (2)"
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     test_set_dist_to_marker()
     test_get_position_from_markers()
+    assert abs(get_angle_from_pos_on_screen((160, 0))-7) <0.5 #~7°
+    assert abs(get_angle_from_pos_on_screen((-160, 0))+7) <0.5 #~-7°
+    test_angle_vect()
+    test_vect_mean()
+    test_get_orientation()
     
 
 
