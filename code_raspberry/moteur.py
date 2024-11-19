@@ -221,5 +221,4 @@ def avance_cm(dist, time_step, temps_accel_decel):
 		if tick_parc > 0:
 			temps_parc = tick_parc/(100 * spd)
 			avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
-		else:
 			break
