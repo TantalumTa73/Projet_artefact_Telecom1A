@@ -161,6 +161,10 @@ Utilisation du module python `requests` pour envoyer des requetes au serveur de 
 
 ### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DES MARQUEURS (Alice) 
 
+Creation d'une fonction qui prend en argument une liste de liste de markers detectés et qui renvoie la position estimée du robot ainsi que l'erreur en cm.
+On utilise une méthode de triangulation en prenant pour distance à chaque marker repère détecté la moyenne de toutes les distances mesurées.
+
+
 ### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DE LA VITESSE DES MOTEUR ET DISTANCE PARCOURU (Joshua)
 
 ### MISE A JOURS DU FIRMWARE DE LA RASPBERRY (Martin)

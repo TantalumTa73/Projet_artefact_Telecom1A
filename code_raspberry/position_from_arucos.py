@@ -1,5 +1,6 @@
 """Ce module permet de récupérer la position du robot
-grâce aux positions relatives des aruco présents autour de lui"""
+grâce aux positions relatives des aruco présents autour de lui
+Fonction a utiliser : get_position_from_markers """
 
 import fonction_detection_aruco as detection_aruco
 from math import sqrt
