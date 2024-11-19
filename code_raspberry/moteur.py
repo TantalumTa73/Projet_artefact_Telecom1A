@@ -14,6 +14,15 @@ def action_moteur(type_action):
         # CALCUL SAVANT POUR CONVERTIR CENTIMETRE EN TICK
         avance_corrige("left", 1, dist)
 
+def acceleration(vitesse):
+
+    """ Accélère de façon progressive jusqu'à une certaine vitesse """
+
+    vitesse = int(vitesse)
+    for k in range(1, 11):
+
+        moteur.set_motor_speed(int(k * vitesse / 10) , int(k * vitesse / 10))
+        t.sleep(0.05)
 
 def avance_corrige(moteur_princ, ratio, vitesse):
 
@@ -29,22 +38,13 @@ def avance_corrige(moteur_princ, ratio, vitesse):
         print(moteur_princ, ratio, vitesse)
         print(moteur.get_encoder_ticks())
         print("test")
+        acceleration(vitesse)
         moteur.set_motor_speed(vitesse, int(ratio * vitesse))
         t.sleep(2)
         print(moteur.get_encoder_ticks())
     else:
 
         moteur.set_motor_speed(int(ratio * vitesse), vitesse)
-
-def acceleration(vitesse):
-
-    """ Accélère de façon progressive jusqu'à une certaine vitesse """
-
-    vitesse = int(vitesse)
-    for k in range(1, 11):
-
-        moteur.set_motor_speed(int(k * vitesse / 10) , int(k * vitesse / 10))
-        t.sleep(0.05)
 
 def rotation_test(temps, vitesse, côté):
     if côté == "left":
