@@ -22,7 +22,6 @@ def acceleration(vitesse,time_step):
 
 	vitesse = int(vitesse)
 
-	real_ticks = 0
 	curr_ticks = [0,0]
 	supposed_ticks = [0]
 
@@ -38,7 +37,7 @@ def acceleration(vitesse,time_step):
 		speed_left = (supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return real_ticks
+	return supposed_ticks[-1]
 
 def deceleration(vitesse,time_step):
 
@@ -46,7 +45,6 @@ def deceleration(vitesse,time_step):
 
 	vitesse = int(vitesse)
 
-	real_ticks = 0
 	curr_ticks = [0,0]
 	supposed_ticks = [0]
 
@@ -62,7 +60,7 @@ def deceleration(vitesse,time_step):
 		speed_left = (supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
-	return real_ticks
+	return supposed_ticks[-1]
 
 def straight_line(vitesse, time_step, temps):
 	n = int(temps / time_step)
@@ -81,6 +79,7 @@ def straight_line(vitesse, time_step, temps):
 		speed_left = (supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
+	return supposed_ticks[-1]
 
 
     
@@ -128,8 +127,7 @@ def avance_test():
 	real_ticks.append(acceleration(vitesse,time_step))
 	t.sleep(attente)
 	val.append(moteur.get_encoder_ticks())
-	t.sleep(temps_parcours)
-	real_ticks.append(vitesse*temps_parcours*100)
+	real_ticks.append(straight_line(vitesse,time_step*3,temps_parcours))
 	val.append(moteur.get_encoder_ticks())
 	real_ticks.append(deceleration(vitesse,time_step))
 	t.sleep(attente)
