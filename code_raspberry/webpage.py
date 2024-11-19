@@ -80,7 +80,6 @@ def change_speed():
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
-    print(vitesse)
 	moteur.avance_corrige("left", 1, vitesse)
 	return render_template("page.html")	
 
@@ -160,7 +159,11 @@ def update():
 <p>connexion camera : {connexion}</p>
 <p>aruco détecté: {aruco_detected}</p>
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
+<ul>
 """
+	for user in users_connected:
+		updated_content += "<li>{user]</li>"
+	update_content += "</ul>"
 
 	return updated_content
 
