@@ -2,4 +2,4 @@ import moteur
 
 
 # Access the argument from the command line
-moteur.avance_cm(400, 0.1, 4)
+moteur.rota_deg(22.5, 0.1, 1)
