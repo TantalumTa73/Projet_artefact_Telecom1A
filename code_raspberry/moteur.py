@@ -25,6 +25,16 @@ def acceleration(vitesse):
         moteur.set_motor_speed(int(k * vitesse / 10) , int(k * vitesse / 10))
         t.sleep(0.05)
 
+def deceleration(vitesse):
+
+    """ Décélère de façon progressive jusqu'à l'arrêt depuis une certaine vitesse """
+
+    vitesse = int(vitesse)
+    for k in range(1, 11):
+
+        moteur.set_motor_speed(vitesse - int(k * vitesse / 10) ,vitesse - int(k * vitesse / 10))
+        t.sleep(0.05)
+
 def avance_corrige(moteur_princ, ratio, vitesse):
 
     """ Fait avancer le robot en imposant un ratio (entre 0 et 1) entre les vitesses des moteurs, 
