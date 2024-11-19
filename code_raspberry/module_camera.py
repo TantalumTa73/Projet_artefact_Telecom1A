@@ -3,12 +3,6 @@
 Ce module permet d'interagir avec la caméra
 """
 
-
-# -*- coding: utf-8 -*-
-"""
-Ce module permet d'interagir avec la caméra
-"""
-
 import cv2
 import os 
 
@@ -66,26 +60,21 @@ def check_aruco(cam):
         return False
     return get_id_aruco() != -1
 
-def save_image(cam):
+def get_image(cam):
+    """capture une image de la camera en la renvoi"""
+
+    result, image = cam.read()
+    if result:
+        return image
+    else:
+        print("Image non capturée")
+
+def save_image(image):
     """sauvegarde l'image dans le fichier 'image.png'
     Return 0 s'il n'y a pas eu d'erreur, 1 sinon"""
 
-    result, image = cam.read()
-    
     #convertion en png
-    if result:
-        if not cv2.imwrite(os.path.dirname(os.path.realpath(__file__))+"/static/image.png", image):
-            print("writing image failed")
-    else:
-        print("image non capturée")
+    if not cv2.imwrite(os.path.dirname(os.path.realpath(__file__))+"/static/image.png", image):
+        print("writing image failed")
         return 1
     return 0
-
-
-
-
-
-
-
-
-
