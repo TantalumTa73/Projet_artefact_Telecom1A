@@ -17,8 +17,8 @@ vitesse = 0
 
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
-current_x = 0
-current_y = 0
+current_x = 25
+current_y = 25
 current_angle = 0
 
 last_distance = ""
