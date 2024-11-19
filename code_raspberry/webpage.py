@@ -63,18 +63,18 @@ def test_calibrage():
 
 	try:
 		moteur.avance_corrige(moteur_princ, ratio, 100)
-		print("C bien")
 	except Exception as e:
 		error_message = str(e)
-		print("C pas bien")
+		print("Moteur ne marchent pas")
 		print(error_message)
-		return render_template('page.html', error=error_message)
+		return Response(status=500)
 	return Response(status=200)
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
 	vitesse = request.form.get('speed')
+	print(f"Setting speed to {vitesse}")
 	return Response(status=200)
 
 @app.route('/forward-press', methods=['POST'])
@@ -146,7 +146,8 @@ def update():
 
 		# Saving image
 		print("Attempt to save image")
-		module_camera.save_image(cam)
+		image = module_camera.get_image(cam)
+		module_camera.save_image(image)
 
 		last_update_time = now
 	#####################################################
