@@ -7,6 +7,7 @@ import datetime
 import module_camera
 import os
 import moteur
+import requests
 
 # Moteurs 
 
@@ -111,6 +112,7 @@ def update():
 	now = time.time()
 	current_user = request.remote_addr
 
+
 	# Determination du nombre d'utilisateur connecte 
 	if current_user not in users_connected.keys():
 		users_connected[current_user] = now
@@ -124,16 +126,28 @@ def update():
 		del users_connected[user]
 
 
+	###### Code qui s'exécute toute les secondes #######
+	if now - last_update_time >= 1:
+		# Envoi vers l'api 
+		url = "http://proj103.r2.enst.fr/api/pos?x=100&y=20"
+		r = requests.post(url)
+		print(r.status_code)
+		print(r.content)
 
-    # Capture de l'image de la camera et sauvegarde 
-	if cam is None:
-		cam = module_camera.connect()
-	aruco_detected = module_camera.check_aruco(cam)
-	connexion = module_camera.check_camera_status(cam,verbose=True)
-	print("try to save the image")
-	module_camera.save_image(cam)
 
-    # Contenu renvoier
+
+		# Capture de l'image de la camera et sauvegarde 
+		if cam is None:
+			cam = module_camera.connect()
+		aruco_detected = module_camera.check_aruco(cam)
+		connexion = module_camera.check_camera_status(cam,verbose=True)
+		print("try to save the image")
+		module_camera.save_image(cam)
+
+	#####################################################
+
+		
+	# Contenu renvoier
 	updated_content=f"""
 <p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
 <p>connexion camera : {connexion}</p>
@@ -142,6 +156,7 @@ def update():
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
 """
 
+	last_update_time = time.time()
 	return updated_content
 
 
