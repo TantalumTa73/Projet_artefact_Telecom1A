@@ -159,6 +159,7 @@ def avance_test():
 	print(sum(real_ticks))
 
 def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel):
+	moteur.get_encoder_ticks()
 	vitesse = int(vitesse)
 	n_accel = int(temps_accel/time_step)
 	n_decel = int(temps_decel/time_step)
@@ -181,8 +182,8 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
 		print("curr", curr_ticks)     
-		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)) + 3
-		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)) + 3
+		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
+		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
 		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
