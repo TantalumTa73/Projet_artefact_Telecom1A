@@ -10,7 +10,7 @@ import os
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
 parameters = cv2.aruco.DetectorParameters()
-detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
+#detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
 
 def connect():
     return cv2.VideoCapture('/dev/video0',cv2.CAP_V4L2)
