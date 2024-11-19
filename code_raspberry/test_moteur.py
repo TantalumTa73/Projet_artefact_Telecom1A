@@ -2,4 +2,4 @@ import moteur
 
 
 # Access the argument from the command line
-moteur.avance_cm(100, 0.1, 4)
+moteur.rotation_asservi(30, 0.1, 2, 2, 2, "left")
