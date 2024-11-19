@@ -64,16 +64,16 @@ def case_to_string(case):
 	i,j = case 
 	if i<0 or i>3 or j<0 or j>6:
 		return "Hors du terrain"
-	string = "GFEDCBA"[j]
+	string = "ABACDEFG"[j]
 	return (string,str(i+1))
 
 def string_to_case(case):
 	"""renvoie la case (i,j) correspondant au string
 	None si le format est incorrect"""
-	j = "GFEDCBA".find(case[0])
+	j = "ABCDEFG".find(case[0])
 	if j==-1:
-		"gfedcba".find(case[0])
-	return (j, int(case[1]))
+		"abcdefg".find(case[0])
+	return (j, int(case[1])-1)
 	
 	
 
