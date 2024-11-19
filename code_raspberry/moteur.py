@@ -268,6 +268,7 @@ def rota_deg(deg, time_step, temps_accel_decel, side):
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
 		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
 		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
+		print(tick_parc)
 		if tick_parc > 0:
 			temps_parc = tick_parc/(100 * spd)
 			rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, side)
