@@ -26,6 +26,26 @@ image_view = True
 c = controller.Controller()
 c.standby()
 
+def send_position(x,y):
+	r = requests.post(url+f"/api/pos?x={x}&y={y}")
+
+	if r.status_code != 200: 
+		print(f"Failed to send data to server {r.status_code}")
+
+def get_status():
+	r = requests.get(url+"/api/status")
+	if r.status_code != 200: 
+		print(f"Failed to retrieve data from server {r.status_code}")
+	else:
+		return r.json()
+
+def found_flag(marquer_id,col,row):
+	r = requests.post(url+f"/api/marker?id={marquer_id}&col={col}&row={row}")
+
+	if r.status_code != 200: 
+		print(f"Failed to send data to server {r.status_code}")
+
+
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__, static_url_path='/static/')
@@ -137,27 +157,15 @@ def update():
 	if image_view:
 		if cam is None:
 			cam = module_camera.connect()
-		aruco_detected = module_camera.check_aruco(cam)
 		connexion = module_camera.check_camera_status(cam,verbose=True)
 		updated_content+=f"<p>Connexion camera : {connexion}</p>"
-		updated_content+=f"<p>Aruco détecté: {aruco_detected}</p>"
 
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
 		# Envoi vers l'api 
-		x = 100
-		y = 20
-		r = requests.post(url+f"/api/pos?x={x}&y={y}")
-
-		if r.status_code != 200: 
-			print(f"Data failed to send to sever {r.status_code}")
-
-		r = requests.get(url+"/api/status")
-		if r.status_code != 200: 
-			print(f"Failed to retrieve data from server {r.status_code}")
-		else:
-			print(r.json())
-
+		#send_position(x, y)
+		#status = get_status()
+		#found_flag(marquer_id, col, row)
 
 
 
@@ -180,7 +188,7 @@ def update():
 	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
 	updated_content+="<ul>"
-	for user in users_connected:
+	for user in sorted(users_connected):
 		updated_content += f"<li>{user}</li>"
 	updated_content += "</ul>"
 
