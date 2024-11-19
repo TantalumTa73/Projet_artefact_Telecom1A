@@ -213,6 +213,8 @@ def avance_cm(dist, time_step, temps_accel_decel):
 	ticks = int(dist * 185.72)
 	"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
 	poss_speed = [70, 60, 50, 40, 30, 20, 10]
+	if dist < 0:
+		poss_speed = -poss_speed
 	for spd in poss_speed:
 		print('patate')
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
