@@ -52,7 +52,7 @@ def acceleration_rota(vitesse, time_step, sens):
 
 def deceleration_rota(vitesse, time_step, sens):
 	
-    """ Accélère de façon progressive jusqu'à une certaine vitesse de rotation """
+    """ Décelère de façon progressive jusqu'à l'arrêt de rotation """
 
     if sens == "left":
         mods = (-1, 1)
@@ -107,12 +107,32 @@ def avance_corrige(moteur_princ, ratio, vitesse):
 
 		moteur.set_motor_speed(int(ratio * vitesse), vitesse)
 
-def rotation_test(temps, vitesse, côté):
-	if côté == "left":
-		vitesse = -vitesse
-	moteur.set_motor_speed(vitesse, -vitesse)
-	t.sleep(temps)
-	print(moteur.get_encoder_ticks())
+def rotation_test():
+	moteur.set_motor_shutdown_timeout(10)
+
+	# 1,3,30,0.1
+	attente, temps_parcours, vitesse, time_step, sens = (1,3,30,0.1, "left") #*sys.argv[1::]
+
+	val = []
+	real_ticks = [] 
+	
+	val.append(moteur.get_encoder_ticks())
+	real_ticks.append(acceleration_rota(vitesse,time_step, sens))
+	t.sleep(attente)
+	val.append(moteur.get_encoder_ticks())
+	t.sleep(temps_parcours)
+	real_ticks.append(vitesse*temps_parcours*100)
+	val.append(moteur.get_encoder_ticks())
+	real_ticks.append(deceleration_rota(vitesse,time_step, sens))
+	t.sleep(attente)
+	val.append(moteur.get_encoder_ticks())
+
+	print(val[1::])
+	print(sum(map(lambda x : x[0], val[1::])))
+	print(sum(map(lambda x : x[1], val[1::])))
+	print()
+	print(real_ticks)
+	print(sum(real_ticks))
 	
 def avance_test():
 	moteur.set_motor_shutdown_timeout(10)
