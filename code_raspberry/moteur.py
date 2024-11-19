@@ -261,7 +261,8 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	moteur.set_motor_speed(0,0)
-	print([supposed_ticks[-1], curr_ticks])
+	t.sleep(0.5)
+	return([supposed_ticks[-1], curr_ticks])
 
 
 def rota_deg(deg, time_step, temps_accel_decel):
@@ -283,3 +284,23 @@ def rota_deg(deg, time_step, temps_accel_decel):
 	moteur.set_motor_speed(0,0)
 	t.sleep(2)
 
+def rota_16_angles(time_step, temps_accel_decel):
+	moteur.get_encoder_ticks()
+	tot_tick = int(183.6 * 2 * 3.141592 * 7.85)
+	tick_per_turn = tot_tick/16
+	supposed_ticks = [tick_per_turn * i for i in range(17)]
+	supposed_ticks.append(tot_tick)
+	poss_speed = [20,15,12,10,5,3]
+	curr_tick = 0
+	for k in range(18):
+		tick = supposed_ticks[k] - curr_tick
+		print(tick)
+		for spd in poss_speed:
+			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
+			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
+			tick_parc = tick - acc_tick - dec_tick
+			if tick_parc > 0:
+				temps_parc = tick_parc/(100*spd)
+				curr_tick += (rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, "right"))[1]
+				break
+	moteur.set_motor_speed(0,0)
