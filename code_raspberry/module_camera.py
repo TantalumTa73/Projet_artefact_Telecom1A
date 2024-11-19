@@ -8,8 +8,8 @@ import os
 
 #outils de detection de aruco
 
-aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
-parameters = cv2.aruco.DetectorParameters()
+#aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+#parameters = cv2.aruco.DetectorParameters()
 #detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
 
 def connect():
