@@ -211,7 +211,7 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 
 def avance_cm(dist, time_step, temps_accel_decel):
 	ticks = int(dist * 185.72)
-	asserv_decel = {10:30, 20:60, 30:80, 40:115, 50:115, 60:135, 70:155}
+	asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}
 	poss_speed = [70, 60, 50, 40, 30, 20, 10]
 	for spd in poss_speed:
 		print('patate')
