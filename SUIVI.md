@@ -169,9 +169,8 @@ On utilise une méthode de triangulation en prenant pour distance à chaque mark
 
 Résolution de conflit de modules python et implementation du code
 
-### MISE A JOURS DU FIRMWARE DE LA RASPBERRY (Martin)
+### MISE A JOURS DU FIRMWARE DE LA RASPBERRY (Martin, Jeffrey)
 
-(la mise a jours échou)
 
 ### RETOUCHANGE DE LA PAGE WEB (Jeffrey)
 
@@ -180,4 +179,11 @@ Résolution de conflit de modules python et implementation du code
 
 ## 19/11/2024 (Après-midi)
 
-### ASSERVISEMENT DES MOTEURS POUR AJUSTER LE POSITIONNEMENT (Martin, Jeffrey)
+### ASSERVISEMENT DES MOTEURS POUR AJUSTER LE POSITIONNEMENT (Martin, Jeffrey, Edouard)
+Asservisement en ligne droite (Martin, Jeffrey): detection du décalage de tick des moteurs et adaptation en conséquence 
+
+Asservisement par rotation (pouvoir tourner le robot d'un certain angle) (Edouard)
+
+### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DES DONNÉE DES MARQUEURS (Alice)
+
+### FONCTIONS POUR COMMUNIQUER AVEC LE SERVEUR DE SUIVI (Jeffrey)
