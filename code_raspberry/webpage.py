@@ -14,6 +14,8 @@ import requests
 global vitesse
 vitesse = 0
 
+url = "https://comment.requestcatcher.com/"
+
 last_update_time = time.time()
 users_connected = dict() 
 cam = None 
@@ -133,12 +135,12 @@ def update():
 
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
-		print(now)
+		print(now,now-last_update_time)
 		# Envoi vers l'api 
-		url = "https://comment.requestcatcher.com/"
 		r = requests.post(url)
-		print(r.status_code)
-		print(r.content)
+
+		if r.status_code == 200: 
+			print("Data sent to server")
 
 
 
