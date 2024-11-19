@@ -132,6 +132,7 @@ def avance_test():
 	real_ticks.append(deceleration(vitesse,time_step))
 	t.sleep(attente)
 	val.append(moteur.get_encoder_ticks())
+	moteur.set_motor_speed(0,0)
 
 	print(val[1::])
 	print(sum(map(lambda x : x[0], val[1::])))
