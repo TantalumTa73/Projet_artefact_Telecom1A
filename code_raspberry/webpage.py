@@ -67,44 +67,44 @@ def test_calibrage():
 		error_message = str(e)
 		print("Moteur ne marchent pas")
 		print(error_message)
-		return Response(status=500)
-	return Response(status=200)
+		return "Failed"
+	return "Working"
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
 	vitesse = request.form.get('speed')
 	print(f"Setting speed to {vitesse}")
-	return Response(status=200)
+	return "Working"
 
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
 	moteur.avance_corrige("left", 1, vitesse)
-	return Response(status=200)
+	return "Working"
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
 	global vitesse
 	moteur.avance_corrige("left", 1, -vitesse)
-	return Response(status=200)
+	return "Working"
 
 @app.route('/right-press', methods=['POST'])
 def right():
 	global vitesse
 	moteur.avance_corrige("left", -1, vitesse)
-	return Response(status=200)
+	return "Working"
 
 @app.route('/left-press', methods=['POST'])
 def left():
 	global vitesse
 	moteur.avance_corrige("right", -1, vitesse)
-	return Response(status=200)
+	return "Working"
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
 	moteur.avance_corrige("left", 1, 0)
-	return Response(status=200)
+	return "Working"
 
 
 @app.route('/update')
