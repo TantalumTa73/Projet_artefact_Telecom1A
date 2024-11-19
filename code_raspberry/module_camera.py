@@ -61,13 +61,14 @@ def check_aruco(cam):
     return get_id_aruco() != -1
 
 def get_image(cam):
-    """capture une image de la camera en la renvoi"""
+    """capture une image de la camera en la renvoie ainsi que le status de l'operation (erreur)"""
 
     result, image = cam.read()
     if result:
-        return image
+        return image, result
     else:
         print("Image non capturée")
+        return None, result
 
 def save_image(image):
     """sauvegarde l'image dans le fichier 'image.png'

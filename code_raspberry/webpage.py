@@ -126,8 +126,9 @@ def update():
 
 		# Saving image
 		print("Attempt to save image")
-		image = module_camera.get_image(cam)
-		module_camera.save_image(image)
+		image, result = module_camera.get_image(cam)
+		if result:
+			module_camera.save_image(image)
 
 		last_update_time = now
 	#####################################################
