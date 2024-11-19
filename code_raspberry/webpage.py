@@ -15,7 +15,7 @@ import analyse_image
 global vitesse
 vitesse = 0
 
-url = "https://comment.requestcatcher.com/"
+url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
 last_distance = ""
 last_update_time = time.time()
@@ -145,10 +145,19 @@ def update():
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
 		# Envoi vers l'api 
-		r = requests.post(url)
+		x = 100
+		y = 20
+		r = requests.post(url+f"/api/pos?x={x}&y={y}")
 
 		if r.status_code != 200: 
 			print(f"Data failed to send to sever {r.status_code}")
+
+		r = requests.get(url+"/api/status")
+		if r.status_code != 200: 
+			print(f"Failed to retrieve data from server {r.status_code}")
+		else:
+			print(r.json())
+
 
 
 
