@@ -28,6 +28,7 @@ def acceleration(vitesse,time_step):
 	for k in range(0, 11):
 		dvitesse = int(k * vitesse / 10)
 		supposed_ticks.append(dvitesse*time_step*100 + supposed_ticks[-1])
+	print(supposed_ticks)
 
 	for k in range(0,11):
 		ticks = moteur.get_encoder_ticks()
@@ -51,6 +52,7 @@ def deceleration(vitesse,time_step):
 	for k in range(0, 11):
 		dvitesse = int(k * vitesse / 10)
 		supposed_ticks.append((vitesse -dvitesse)*time_step*100 + supposed_ticks[-1])
+	print(supposed_ticks)
 
 	for k in range(0,11):
 		ticks = moteur.get_encoder_ticks()
@@ -126,13 +128,14 @@ def avance_test():
 	val.append(moteur.get_encoder_ticks())
 	real_ticks.append(acceleration(vitesse,time_step))
 	t.sleep(attente)
-	val.append(moteur.get_encoder_ticks())
+	moteur.set_motor_speed(0,0)
+	"""val.append(moteur.get_encoder_ticks())
 	real_ticks.append(straight_line(vitesse,time_step*3,temps_parcours))
 	val.append(moteur.get_encoder_ticks())
 	real_ticks.append(deceleration(vitesse,time_step))
 	t.sleep(attente)
 	val.append(moteur.get_encoder_ticks())
-	moteur.set_motor_speed(0,0)
+	moteur.set_motor_speed(0,0)"""
 
 	print(val[1::])
 	print(sum(map(lambda x : x[0], val[1::])))
