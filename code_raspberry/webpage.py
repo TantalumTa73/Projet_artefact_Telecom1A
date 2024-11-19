@@ -17,6 +17,7 @@ vitesse = 0
 
 url = "https://comment.requestcatcher.com/"
 
+last_distance = ""
 last_update_time = time.time()
 users_connected = dict() 
 cam = None 
@@ -111,7 +112,7 @@ def aruco_detect():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected, cam
+	global last_update_time, users_connected, cam, last_distance
 	"""send current content"""
 
 	now = time.time()
@@ -156,7 +157,7 @@ def update():
 			image, result = module_camera.get_image(cam)
 			if result:
 				module_camera.save_image(image)
-				print(analyse_image.detect_aruco_markers(image))
+				last_distance = f"{analyse_image.detect_aruco_markers(image)}"
 			else:
 				print("Image did not save")
 
@@ -167,6 +168,7 @@ def update():
 	# Contenu renvoier
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
+	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
 	updated_content+="<ul>"
 	for user in users_connected:
