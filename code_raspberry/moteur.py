@@ -37,7 +37,7 @@ def acceleration(vitesse,time_step):
 		print(curr_ticks)     
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
-		print([speed_left, speed_right])
+		print("speed" + [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1]
