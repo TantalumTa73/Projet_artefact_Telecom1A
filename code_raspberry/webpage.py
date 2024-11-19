@@ -62,18 +62,11 @@ def pos_to_case(pos):
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
 	i,j = case 
-	if not 0<i<7 or 0<j<7:
-		return "Hors du terrain"
-		print("Hors du terrain")
-	string = "ABACDEFG"[j]
-	return (string,str(i+1))
-
-def string_to_case(case):
 	"""renvoie la case (i,j) correspondant au string
 	None si le format est incorrect"""
-	j = "ABCDEFG".find(case[0])
+	j = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".find(case[0])
 	if j==-1:
-		"abcdefg".find(case[0])
+		"abcdefghijklmnopqrstuvwxyz".find(case[0])
 	return (j, int(case[1])-1)
 	
 	
