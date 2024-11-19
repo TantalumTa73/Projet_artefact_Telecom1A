@@ -36,6 +36,16 @@ def avance_corrige(moteur_princ, ratio, vitesse):
 
         moteur.set_motor_speed(int(ratio * vitesse), vitesse)
 
+def acceleration(vitesse):
+
+    """ Accélère de façon progressive jusqu'à une certaine vitesse """
+
+    vitesse = int(vitesse)
+    for k in range(1, 11):
+
+        moteur.set_motor_speed(int(k * vitesse / 10) , int(k * vitesse / 10))
+        t.sleep(0.05)
+
 def rotation_test(temps, vitesse, côté):
     if côté == "left":
         vitesse = -vitesse
