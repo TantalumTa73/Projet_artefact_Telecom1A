@@ -2,4 +2,4 @@ import moteur
 
 
 # Access the argument from the command line
-moteur.avance_asservi(70, 0.1, 4, 4, 4)
+moteur.avance_cm(100, 0.1, 4)
