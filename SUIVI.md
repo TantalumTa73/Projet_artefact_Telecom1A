@@ -153,7 +153,7 @@ Prise de différentes photos avec la caméra afin de trouver la matrice intrins�
 Envoi d'une requête simple au serveur, qui m'a tout simplement répondu OK
 
 
-## 19/11/2024
+## 19/11/2024 (Matin)
 
 ### ENVOI DES REQUETES AU SERVEUR DE SUIVI (Martin, Jeffrey)
 
@@ -165,8 +165,19 @@ Creation d'une fonction qui prend en argument une liste de liste de markers dete
 On utilise une méthode de triangulation en prenant pour distance à chaque marker repère détecté la moyenne de toutes les distances mesurées.
 
 
-### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DE LA VITESSE DES MOTEUR ET DISTANCE PARCOURU (Joshua)
+### OBTENTION DES DONNÉES DE LECTURE DU ACURO VU PAR LA RASPBERRY (Joshua, Jeffrey) 
+
+Résolution de conflit de modules python et implementation du code
 
 ### MISE A JOURS DU FIRMWARE DE LA RASPBERRY (Martin)
 
+(la mise a jours échou)
+
 ### RETOUCHANGE DE LA PAGE WEB (Jeffrey)
+
+
+
+
+## 19/11/2024 (Après-midi)
+
+### ASSERVISEMENT DES MOTEURS POUR AJUSTER LE POSITIONNEMENT (Martin, Jeffrey)
