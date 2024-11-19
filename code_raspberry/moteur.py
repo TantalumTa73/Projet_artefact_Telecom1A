@@ -33,7 +33,8 @@ def acceleration(vitesse,time_step):
 	for k in range(0,11):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
-		curr_ticks[1] += ticks[1]      
+		curr_ticks[1] += ticks[1]
+		print(curr_ticks())     
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
 		moteur.set_motor_speed(speed_left, speed_right)
