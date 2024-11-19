@@ -174,6 +174,7 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 	for k in range(0,n_decel + 1):
 		dvitesse = int(k * vitesse / n_decel)
 		supposed_ticks.append((vitesse -dvitesse)*time_step*100 + supposed_ticks[-1])
+	print(supposed_ticks)
 
 	for k in range(0, n_accel + n_parcours + n_decel + 2):
 		ticks = moteur.get_encoder_ticks()
@@ -186,4 +187,5 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 		print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
+	moteur.set_motor_speed(0,0)
 	print([supposed_ticks[-1], curr_ticks])
