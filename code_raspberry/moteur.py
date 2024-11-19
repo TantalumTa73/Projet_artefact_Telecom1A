@@ -68,7 +68,7 @@ def avance_test():
     print(moteur.get_encoder_ticks)
     acceleration(30)
     print(moteur.get_encoder_ticks)
-    sleep(3)
+    t.sleep(3)
     print(moteur.get_encoder_ticks)
     deceleration(30)
     print(moteur.get_encoder_ticks)
