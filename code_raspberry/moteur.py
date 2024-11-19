@@ -210,11 +210,11 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 	print([supposed_ticks[-1], curr_ticks])
 
 def avance_cm(dist, time_step, temps_accel_decel):
-	print('patate')
 	ticks = int(dist * 185.72)
 	asserv_decel = {10:30, 20:60, 30:80, 40:115, 50:115, 60:135, 70:155}
 	poss_speed = [70, 60, 50, 40, 30, 20, 10]
 	for spd in poss_speed:
+        print('patate')
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
 		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
 		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
