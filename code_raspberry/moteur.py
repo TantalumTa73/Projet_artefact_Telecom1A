@@ -274,6 +274,7 @@ def rota_deg(deg, time_step, temps_accel_decel):
 		print('patate')
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
 		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
+		print(acc_tick)
 		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
 		print(tick_parc)
 		if tick_parc > 0:
