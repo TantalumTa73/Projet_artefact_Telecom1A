@@ -122,9 +122,7 @@ Changement du module caméra pour que sa taille soit mieux adaptée, tentative d
 
 ### REPARATION ROBOT (Martin, Edouard)
 
-Suite de la réparation de roue après que les dernières solutions aient échoué lamentablement.
-Utilisation de colle forte pour stabiliser les roues qui commencaient à se détacher du support de la raspberrypi.
-
+Suite de la réparation de roue après que les dernières solutions aient échoué lamentablement. Utilisation de colle forte pour stabiliser les roues qui commencaient à se détacher du support de la raspberrypi.
 ### AJOUT MODULE CAMERA (Alice, Jeffrey)
 
 On a ajouté sur le git dans le dossier code_raspberry le module pour utiliser la camera et modifier la page web pour pouvoir y faire des tests. Problème : on a push alors que l'ordinateur était dans l'environnement python. On a du supprimer ensuite les fichiers inutiles, ce qui nous a fait perdre du temps. On a ajouté ensuite tout le dossier mon_env dans le .gitignore . 
@@ -153,3 +151,18 @@ Prise de différentes photos avec la caméra afin de trouver la matrice intrins�
 ### TEST DU SERVEUR DE SUIVI (Martin)
 
 Envoi d'une requête simple au serveur, qui m'a tout simplement répondu OK
+
+
+## 19/11/2024
+
+### ENVOI DES REQUETES AU SERVEUR DE SUIVI (Martin, Jeffrey)
+
+Utilisation du module python `requests` pour envoyer des requetes au serveur de suivi (debugage par envoi de requete à requestcatcher.com)
+
+### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DES MARQUEURS (Alice) 
+
+### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DE LA VITESSE DES MOTEUR ET DISTANCE PARCOURU (Joshua)
+
+### MISE A JOURS DU FIRMWARE DE LA RASPBERRY (Martin)
+
+### RETOUCHANGE DE LA PAGE WEB (Jeffrey)
