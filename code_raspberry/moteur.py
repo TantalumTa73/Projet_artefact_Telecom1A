@@ -265,18 +265,13 @@ def rota_deg(deg, time_step, temps_accel_decel):
 	if deg > 180:
 		deg = 360 - deg
 		side = "left"
-	print(deg)
 	ticks = int((deg * 185.72 * 2 * 3.141592 * 7.85) / 360)
-	print(ticks)
-	asserv_decel = {10:30, 5:-15, 3: -40}
+	asserv_decel = {10:0, 5:0, 3: 0}
 	poss_speed = [10,5,3]
 	for spd in poss_speed:
-		print('patate')
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
-		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
-		print(acc_tick)
+		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)print(acc_tick)
 		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
-		print(tick_parc)
 		if tick_parc > 0:
 			temps_parc = tick_parc/(100 * spd)
 			rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, side)
