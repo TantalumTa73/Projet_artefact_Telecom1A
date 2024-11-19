@@ -57,12 +57,12 @@ def case_to_pos(case):
 def pos_to_case(pos):
 	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
 	x,y = pos 
-	return ((x-25)//50, (y-25)//50)
+	return (x//50, y//50)
 
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
 	i,j = case 
-	if i<0 or i>3 or j<0 or j>6:
+	if not 0<i<7 or 0<j<7:
 		return "Hors du terrain"
 		print("Hors du terrain")
 	string = "ABACDEFG"[j]
