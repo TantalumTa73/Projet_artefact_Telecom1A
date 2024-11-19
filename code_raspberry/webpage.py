@@ -132,10 +132,10 @@ def update():
 	connexion = module_camera.check_camera_status(cam,verbose=True)
 
 	###### Code qui s'exécute toute les secondes #######
-	if now - last_update_time >= 1:
+	if now - last_update_time >= 0.9:
 		print(now)
 		# Envoi vers l'api 
-		url = "http://proj103.r2.enst.fr/api/pos?x=100&y=20"
+		url = "https://comment.requestcatcher.com/"
 		r = requests.post(url)
 		print(r.status_code)
 		print(r.content)
