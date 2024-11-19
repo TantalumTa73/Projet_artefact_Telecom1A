@@ -1,21 +1,24 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 import controller
 import time
 import datetime
 import module_camera
 import os
 import moteur
+import requests
 
 # Moteurs 
 
 global vitesse
 vitesse = 0
 
+url = "https://comment.requestcatcher.com/"
+
 last_update_time = time.time()
 users_connected = dict() 
-cam = module_camera.connect()
+cam = None 
 
 c = controller.Controller()
 c.standby()
@@ -27,12 +30,6 @@ app = Flask(__name__, static_url_path='/static/')
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
-
-def get_index(elm,tab):
-	for i in range(len(tab)):
-		if elm == tab[i]:
-			return i
-	return None
 
 @app.route('/', methods=['GET','POST'])
 def page():
@@ -66,50 +63,58 @@ def test_calibrage():
 
 	try:
 		moteur.avance_corrige(moteur_princ, ratio, 100)
-		print("C bien")
 	except Exception as e:
 		error_message = str(e)
-		print("C pas bien")
+		print("Moteur ne marchent pas")
 		print(error_message)
-		return render_template('page.html', error=error_message)
+		return Response(status=500)
+	return render_template("page.html")	
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
 	vitesse = int(request.form.get('speed'))
+	print(f"Setting speed to {vitesse}")
+	return render_template("page.html")	
 
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse
 	moteur.avance_corrige("left", 1, vitesse)
+	return render_template("page.html")	
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
 	global vitesse
 	moteur.avance_corrige("left", 1, -vitesse)
+	return render_template("page.html")	
 
 @app.route('/right-press', methods=['POST'])
 def right():
 	global vitesse
 	moteur.avance_corrige("left", -1, vitesse)
+	return render_template("page.html")	
 
 @app.route('/left-press', methods=['POST'])
 def left():
 	global vitesse
 	moteur.avance_corrige("right", -1, vitesse)
+	return render_template("page.html")	
 
 @app.route('/button-release', methods=['POST'])
 def test_button_release():
 	moteur.avance_corrige("left", 1, 0)
+	return render_template("page.html")	
 
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected
+	global last_update_time, users_connected, cam
 	"""send current content"""
 
 	now = time.time()
 	current_user = request.remote_addr
+
 
 	# Determination du nombre d'utilisateur connecte 
 	if current_user not in users_connected.keys():
@@ -123,22 +128,42 @@ def update():
 	for user in to_remove:
 		del users_connected[user]
 
-
-
-	module_camera.save_image(cam)
-	connexion = module_camera.check_camera_status(cam)
-	if connexion :
-		print("try to save the image")
-		module_camera.save_image(cam)
-
+	# Connection de la camera
+	if cam is None:
+		cam = module_camera.connect()
 	aruco_detected = module_camera.check_aruco(cam)
+	connexion = module_camera.check_camera_status(cam,verbose=True)
+
+	###### Code qui s'exécute toute les secondes #######
+	if now - last_update_time >= 0.9:
+		# Envoi vers l'api 
+		r = requests.post(url)
+
+		if r.status_code == 200: 
+			print("Data sent to server")
+
+
+
+		# Saving image
+		print("Attempt to save image")
+		image = module_camera.get_image(cam)
+		module_camera.save_image(image)
+
+		last_update_time = now
+	#####################################################
+
+		
+	# Contenu renvoier
 	updated_content=f"""
 <p>Current time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} </p>
 <p>connexion camera : {connexion}</p>
 <p>aruco détecté: {aruco_detected}</p>
-<p>aruco détecté: {aruco_detected}</p>
 <p>nombre d'utilisateurs connectés {len(users_connected)}</p>
+<ul>
 """
+	for user in users_connected:
+		updated_content += f"<li>{user}</li>"
+	updated_content += "</ul>"
 
 	return updated_content
 

@@ -149,3 +149,7 @@ Les deux roues du robot ne tournent pas à la même vitesse et ne commence ni ne
 ### CALIBRAGE DE LA CAMERA (Joshua)
 
 Prise de différentes photos avec la caméra afin de trouver la matrice intrinsèque de la caméra, ce qui permettra ensuite de la calibrer. Des résultats sont trouvés mais aucun n'est vraiment concluant (test surtout effectués pour l'évaluation de la distance du QR code à la aruco).
+
+### TEST DU SERVEUR DE SUIVI (Martin)
+
+Envoi d'une requête simple au serveur, qui m'a tout simplement répondu OK
