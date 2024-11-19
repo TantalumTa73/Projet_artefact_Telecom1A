@@ -270,7 +270,7 @@ def rota_deg(deg, time_step, temps_accel_decel):
 	poss_speed = [10,5,3]
 	for spd in poss_speed:
 		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
-		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)print(acc_tick)
+		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
 		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
 		if tick_parc > 0:
 			temps_parc = tick_parc/(100 * spd)
