@@ -53,7 +53,7 @@ def test_calibrage():
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
-	vitesse = request.form.get('speed')
+	vitesse = int(request.form.get('speed'))
 	print(f"Setting speed to {vitesse}")
 	return render_template("page.html")	
 
