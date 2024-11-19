@@ -16,6 +16,18 @@ hauteur_image = 480
 angle_vue = 28 #degrés
 dist_foyer_ecran = (largeur_image//2)/tan(radians(angle_vue/2))
 
+
+### CHANGER LA POSITION DES MARKERS
+
+def set_pos_marker(list_pos:list):
+    """change les positions des markers
+    list_pos est une liste de 4 positions (x,y) des markers"""
+    assert len(list_pos)==4
+    for i in range(4):
+        assert(len(list_pos[i])==2)
+        pos_marker[i+1] = list_pos[i]
+
+
 ### UPDATE LA DISTANCE AUX MARKERS
 
 def clear_dist_to_marker():
@@ -400,8 +412,10 @@ def test_get_orientation():
     assert float_equal(erreur, 0.0), "erreur test_get_orientation (2)"
 
 
-
-
+def get_angle_with_drapeau(info_marker):
+    """renvoie l'angle entre l'orientation de la camera et le drapeau"""
+    id_marker, dist_marker, angle_marker, pos_on_screen = info_marker
+    angle = get_angle_from_pos_on_screen(pos_on_screen)
 
 
 
