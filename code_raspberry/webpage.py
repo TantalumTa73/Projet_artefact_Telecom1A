@@ -63,7 +63,7 @@ def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
 	i,j = case 
 	if i<0 or i>3 or j<0 or j>6:
-		return "Hors du terrain"
+		print("Hors du terrain")
 	string = "GFEDCBA"[j]
 	return (string,str(i+1))
 
