@@ -257,3 +257,18 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 		t.sleep(time_step)
 	moteur.set_motor_speed(0,0)
 	print([supposed_ticks[-1], curr_ticks])
+
+
+def rota_deg(deg, time_step, temps_accel_decel, side):
+	ticks = int((deg * 185.72 * 2 * 3.141592 * 7.85) / 360)
+	asserv_decel = {10:30}
+	poss_speed = [10]
+	for spd in poss_speed:
+		print('patate')
+		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
+		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
+		tick_parc = ticks - acc_tick - dec_tick - asserv_decel[spd]
+		if tick_parc > 0:
+			temps_parc = tick_parc/(100 * spd)
+			rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, "left")
+			break
