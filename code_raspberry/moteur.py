@@ -21,7 +21,7 @@ def acceleration(vitesse,time_step, temps_accel):
 	""" Accélère de façon progressive jusqu'à une certaine vitesse """
 
 	vitesse = int(vitesse)
-	n = temps_accel/time_step
+	n = int(temps_accel/time_step)
 
 	curr_ticks = [0,0]
 	supposed_ticks = [0]
@@ -49,7 +49,7 @@ def deceleration(vitesse,time_step, temps_decel):
 	""" Décélère de façon progressive jusqu'à l'arrêt depuis une certaine vitesse """
 
 	vitesse = int(vitesse)
-	n = temps_decel/time_step
+	n = int(temps_decel/time_step)
 
 	curr_ticks = [0,0]
 	supposed_ticks = [0]
