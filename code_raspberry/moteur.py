@@ -5,6 +5,7 @@ import time as t
 
 moteur = c.Controller()
 moteur.standby()
+moteur.set_motor_shutdown_timeout(10)
 
 def action_moteur(type_action):
 
