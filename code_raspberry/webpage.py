@@ -257,7 +257,7 @@ def update():
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
 		# Envoi vers l'api 
-		send_position(*current_pos.get_pos())
+		send_position(*map(int,current_pos.get_pos()))
 		#status = get_status()
 		#found_flag(marquer_id, col, row)
 
