@@ -282,10 +282,6 @@ def aller_drap():
 		print(analyser_drapeau.analyser_drapeau(list_aru, current_pos, cam))
 	return render_template("page.html")	
 
-@app.route('/test-ultime', methods=['POST'])
-def ultime():
-
-	return render_template("page.html")	
 
 @app.route('/update')
 def update():
@@ -402,6 +398,7 @@ def ultime():
 			else:
 				x, y = current_pos.get_pos()
 				main.aller_case(x, y + 100, current_pos)
+	return render_template("page.html")	
 
 
 # main driver function
