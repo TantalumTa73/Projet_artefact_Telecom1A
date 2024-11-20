@@ -21,7 +21,7 @@ def action_moteur(type_action):
 		# CALCUL SAVANT POUR CONVERTIR CENTIMETRE EN TICK
 		avance_corrige("left", 1, dist)
 
-def acceleration(vitesse,time_step, temps_accel):
+def acceleration(vitesse,time_step=0.01, temps_accel=2):
 
 	""" Accélère de façon progressive jusqu'à une certaine vitesse """
 
@@ -49,7 +49,7 @@ def acceleration(vitesse,time_step, temps_accel):
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
 
-def calc_tick_accel(vitesse, time_step, temps_accel):
+def calc_tick_accel(vitesse, time_step=0.01, temps_accel=2):
 	vitesse = int(vitesse)
 	n = int(temps_accel/time_step)
 	tick = 0
@@ -58,7 +58,7 @@ def calc_tick_accel(vitesse, time_step, temps_accel):
 		tick += dvitesse*time_step*100
 	return tick
 
-def deceleration(vitesse,time_step, temps_decel):
+def deceleration(vitesse,time_step=0.01, temps_decel=2):
 
 	""" Décélère de façon progressive jusqu'à l'arrêt depuis une certaine vitesse """
 
@@ -86,7 +86,7 @@ def deceleration(vitesse,time_step, temps_decel):
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
 
-def calc_tick_decel(vitesse, time_step, temps_accel):
+def calc_tick_decel(vitesse, time_step=0.01, temps_accel=2):
 	vitesse = int(vitesse)
 	n = int(temps_accel/time_step)
 	tick = 0
@@ -95,7 +95,7 @@ def calc_tick_decel(vitesse, time_step, temps_accel):
 		tick += (vitesse-dvitesse)*time_step*100
 	return tick
 
-def straight_line(vitesse, time_step, temps):
+def straight_line(vitesse, time_step=0.01, temps=2):
 	n = int(temps / time_step)
 	real_ticks = 0
 	curr_ticks = [0,0]
