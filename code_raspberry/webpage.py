@@ -237,7 +237,12 @@ def reperage_rotation_prep():
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientations.append(orient)
 
-	real_pos, err = position_from_arucos.get_position_from_markers(info_images)
+	res = position_from_arucos.get_position_from_markers(info_images)
+
+	if res is None:
+		print("No arucos found!")
+		return None
+	real_pos, err = res
 
 	orientations = []
 	for i in range(len(info_images)):
@@ -251,6 +256,8 @@ def reperage_rotation_prep():
 	current_pos.set_orientation(*orientation)
 
 	send_position(*current_pos.get_pos())
+
+	print("\n\n\n\n\nrotation fini")
 	return render_template("page.html")	
 
 @app.route('/test-aller-drap', methods=['POST'])
