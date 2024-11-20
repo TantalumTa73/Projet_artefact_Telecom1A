@@ -322,7 +322,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 			else:
 				ratio = (supposed_ticks_turn[l] - curr_tick[1]) / (supposed_ticks[l] + curr_tick[0])
 			left_speed = - spd
-			right_speed = ratio * left_speed
+			right_speed = ratio * spd
 			acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel)
 			dec_tick_left = calc_tick_decel(left_speed, time_step, temps_decel)
 			acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel)
