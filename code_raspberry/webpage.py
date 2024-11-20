@@ -265,7 +265,7 @@ def update():
 
 		
 	# Contenu renvoier
-	updated_content+=f"<p>En mouvement: {current_pos.is_move()}</p>"
+	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
 	updated_content+=f"<p>Position actuelle (cm) x:{current_pos.get_pos()[0]} y:{current_pos.get_pos()[1]} angle:{current_pos.get_angle_orientation()}</p>"
 	case_x,case_y= pos_to_case(current_pos.get_pos())
