@@ -269,7 +269,7 @@ def update():
 			image, result = module_camera.get_image(cam)
 			if result:
 				module_camera.save_image(image)
-				last_distance = f"{analyse_image.detect_aruco_markers(image)}"
+				last_distance = f"{analyse_image.detect_aruco_markers(image,current_pos)}"
 			else:
 				print("Image did not save")
 

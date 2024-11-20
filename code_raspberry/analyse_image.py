@@ -37,7 +37,7 @@ def position_drapeau(liste_aru, position_robot):
     x,y = position_robot.get_pos()
 
     distance = liste_aru[1]
-    angle_aru =  pfa.get_angle_with_flag(liste_aru)
+    angle_aru =  pfa.get_angle_with_drapeau(liste_aru)
     angle_absolu_aruco =  angle_aru + angle
     var_x = np.sin(angle_absolu_aruco) * distance 
     var_y = np.cos(angle_absolu_aruco) * distance 
