@@ -70,58 +70,62 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
 
-<script>
-	// The URL for the POST requests
-	const urlForward = '/forward-press';  // URL to send when the button is pressed
-	const urlBackward= '/backward-press';  // URL to send when the button is pressed
-	const urlRight = '/right-press';  // URL to send when the button is pressed
-	const urlLeft = '/left-press';  // URL to send when the button is pressed
-	const urlRelease = '/button-release'; // URL to send when the button is released
-
-	// Function to send a POST request
-	function sendPostRequest(url) {
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ action: 'button-activated' })
-		})
-		.then(response => response.json());
-	}
-
-	const buttonForward = document.getElementById('forward');
-	const buttonBackward = document.getElementById('backward');
-	const buttonRight = document.getElementById('right');
-	const buttonLeft = document.getElementById('left');
-
-	// When the button is pressed
-	buttonForward.addEventListener('mousedown', function() {
-		sendPostRequest(urlForward);  // Send POST request when pressed
-	});
-	buttonBackward.addEventListener('mousedown', function() {
-		sendPostRequest(urlBackward);  // Send POST request when pressed
-	});
-	buttonRight.addEventListener('mousedown', function() {
-		sendPostRequest(urlRight);  // Send POST request when pressed
-	});
-	buttonLeft.addEventListener('mousedown', function() {
-		sendPostRequest(urlLeft);  // Send POST request when pressed
+<script> // Live control for robot
+	// Key press event
+	document.addEventListener('keydown', function(event) {
+		if (event.key === "ArrowUp") {
+			// Send a POST request to the Flask server to trigger the forward press function
+			fetch('/forward-press', {
+				method: 'POST',
+			});
+		}
+		else if (event.key === "ArrowDown") {
+			// Send a POST request to the Flask server to trigger the downward press function
+			fetch('/downward-press', {
+				method: 'POST',
+			});
+		}
+		if (event.key === "ArrowLeft") {
+			// Send a POST request to the Flask server to trigger the left press function
+			fetch('/left-press', {
+				method: 'POST',
+			});
+		}
+		if (event.key === "ArrowRight") {
+			// Send a POST request to the Flask server to trigger the right press function
+			fetch('/right-press', {
+				method: 'POST',
+			});
+		}
 	});
 
-	// When the button is released
-	buttonForward.addEventListener('mouseup', function() {
-		sendPostRequest(urlRelease);  // Send a different POST request when released
-	});
-	buttonBackward.addEventListener('mouseup', function() {
-		sendPostRequest(urlRelease);  // Send a different POST request when released
-	});
-	buttonRight.addEventListener('mouseup', function() {
-		sendPostRequest(urlRelease);  // Send a different POST request when released
-	});
-	buttonLeft.addEventListener('mouseup', function() {
-		sendPostRequest(urlRelease);  // Send a different POST request when released
-	});
+	// Key release event
+	document.addEventListener('keyup', function(event) {
+		if (event.key === "ArrowUp") {
+			// Send a POST request to the Flask server to trigger the forward release function
+			fetch('/forward-release', {
+				method: 'POST',
+			});
+		}
+		else if (event.key === "ArrowDown") {
+			// Send a POST request to the Flask server to trigger the downward release function
+			fetch('/downward-release', {
+				method: 'POST',
+			});
+		}
+		if (event.key === "ArrowLeft") {
+			// Send a POST request to the Flask server to trigger the left release function
+			fetch('/left-release', {
+				method: 'POST',
+			});
+		}
+		if (event.key === "ArrowRight") {
+			// Send a POST request to the Flask server to trigger the right release function
+			fetch('/right-release', {
+				method: 'POST',
+			});
+		}
+        });
 </script>
 
 <script type="text/javascript">
