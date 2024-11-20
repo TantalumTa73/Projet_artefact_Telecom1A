@@ -34,7 +34,7 @@ def ultime(position_robot,cam):
         
     curr_tick = [0,0]
     for i in range(17):
-        curr_tick = moteur.rota_petit_angle(l, curr_tick)
+        curr_tick = moteur.rota_petit_angle(i, curr_tick)
         image, result = module_camera.get_image(cam)
         arus = analyse_image.detect_aruco_markers(image, position_robot)
         for j in range(len(arus)):
