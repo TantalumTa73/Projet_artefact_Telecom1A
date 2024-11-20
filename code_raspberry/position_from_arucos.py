@@ -329,7 +329,7 @@ def get_orientation(pos_robot, info_image):
     Argument : 
         - la position en centimètres du robot
         - liste de tuples de la forme (id_marker, dist_marker, angle_marker, pos_on_screen)"""
-    for (id_marker, dist_marker, angle_marker, pos_on_screen) in info_image :
+    for (id_marker, dist_marker, angle_marker, pos_on_screen,_) in info_image :
         if 1<=id_marker and id_marker <=4:
             angle_with_marker[id_marker] = get_angle_from_pos_on_screen(pos_on_screen)
     id_markers = get_markers_angle_connus()
