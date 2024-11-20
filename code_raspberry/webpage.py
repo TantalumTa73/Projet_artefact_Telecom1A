@@ -248,7 +248,7 @@ def reperage_rotation_prep():
 	for i in range(len(info_images)):
 		orient_img, err = position_from_arucos.get_orientation(real_pos, info_images[i])
 		if orient_img is not None:
-			orientations = vecteur_2d.rotate_vect(orient_img,-orientation[i]) 
+			orientations = vecteur_2d.rotate_vect(orient_img,-orientations[i]) 
 
 	orientation = vecteur_2d.vect_mean(orientations)
 	
