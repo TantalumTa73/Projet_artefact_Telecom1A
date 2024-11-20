@@ -53,6 +53,7 @@ def reperage_rotation(cam):
         img, res = module_camera.get_image(cam)
         orientation = ((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))
         images.append((img,orientation))
+    moteur.reajustement(curr_tick)
     return images
 
 
