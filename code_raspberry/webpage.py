@@ -241,7 +241,7 @@ def reperage_rotation_prep():
 		img,orientation = res[i]
 		module_camera.save_image(img,f"image{i}")
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
-		orientations.append(orient)
+		orientations.append(orientation)
 
 	res = position_from_arucos.get_position_from_markers(info_images)
 
