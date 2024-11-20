@@ -420,13 +420,7 @@ def ultime():
 
 				x,y = current_pos.get_pos()
 				
-				x_hd , y_hd = x1 + 25, y1 + 25
-				x_hg , y_hg = x1 - 25, y1 + 25
-				
-				if x < x1 :
-					main.aller_case(x_hg,y_hg,current_pos)
-				else:
-					main.aller_case(x_hd, y_hd,current_pos)
+				main.aller_case(125,y1+25,current_pos)
 			else:
 				print("		"+"no flag found")
 				x, y = current_pos.get_pos()
