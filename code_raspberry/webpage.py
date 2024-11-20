@@ -255,7 +255,8 @@ def reperage_rotation_prep():
 
 @app.route('/test-aller-drap', methods=['POST'])
 def aller_drap():
-	print(analyser_drapeau.analyser_drapeau(analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(module_camera.get_image(cam), current_pos))))
+	image, result = module_camera.get_image(cam)
+	print(analyser_drapeau.analyser_drapeau(analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))))
 	return render_template("page.html")	
 
 @app.route('/update')
