@@ -24,11 +24,11 @@ class Position_robot:
 		self.__pos = (x,y)
 
 	def set_orientation(self, x, y):
-        self.__orientation = normalize((x,y))
+		self.__orientation = normalize((x,y))
 
-    def avancer(self, d):
-        """avance la position de d cm dans la direction donnée par self.__vect_orientation"""
-        self.__pos = add_vect(self.__pos, mult_scalar(d, self.__vect_orientation))
+	def avancer(self, d):
+		"""avance la position de d cm dans la direction donnée par self.__vect_orientation"""
+		self.__pos = add_vect(self.__pos, mult_scalar(d, self.__vect_orientation))
 
 	def tourner(self, deg):
 		"""tourne l'oriantation de deg degrés"""

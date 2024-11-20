@@ -117,30 +117,12 @@ def go_to():
 
 	return render_template("page.html")	
 
-@app.route('/test_calibrage', methods=['POST'])
-def test_calibrage():
-	moteur_princ = request.form.get('text')
-	ratio = request.form.get('ratio')
-
-	try:
-		moteur.avance_corrige(moteur_princ, ratio, 100)
-	except Exception as e:
-		error_message = str(e)
-		print("Moteur ne marchent pas")
-		print(error_message)
-		return Response(status=500)
-	return render_template("page.html")	
-
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
 	global vitesse
 	vitesse = int(request.form.get('speed'))
 	print(f"Setting speed to {vitesse}")
 	return render_template("page.html")	
-
-@app.route('/avance-test', methods=['POST'])
-def avance_test():
-	moteur.avance_test()
 
 @app.route('/forward-press', methods=['POST'])
 def forward():
