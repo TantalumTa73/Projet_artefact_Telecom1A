@@ -153,6 +153,8 @@ def right():
 		left_speed += vitesse
 	elif left_speed <= vitesse and right_speed > 0:
 		left_speed += vitesse
+	elif left_speed < 0 and right_speed < 0 and right_speed >= -vitesse:
+		right_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
 
@@ -164,6 +166,8 @@ def left():
 		left_speed -= vitesse
 	elif right_speed <= vitesse	and left_speed > 0:
 		right_speed += vitesse
+	elif left_speed < 0 and right_speed < 0 and left_speed >= -vitesse:
+		left_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
 
@@ -190,6 +194,8 @@ def right_rel():
 	if left_speed == -right_speed:
 		right_speed += vitesse
 		left_speed -= vitesse
+	elif left_speed < 0 and right_speed < 0:
+		right_speed += vitesse
 	else:
 		left_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
@@ -201,6 +207,8 @@ def left_rel():
 	print(left_speed, right_speed)
 	if left_speed == - right_speed:
 		right_speed -= vitesse
+		left_speed += vitesse
+	elif left_speed < 0 and right_speed < 0:
 		left_speed += vitesse
 	else:
 		right_speed -= vitesse
