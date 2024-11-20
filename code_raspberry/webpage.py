@@ -45,7 +45,8 @@ def send_position(x,y):
 	r = requests.post(url+f"/api/pos?x={x}&y={y}")
 
 	if r.status_code != 200: 
-		print(f"Failed to send data to server {r.status_code}")
+		#print(f"Failed to send data to server {r.status_code}")
+		pass
 
 def get_status():
 	r = requests.get(url+"/api/status")
@@ -310,7 +311,7 @@ def update():
 	if image_view:
 		if cam is None:
 			cam = module_camera.connect()
-		connexion = module_camera.check_camera_status(cam,verbose=True)
+		connexion = module_camera.check_camera_status(cam,verbose=False)
 		updated_content+=f"<p>Connexion camera : {connexion}</p>"
 
 	###### Code qui s'exécute toute les secondes #######
@@ -435,5 +436,5 @@ if __name__ == '__main__':
 	# run() method of Flask class runs the application 
 	# on the local development server.
 	#app.run()
-	app.run(debug=True,host="0.0.0.0")
+	app.run(debug=False,host="0.0.0.0")
 
