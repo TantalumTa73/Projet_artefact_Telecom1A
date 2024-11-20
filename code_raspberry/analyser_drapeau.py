@@ -94,7 +94,8 @@ def analyser_drapeau(liste_aru, position_robot):
     if ou_est_drapeau == "a_gauche":
         for _ in range(4):
             moteur.rota_deg(-45, position_robot)
-            aru = drapeau_proche(anal.detect_aruco_markers(module_camera.get_image, position_robot))
+            image, result = module_camera.get_image()
+            aru = drapeau_proche(anal.detect_aruco_markers(image, position_robot))
             if aru[0] != 0 :
                 moteur.rota_deg(45, position_robot)
                 return aru[0]
@@ -106,7 +107,8 @@ def analyser_drapeau(liste_aru, position_robot):
     else:
         for _ in range(4):
             moteur.rota_deg(45, position_robot)
-            aru = drapeau_proche(anal.detect_aruco_markers(module_camera.get_image, position_robot))
+            image, result = module_camera.get_image()
+            aru = drapeau_proche(anal.detect_aruco_markers(image, position_robot))
             if aru[0] != 0 :
                 moteur.rota_deg(-45, position_robot)
                 return aru[0]

@@ -255,10 +255,11 @@ def reperage_rotation_prep():
 		res = position_from_arucos.get_orientation(real_pos, info_images[i])
 		if res is not None:
 			orient_img, err = res
-			orientations_vect.append(vecteur_2d.rotate_vect(orient_img,-orientations[i]))
+			orient, _ = vecteur_2d.rotate_vect(orient_img,-orientations[i])
+			orientations_vect.append(orient)
 
 	if len(orientations_vect) != 0:
-		orientation = vecteur_2d.vect_mean(orientations_vect)
+		orientation, _ = vecteur_2d.vect_mean(orientations_vect)
 		current_pos.set_orientation(*orientation)
 	
 	current_pos.set_pos(*real_pos)
