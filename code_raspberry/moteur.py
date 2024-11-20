@@ -312,14 +312,12 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 	poss_speed = [20,15,10,5,3]
 	curr_tick = [0,0]
 	curr_ticks_ins = [0,0]
-	print(supposed_ticks_turn)
 	for l in range(17):
 		for spd in poss_speed:
 			acc_tick = calc_tick_accel(spd, time_step, temps_accel)
 			dec_tick = calc_tick_decel(spd, time_step, temps_decel)
 			tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] + acc_tick + dec_tick
 			tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick - dec_tick
-			print(tick_parc_left, tick_parc_right)
 			if tick_parc_left < 0 and tick_parc_right > 0:
 				left_speed = - spd
 				right_speed = tick_parc_right/tick_parc_left * left_speed
@@ -354,6 +352,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 				curr_tick[0] += curr_ticks_ins[0]
 				curr_tick[1] += curr_ticks_ins[1]
 				t.sleep(3)
+				print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[0]*360)/(2*3.141592*7.85*183.6)])
 				break
 	moteur.set_motor_speed(0,0)
 
