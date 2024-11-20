@@ -45,7 +45,7 @@ def analyser_drapeau(liste_aru, position_robot, cam):
     mini = (x-x_hd)**2 +(y-y_hd)**2
     x_min, y_min = x_hd, y_hd
             
-    if (x-x_hg)**2 +(y-y_hg)**2 < mini:
+    if (x-x_hg)**2 +(y-y_hg)**2 < mini: 
         mini = (x-x_hg)**2 +(y-y_hg)**2
         x_min, y_min = x_hg, y_hg
     if (x-x_bd)**2 +(y-y_bd)**2 < mini:

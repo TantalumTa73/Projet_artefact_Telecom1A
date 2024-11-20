@@ -357,7 +357,51 @@ def update():
 
 	return updated_content
 
+@app.route('/test-ultime', methods=['POST'])
+def ultime():
+	for i in range(2):
+		next_flag = 0
+		while next_flag == 0:
+			angle = current_pos.get_angle_orientation()
+			if -45 < angle and angle < 45 :
+				moteur.rota_deg(-90, current_pos)
+			elif 135 > angle and angle > 45 :
+				moteur.rota_deg(180, current_pos)
+			elif angle < -135 and angle >135 :
+				moteur.rota_deg(90, current_pos)
+				
+			curr_tick = [0,0]
+			for i in range(17):
+				curr_tick = moteur.rota_petit_angle(l, curr_tick)
+				image, result = module_camera.get_image(cam)
+				arus = analyse_image.detect_aruco_markers(image, current_pos)
+				for j in range(len(arus)):
+					if arus[j][0] not in [1,2,3,4]:
+						next_flag = arus[j]
+						break
+			moteur.reajustement(curr_tick)
+					
+			if next_flag != 0:
+				liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
+				id_1,coord_1 = analyser_drapeau.analyser_drapeau(liste_aru,current_pos,cam)
+				x1,y1 = coord_1
+				if id_1 != -1:
+					moteur.tour_sur_soi_meme()
+					i, j = case_to_pos(x1, y1)
+					found_flag(id_1, i, j)
 
+				x,y = current_pos.get_pos()
+				
+				x_hd , y_hd = x1 + 25, y1 + 25
+				x_hg , y_hg = x1 - 25, y1 + 25
+				
+				if x < x1 :
+					main.aller_case(x_hg,y_hg,current_pos)
+				else:
+					main.aller_case(x_hd, y_hd,current_pos)
+			else:
+				x, y = current_pos.get_pos()
+				main.aller_case(x, y + 100, current_pos)
 
 
 # main driver function
