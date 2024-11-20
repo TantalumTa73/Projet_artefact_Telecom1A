@@ -32,7 +32,7 @@ def analyser_drapeau(liste_aru, position_robot):
     angle = position_robot.get_angle_orientation()
     x,y = position_robot.get_pos()
 
-    x_drapeau, y_drapeau = liste_aru[5]
+    x_drapeau, y_drapeau = liste_aru[4]
     x_hd , y_hd = x_drapeau + 25 * 1.41 , y_drapeau + 25 * 1.41
     x_hg , y_hg = x_drapeau - 25 * 1.41 , y_drapeau + 25 * 1.41
     x_bd , y_bd = x_drapeau + 25 * 1.41 , y_drapeau - 25 * 1.41
