@@ -293,7 +293,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 	curr_tick = [0,0]
 	curr_ticks_ins = [0,0]
 	print(supposed_ticks_turn)
-	for l in range(2):
+	for l in range(17):
 		for spd in poss_speed:
 			acc_tick = calc_tick_accel(spd, time_step, temps_accel)
 			dec_tick = calc_tick_decel(spd, time_step, temps_decel)
