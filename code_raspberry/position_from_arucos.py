@@ -10,7 +10,7 @@ from vecteur_2d import *
 dist_to_marker = [None, None, None, None, None] #la première valeur est inutile (id_marker=0 n'existe pas) 
                                                 #pour les autres valeurs, None signifie que la distance est inconnue
 angle_with_marker = [None, None, None, None, None] #les angles sont en degrés
-pos_marker = [None, (0, 350), (150, 350), (150, 50), (0, 50)] #coorodonées en cemtimètres des markers
+pos_marker = [None, (0, 300), (150, 300), (150, 0), (0, 0)] #coorodonées en cemtimètres des markers
 
 largeur_image = 640
 hauteur_image = 480

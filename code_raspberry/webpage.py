@@ -370,7 +370,7 @@ def ultime():
 				print("		"+"looking north")
 				moteur.rota_deg(90, current_pos)
 			elif -135 < angle and angle < -45 :
-				print("		"+"looking ouest")
+				print("		"+"looking west")
 				moteur.rota_deg(180, current_pos)
 			elif angle < -135 and angle >135 :
 				print("		"+"looking south")
@@ -438,5 +438,5 @@ if __name__ == '__main__':
 	# run() method of Flask class runs the application 
 	# on the local development server.
 	#app.run()
-	app.run(debug=False,host="0.0.0.0")
+	app.run(debug=True,host="0.0.0.0")
 
