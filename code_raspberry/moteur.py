@@ -312,61 +312,59 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 	else:
 		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
 
-def rota_16_angles(time_step, temps_accel, temps_decel):
+
+def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=1.5):
 	moteur.get_encoder_ticks()
 	tot_tick = int(183.6 * 2 * 3.141592 * 7.85)
 	tick_per_turn = tot_tick/16
 	supposed_ticks_turn = [tick_per_turn * i for i in range(17)]
 	poss_speed = [20,15,10,5,3]
-	curr_tick = [0,0]
 	curr_ticks_ins = [0,0]
-	for l in range(17):
-		for spd in poss_speed:
-			if curr_tick[0] == 0 :
-				ratio = 1
-			else:
-				ratio = (supposed_ticks_turn[l] - curr_tick[1]) / (supposed_ticks_turn[l] + curr_tick[0])
-			left_speed = - spd
-			right_speed = ratio * spd
-			acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel)
-			dec_tick_left = calc_tick_decel(left_speed, time_step, temps_decel)
-			acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel)
-			dec_tick_right = calc_tick_decel(right_speed, time_step, temps_decel)
-			tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] - acc_tick_left - dec_tick_left
-			tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick_right - dec_tick_right
-			if tick_parc_left < 0 and tick_parc_right > 0:
-				temps_parc = tick_parc_left/(left_speed*100)
-				n_accel = int(temps_accel/time_step)
-				n_parcours = int(temps_parc/time_step)
-				n_decel = int(temps_decel/time_step)
-				real_ticks = [0,0]
-				curr_ticks_ins = [0,0]
-				supposed_ticks = [[0,0]]
-				for k in range(0,n_accel + 1):
-					dvitesse_left = k * left_speed / n_accel
-					dvitesse_right = k * right_speed / n_accel
-					supposed_ticks.append([dvitesse_left*time_step*100 + supposed_ticks[-1][0], dvitesse_right*time_step*100 + supposed_ticks[-1][1]])
-				for k in range(0,n_parcours):
-					supposed_ticks.append([left_speed*time_step*100 + supposed_ticks[-1][0], right_speed*time_step*100 + supposed_ticks[-1][1]])
-				for k in range(0,n_decel + 1):
-					dvitesse_left = k * left_speed / n_decel
-					dvitesse_right = k * right_speed / n_decel
-					supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
+	for spd in poss_speed:
+		if curr_tick[0] == 0 :
+			ratio = 1
+		else:
+			ratio = (supposed_ticks_turn[l] - curr_tick[1]) / (supposed_ticks_turn[l] + curr_tick[0])
+		left_speed = - spd
+		right_speed = ratio * spd
+		acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel)
+		dec_tick_left = calc_tick_decel(left_speed, time_step, temps_decel)
+		acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel)
+		dec_tick_right = calc_tick_decel(right_speed, time_step, temps_decel)
+		tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] - acc_tick_left - dec_tick_left
+		tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick_right - dec_tick_right
+		if tick_parc_left < 0 and tick_parc_right > 0:
+			temps_parc = tick_parc_left/(left_speed*100)
+			n_accel = int(temps_accel/time_step)
+			n_parcours = int(temps_parc/time_step)
+			n_decel = int(temps_decel/time_step)
+			real_ticks = [0,0]
+			curr_ticks_ins = [0,0]
+			supposed_ticks = [[0,0]]
+			for k in range(0,n_accel + 1):
+				dvitesse_left = k * left_speed / n_accel
+				dvitesse_right = k * right_speed / n_accel
+				supposed_ticks.append([dvitesse_left*time_step*100 + supposed_ticks[-1][0], dvitesse_right*time_step*100 + supposed_ticks[-1][1]])
+			for k in range(0,n_parcours):
+				supposed_ticks.append([left_speed*time_step*100 + supposed_ticks[-1][0], right_speed*time_step*100 + supposed_ticks[-1][1]])
+			for k in range(0,n_decel + 1):
+				dvitesse_left = k * left_speed / n_decel
+				dvitesse_right = k * right_speed / n_decel
+				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
-				for k in range(0, n_accel + n_decel + n_parcours  + 2):
-					ticks = moteur.get_encoder_ticks()
-					curr_ticks_ins[0] += ticks[0]
-					curr_ticks_ins[1] += ticks[1]   
-					speed_left = int((supposed_ticks[k+1][0] - curr_ticks_ins[0]) / (time_step * 100))
-					speed_right = int((supposed_ticks[k+1][1] - curr_ticks_ins[1]) / (time_step * 100))
-					moteur.set_motor_speed(speed_left, speed_right)
-					t.sleep(time_step)
-				moteur.set_motor_speed(0,0)
-				t.sleep(0.5)
-				curr_tick[0] += curr_ticks_ins[0]
-				curr_tick[1] += curr_ticks_ins[1]
-				#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
-				t.sleep(4)
-				break
-	moteur.set_motor_speed(0,0)
+			for k in range(0, n_accel + n_decel + n_parcours  + 2):
+				ticks = moteur.get_encoder_ticks()
+				curr_ticks_ins[0] += ticks[0]
+				curr_ticks_ins[1] += ticks[1]   
+				speed_left = int((supposed_ticks[k+1][0] - curr_ticks_ins[0]) / (time_step * 100))
+				speed_right = int((supposed_ticks[k+1][1] - curr_ticks_ins[1]) / (time_step * 100))
+				moteur.set_motor_speed(speed_left, speed_right)
+				t.sleep(time_step)
+			moteur.set_motor_speed(0,0)
+			t.sleep(0.5)
+			curr_tick[0] += curr_ticks_ins[0]
+			curr_tick[1] += curr_ticks_ins[1]
+			#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
+			t.sleep(0.5)
+			break
 
