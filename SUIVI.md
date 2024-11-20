@@ -239,17 +239,17 @@ Désormais, le pilotage du robot est beaucoup plus aisé et précis.
 
 ### TESTS RECHERCHE DRAPEAU (Joshua, Edouard)
 
-Test de l'algorithme pour chercher les drapeau
+Test de l'algorithme pour chercher les drapeaux.
 
 ### PRISE EN COMPTE DU DECALAGE DE LA CAMERA PAR RAPPORT AU CENTRE LORS DE LA TRIANGULATION (Alice)
 
 Amelioration de la triangulation.
 
-### TOUR SUR LUI MEME AVEC ARRET (Martin)
+### TOUR SUR LUI MEME AVEC ARRETS (Martin)
 
 Creation d'un fonction permettant au robot de tourner de petits angles plusieurs fois
 en minimisant les erreurs d'approximation (s'assure que le robot a bien fait un tour complet
-à la fin)
+à la fin).
 
 ### REPERAGE GRACE AUX REPERES EN TOURNANT SUR SOI-MEME (Jeffrey, Alice)
 
@@ -260,3 +260,7 @@ des photos autour de lui pour ensuite proceder à la triangulation.
 ### TESTS ET DEBOGAGE DU REPERAGE GRACE AUX REPERES (Martin, Jeffrey)
 
 Tests de la fonction précédante avec le robot sur le terrain.
+
+### CREATION D'UN PETIT DRAPEAU ROUGE A ACCROCHER SUR LE ROBOT (Alice)
+
+Il est écrit notre groupe et notre équpie (6.1) sur notre robot de sorte qu'on puisse le reconnaitre.
