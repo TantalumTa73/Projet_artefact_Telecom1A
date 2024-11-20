@@ -266,7 +266,6 @@ def reperage_rotation_prep():
 			orientations_vect.append(orient)
 
 	if len(orientations_vect) != 0:
-		print(orientations_vect)
 		orientation, _ = vecteur_2d.vect_mean(orientations_vect)
 		current_pos.set_orientation(*orientation)
 	
