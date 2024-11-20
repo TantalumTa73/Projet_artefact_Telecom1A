@@ -244,7 +244,6 @@ def reperage_rotation_prep():
 		return None
 	real_pos, err = res
 
-	orientations = []
 	for i in range(len(info_images)):
 		res = position_from_arucos.get_orientation(real_pos, info_images[i])
 		if res is not None:
