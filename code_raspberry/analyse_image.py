@@ -9,6 +9,7 @@ Created on Tue Nov 19 09:43:58 2024
 import cv2
 import numpy as np
 import position_from_arucos as pfa
+from math import *
 
 def get_marker_info(rvec, tvec):
     # Distance en utilisant la norme du vecteur de translation
@@ -39,8 +40,8 @@ def position_drapeau(liste_aru, position_robot):
     distance = liste_aru[1]
     angle_aru =  pfa.get_angle_with_drapeau(liste_aru)
     angle_absolu_aruco =  angle_aru + angle
-    var_x = np.sin(angle_absolu_aruco) * distance 
-    var_y = np.cos(angle_absolu_aruco) * distance 
+    var_x = np.sin(radians(angle_absolu_aruco)) * distance 
+    var_y = np.cos(radians(angle_absolu_aruco)) * distance 
     x_drapeau = x+var_x
     y_drapeau = y+var_y
 
