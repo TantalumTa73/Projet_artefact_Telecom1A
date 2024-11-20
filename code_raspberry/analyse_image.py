@@ -46,7 +46,7 @@ def position_drapeau(liste_aru, position_robot):
 
     return (x_drapeau, y_drapeau)
 
-def detect_aruco_markers(image):
+def detect_aruco_markers(image, position_robot):
     """
     entrée: image sous format numpy array
     sortie : liste de tableau 
@@ -102,7 +102,7 @@ def detect_aruco_markers(image):
 
             # Afficher les informations du marqueur
             liste_retour.append([marker_id, dist_cm,angle_deg,centre])
-            pos_drap = position_drapeau(liste_retour[-1])
+            pos_drap = position_drapeau(liste_retour[-1], position_robot)
             liste_retour[-1].append(pos_drap)
     return liste_retour
         
