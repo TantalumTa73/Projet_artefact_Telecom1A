@@ -237,7 +237,8 @@ def reperage_rotation_prep():
 	info_images = [] 
 	orientations = []
 	res = main.reperage_rotation(cam)
-	for ((img,orient),i) in enumerate(res):
+	for i in range(len(res)):
+		img,orientation = res[i]
 		module_camera.save_image(image,f"image{i}")
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientations.append(orient)
