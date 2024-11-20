@@ -352,7 +352,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 				t.sleep(0.5)
 				curr_tick[0] += curr_ticks_ins[0]
 				curr_tick[1] += curr_ticks_ins[1]
-				t.sleep(2)
+				t.sleep(4)
 				print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
 				break
 	moteur.set_motor_speed(0,0)
