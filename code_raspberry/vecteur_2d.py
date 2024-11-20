@@ -56,6 +56,10 @@ def rotate_vect(u, deg):
     alpha = radians(deg)
     return add_vect(mult_scalar(cos(alpha), u), mult_scalar(sin(alpha), v))
 
+def test_rotate_vect():
+    assert vect_equal(rotate_vect(rotate_vect((0,1), 90), -90), (0,1))
+    assert vect_equal(rotate_vect((0,1), 90), (1,0))
+
 
 def angle_vect(u,v):
     """renvoie l'angle entre u et v en degrés
@@ -75,3 +79,6 @@ def test_angle_vect():
     assert float_equal(angle_vect((0, 1), (-1, 0)), -90.0), "erreur tet_angle_vect (2)"
     assert float_equal(angle_vect((1, 0), (0, 1)), -90.0), "erreur tet_angle_vect (3)"
     assert float_equal(angle_vect((0, 1), (1/sqrt(2), 1/sqrt(2))), 45.0), "erreur tet_angle_vect (4)"
+
+if __name__ == '__main__':
+    test_rotate_vect()
