@@ -1,6 +1,7 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
 from flask import Flask, render_template, request, Response
+from position_robot import Position_robot
 import controller
 import time
 import datetime
@@ -17,9 +18,13 @@ vitesse = 0
 
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
+
+
+
 current_x = 25
 current_y = 25
 current_angle = 0
+current_orientation_
 
 last_distance = ""
 last_update_time = time.time()
