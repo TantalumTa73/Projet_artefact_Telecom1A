@@ -1,3 +1,11 @@
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 19 09:43:58 2024
+
+@author: JOSHUA
+"""
+
 import cv2
 import numpy as np
 
@@ -25,7 +33,7 @@ def detect_aruco_markers(image):
     entrée: image sous format numpy array
     sortie : liste de tableau 
             de la forme
-            tableau [id,distance en cm, angle en degré, coordonée du centre du marqueur
+            tableau [id,distance en bcm, angle en degré, coordonée du centre du marqueur
                       par rapport au centre de l'image]
             pour chaque aruco détéctée .
             
@@ -43,6 +51,7 @@ def detect_aruco_markers(image):
     liste_retour = []
     # Si des marqueurs ont été détectés
     if ids is not None and len(corners) > 0:
+        
         # Dessiner les marqueurs détectés
         image_markers = cv2.aruco.drawDetectedMarkers(image, corners, ids)
 
@@ -55,8 +64,11 @@ def detect_aruco_markers(image):
 
         # Estimer la pose des marqueurs détectés
         for i, marker_id in enumerate(ids.flatten()):
-            rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.099, camera_matrix, dist_coeffs)
-
+            if marker_id in [1,2,3,4]:
+                rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.1, camera_matrix, dist_coeffs)
+            else:
+                rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.02, camera_matrix, dist_coeffs)
+                
             # Récupérer les informations de distance et d'angle
             dist_cm, angle_deg = get_marker_info(rvec, tvec)
 
@@ -73,3 +85,4 @@ def detect_aruco_markers(image):
             # Afficher les informations du marqueur
             liste_retour.append([marker_id, dist_cm,angle_deg,centre])
     return liste_retour
+        
