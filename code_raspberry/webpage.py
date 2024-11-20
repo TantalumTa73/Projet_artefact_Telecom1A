@@ -59,12 +59,12 @@ def found_flag(marquer_id,col,row):
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
 	i,j = case 
-	return (25+i*50, -25+j*50)
+	return (25+int(i)*50, -25+int(j)*50)
 
 def pos_to_case(pos):
 	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
 	x,y = pos 
-	return (x//50, (25+y)//50)
+	return (int(x)//50, (25+int(y))//50)
 
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
@@ -72,8 +72,8 @@ def case_to_string(case):
 	if not (0<=i<7 or 0<=j<7):
 		return "Hors du terrain"
 		print("Hors du terrain")
-	string = "GFEDCBA"[j]
-	return (string,str(i+1))
+	string = "GFEDCBA"[int(j)]
+	return (string,str(int(i)+1))
 
 def string_to_case(case):
 	"""renvoie la case (i,j) correspondant au string
@@ -116,7 +116,7 @@ def go_to():
 	case_y = request.form.get('y')
 
 	target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
-	main.aller_case(target_x, target_y, position_robot)
+	main.aller_case(target_x, target_y, current_pos)
 
 	return render_template("page.html")	
 

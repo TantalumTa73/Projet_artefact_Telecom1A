@@ -54,7 +54,7 @@ class Position_robot:
 
 	def tourner(self, deg):
 		"""tourne l'oriantation de deg degrés"""
-		self.__orientation = rotate_vect(self.__orienatation, deg)
+		self.__vect_orientation = rotate_vect(self.__vect_orientation, deg)
 
 
 
