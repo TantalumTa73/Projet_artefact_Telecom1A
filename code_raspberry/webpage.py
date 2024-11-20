@@ -136,7 +136,7 @@ def forward():
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
 
-@app.route('/backward-press', methods=['POST'])
+@app.route('/downward-press', methods=['POST'])
 def backward():
 	global vitesse, left_speed, right_speed
 	if left_speed > - vitesse and right_speed > -vitesse:
@@ -175,7 +175,7 @@ def forward_rel():
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
 
-@app.route('/backward-release', methods=['POST'])
+@app.route('/downward-release', methods=['POST'])
 def backward_rel():
 	global vitesse, left_speed, right_speed
 	left_speed += vitesse
@@ -186,6 +186,7 @@ def backward_rel():
 @app.route('/right-release', methods=['POST'])
 def right_rel():
 	global vitesse, left_speed, right_speed
+	print(left_speed, right_speed)
 	if left_speed == -right_speed:
 		right_speed += vitesse
 		left_speed -= vitesse
@@ -197,6 +198,7 @@ def right_rel():
 @app.route('/left-release', methods=['POST'])
 def left_rel():
 	global vitesse, left_speed, right_speed
+	print(left_speed, right_speed)
 	if left_speed == - right_speed:
 		right_speed -= vitesse
 		left_speed += vitesse
