@@ -370,7 +370,7 @@ def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=
 
 def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 	turntick = int(183.6 * 2 * 3.141592 * 7.85)
-	tot_tick = [2 * turntick + curr_tick[0] , 2 * turntick - curr_tick[0]]
+	tot_tick = [2 * turntick + curr_tick[0] , 2 * turntick - curr_tick[1]]
 	moteur.get_encoder_ticks()
 	poss_speed = [20,15,10,5,3]
 	for spd in poss_speed:
