@@ -282,6 +282,11 @@ def aller_drap():
 		print(analyser_drapeau.analyser_drapeau(list_aru, current_pos, cam))
 	return render_template("page.html")	
 
+@app.route('/test-ultime', methods=['POST'])
+def ultime():
+
+	return render_template("page.html")	
+
 @app.route('/update')
 def update():
 	global last_update_time, users_connected, cam, last_distance, current_pos
