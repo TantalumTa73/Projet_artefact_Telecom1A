@@ -43,7 +43,7 @@ def aller_case(x_dest, y_dest, position_robot):
             moteur.avance_cm(-distY, position_robot)
 
 
-def reperage_rotation(cam, position_robot):
+def reperage_rotation(cam):
     """ Tourne sur soi même et prend 16 photos qui sont renvoier avec la position
     du robot au moment ou l'image à été prise"""
     images = [] 
@@ -51,7 +51,8 @@ def reperage_rotation(cam, position_robot):
     for l in range(1,17):
         moteur.rota_petit_angle(l, curr_tick)
         img, res = module_camera.get_image(cam)
-        images.append((img,position_robot.get_pos(),position_robot.get_angle_orientation()))
-    return img
+        orientation = ((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))
+        images.append((img,position_robot.get_pos(),orientation))
+    return images
 
 
