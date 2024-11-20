@@ -2,6 +2,7 @@
 # An object of Flask class is our WSGI application.
 from flask import Flask, render_template, request, Response
 from position_robot import Position_robot
+import position_from_arucos
 import controller
 import time
 import datetime
@@ -11,6 +12,7 @@ import moteur
 import requests
 import analyse_image
 import main
+import vecteur_2d
 
 # Moteurs 
 
@@ -24,8 +26,6 @@ right_speed = 0
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
 
-
-
 current_pos = Position_robot((25,25),(0,1))
 
 last_distance = ""
@@ -33,6 +33,8 @@ last_update_time = time.time()
 users_connected = dict() 
 cam = None 
 image_view = True
+
+aruco_detectes = []
 
 c = controller.Controller()
 c.standby()
@@ -217,12 +219,37 @@ def left_rel():
 	return render_template("page.html")	
 
 
+
 @app.route('/toggle-image-view', methods=['POST'])
 def toggle_image_view():
 	global image_view
 	image_view = not image_view
 	return render_template("page.html")	
 
+@app.route('/reperage-rotation', methods=['POST'])
+def reperage_rotation_prep():
+    global current_pos
+
+    info_images = [] 
+    orientations = []
+    for (img,orient) in main.reperage_rotation(cam, current_pos):
+        info_images.append(analyse_imagedetect_aruco_markers(img,current_pos))
+        orientation.append(orient)
+
+    real_pos, err = position_from_arucos.get_position_from_markers(info_images)
+
+    orientations = []
+    for i in range(len(info_images)):
+        orient_img, err = position_from_arucos.get_orientation(real_pos, info_images[i])
+        if orient_img is not None:
+            orientations = vecteur_2d.rotate_vec(orient_img,-orientation[i]) 
+
+    orientation = vecteur_2d.vect_mean(orientations)
+    
+    current_pos.set_pos(*real_pos)
+    current_pos.set_orientation(*orientation)
+
+	send_position(*current_pos.get_pos())
 
 
 @app.route('/update')
@@ -269,7 +296,7 @@ def update():
 			image, result = module_camera.get_image(cam)
 			if result:
 				module_camera.save_image(image)
-				last_distance = f"{analyse_image.detect_aruco_markers(image)}"
+				last_distance = f"{analyse_image.detect_aruco_markers(image,current_pos)}"
 			else:
 				print("Image did not save")
 

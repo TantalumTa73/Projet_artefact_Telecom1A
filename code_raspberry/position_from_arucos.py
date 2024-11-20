@@ -353,6 +353,7 @@ def get_angle_with_drapeau(info_marker):
     """renvoie l'angle entre l'orientation de la camera et le drapeau"""
     id_marker, dist_marker, angle_marker, pos_on_screen = info_marker
     angle = get_angle_from_pos_on_screen(pos_on_screen)
+    return angle
 
 
 
