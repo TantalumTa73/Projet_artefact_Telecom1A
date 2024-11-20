@@ -11,6 +11,7 @@ import os
 import moteur
 import requests
 import analyse_image
+import analyser_drapeau
 import main
 import vecteur_2d
 
@@ -233,7 +234,7 @@ def reperage_rotation_prep():
 	info_images = [] 
 	orientations = []
 	for (img,orient) in main.reperage_rotation(cam, current_pos):
-		info_images.append(analyse_imagedetect_aruco_markers(img,current_pos))
+		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientation.append(orient)
 
 	real_pos, err = position_from_arucos.get_position_from_markers(info_images)
@@ -251,6 +252,10 @@ def reperage_rotation_prep():
 
 	send_position(*current_pos.get_pos())
 
+@app.route('/test-aller-drap')
+def aller_drap():
+	print(analyser_drapeau.analyser_drapeau(analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(module_camera.get_image(cam), current_pos))
+))
 
 @app.route('/update')
 def update():
