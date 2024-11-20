@@ -42,6 +42,7 @@ c = controller.Controller()
 c.standby()
 
 def send_position(x,y):
+	print(f"Sending request {url+f'/api/pos?x={x}&y={y}'}")
 	r = requests.post(url+f"/api/pos?x={x}&y={y}")
 
 	if r.status_code != 200: 
@@ -49,6 +50,7 @@ def send_position(x,y):
 		pass
 
 def get_status():
+	print(f"Sending request {url+'/api/status'}")
 	r = requests.get(url+"/api/status")
 	if r.status_code != 200: 
 		print(f"Failed to retrieve data from server {r.status_code}")
@@ -56,6 +58,7 @@ def get_status():
 		return r.json()
 
 def found_flag(marquer_id,col,row):
+	print(f"Sending request {url+f'/api/marker?id={marquer_id}&col={col}&row={row}'}")
 	r = requests.post(url+f"/api/marker?id={marquer_id}&col={col}&row={row}")
 
 	if r.status_code != 200: 
@@ -409,10 +412,11 @@ def ultime():
 				x1,y1 = coord_1
 				print("		"+f" flag coords {x1} {y1}")
 				if id_1 != -1:
+					print("		"+f"!!! Flag Found !!! {id_1}")
 					moteur.tour_sur_soi_meme()
 					#i, j = case_to_pos(x1, y1)
 					#found_flag(id_1, i, j)
-					found_flag(id_1, x1, y1)
+					found_flag(id_1, *case_to_string(*pos_to_case(x1, y1)))
 
 				x,y = current_pos.get_pos()
 				
