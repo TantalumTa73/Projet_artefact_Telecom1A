@@ -364,26 +364,30 @@ def ultime():
 		flags = []
 		while flags == []:
 			angle = current_pos.get_angle_orientation()
+
+            # S'orienter vers 90 (droit/est)
 			if -45 < angle and angle < 45 :
-				print("looking north")
+				print("		"+"looking north")
 				moteur.rota_deg(90, current_pos)
 			elif -135 < angle and angle < -45 :
-				print("looking west")
+				print("		"+"looking ouest")
 				moteur.rota_deg(180, current_pos)
 			elif angle < -135 and angle >135 :
-				print("looking south")
+				print("		"+"looking south")
 				moteur.rota_deg(-90, current_pos)
 				
 			curr_tick = [0,0]
+            # Tourner 9 fois 
 			for i in range(9):
 				# passage = True 
 				moteur.rota_petit_angle(i, curr_tick)
+				current_pos.set_orientation(90+(curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))
 				image, result = module_camera.get_image(cam)
 				arus = analyse_image.detect_aruco_markers(image, current_pos)
 				for j in range(len(arus)):
-					print(f"Aruco {arus[j][0]} found")
+					print("		"+f"Aruco {arus[j][0]} found")
 					if arus[j][0] not in [1,2,3,4]:
-						print("it is target")
+						print("		"+"it is target")
 						#next_flag = arus[j]
 						#passage = False
 						flags.append(arus[j])
@@ -392,7 +396,7 @@ def ultime():
 			moteur.reajustement(curr_tick)
 					
 			if flags!=[]:
-				print(f"flag found {flags}")
+				print("		"+f"flag found {flags}")
 				#on cherche le flag le plus proche
 				if len(flags)==2:
 					if flags[0][1] < flags[1][1]:
@@ -401,12 +405,12 @@ def ultime():
 						next_flag = flags[1]
 				else:
 					next_flag = flags[0]
-				print(f"closet flag {next_flag[0]}")
+				print("		"+f"closet flag {next_flag[0]}")
 
 				#liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
 				id_1, coord_1 = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
 				x1,y1 = coord_1
-				print(f" flag coords {x1} {y1}")
+				print("		"+f" flag coords {x1} {y1}")
 				if id_1 != -1:
 					moteur.tour_sur_soi_meme()
 					#i, j = case_to_pos(x1, y1)
@@ -423,7 +427,7 @@ def ultime():
 				else:
 					main.aller_case(x_hd, y_hd,current_pos)
 			else:
-				print("no flag found")
+				print("		"+"no flag found")
 				x, y = current_pos.get_pos()
 				main.aller_case(x, y + 100, current_pos)
 	return render_template("page.html")	
