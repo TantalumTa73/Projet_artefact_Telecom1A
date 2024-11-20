@@ -317,14 +317,17 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 	curr_ticks_ins = [0,0]
 	for l in range(17):
 		for spd in poss_speed:
-			acc_tick = calc_tick_accel(spd, time_step, temps_accel)
-			dec_tick = calc_tick_decel(spd, time_step, temps_decel)
-			tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] + acc_tick + dec_tick
-			tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick - dec_tick
+			ratio = (supposed_ticks_turn[l] - curr_tick[1]) / (supposed_ticks[l] + curr_tick[0])
+			left_speed = - spd
+			right_speed = ratio * left_speed
+			acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel)
+			dec_tick_left = calc_tick_decel(left_speed, time_step, temps_decel)
+			acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel)
+			dec_tick_right = calc_tick_decel(right_speed, time_step, temps_decel)
+			tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] - acc_tick_left - dec_tick_left
+			tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick_right - dec_tick_right
 			if tick_parc_left < 0 and tick_parc_right > 0:
-				left_speed = - spd
-				right_speed = tick_parc_right/tick_parc_left * left_speed
-				temps_parc = - tick_parc_left/(spd*100)
+				temps_parc = tick_parc_left/(left_speed*100)
 				n_accel = int(temps_accel/time_step)
 				n_parcours = int(temps_parc/time_step)
 				n_decel = int(temps_decel/time_step)
