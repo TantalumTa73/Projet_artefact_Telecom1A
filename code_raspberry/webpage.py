@@ -347,7 +347,7 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
-    updated_content+=f"<p>Analyse d'aruco:</p>"
+	updated_content+=f"<p>Analyse d'aruco:</p>"
 	updated_content+=f"<ul>{last_analyse}</ul>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
