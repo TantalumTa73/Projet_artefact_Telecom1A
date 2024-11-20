@@ -115,8 +115,9 @@ def go_to():
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 
-	target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
-	main.aller_case(target_x, target_y, current_pos)
+	if not current_pos.is_moving():
+		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
+		main.aller_case(target_x, target_y, current_pos)
 
 	return render_template("page.html")	
 
