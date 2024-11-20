@@ -369,7 +369,7 @@ def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=
 			break
 
 def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
-	print("test"git st)
+	print("test")
 	turntick = int(183.6 * 2 * 3.141592 * 7.85)
 	tot_tick = [2 * turntick + curr_tick[0] , 2 * turntick - curr_tick[1]]
 	moteur.get_encoder_ticks()
