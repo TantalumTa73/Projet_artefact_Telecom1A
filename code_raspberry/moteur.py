@@ -37,17 +37,17 @@ def acceleration(vitesse,time_step=0.01, temps_accel=2):
 	for k in range(0, n + 1):
 		dvitesse = int(k * vitesse / n)
 		supposed_ticks.append(dvitesse*time_step*100 + supposed_ticks[-1])
-	print(supposed_ticks)
+	#print(supposed_ticks)
 
 	for k in range(0,n + 1):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
-		print("curr", curr_ticks)     
+		#print("curr", curr_ticks)     
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
-		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
-		print("speed", [speed_left, speed_right])
+		#print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		#print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
@@ -74,17 +74,17 @@ def deceleration(vitesse,time_step=0.01, temps_decel=2):
 	for k in range(0, n + 1):
 		dvitesse = int(k * vitesse / n)
 		supposed_ticks.append((vitesse -dvitesse)*time_step*100 + supposed_ticks[-1])
-	print(supposed_ticks)
+	#print(supposed_ticks)
 
 	for k in range(0,n + 1):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]      
-		print("curr", curr_ticks)     
+		#print("curr", curr_ticks)     
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)) + 3
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)) + 3
-		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
-		print("speed", [speed_left, speed_right])
+		#print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		#print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
@@ -111,11 +111,11 @@ def straight_line(vitesse, time_step=0.01, temps=2):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
-		print("curr", curr_ticks)     
+		#print("curr", curr_ticks)     
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100)) + 3
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100)) + 3
-		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
-		print("speed", [speed_left, speed_right])
+		#print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		#print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
@@ -134,14 +134,14 @@ def avance_corrige(moteur_princ, ratio, vitesse):
 
 	if moteur_princ == "left":
 
-		print("C presque ça")
-		print(moteur_princ, ratio, vitesse)
-		print(moteur.get_encoder_ticks())
-		print("test")
+		#print("C presque ça")
+		#print(moteur_princ, ratio, vitesse)
+		#print(moteur.get_encoder_ticks())
+		#print("test")
 		acceleration(vitesse)
 		moteur.set_motor_speed(vitesse, int(ratio * vitesse))
 		t.sleep(2)
-		print(moteur.get_encoder_ticks())
+		#print(moteur.get_encoder_ticks())
 	else:
 
 		moteur.set_motor_speed(int(ratio * vitesse), vitesse)
@@ -151,7 +151,7 @@ def rotation_test(temps, vitesse, côté):
 		vitesse = -vitesse
 	moteur.set_motor_speed(vitesse, -vitesse)
 	t.sleep(temps)
-	print(moteur.get_encoder_ticks())
+	#print(moteur.get_encoder_ticks())
 	
 def avance_test():
 	moteur.set_motor_shutdown_timeout(10)
@@ -177,12 +177,12 @@ def avance_test():
 	val.append(moteur.get_encoder_ticks())
 	moteur.set_motor_speed(0,0)
 
-	print(val[1::])
-	print(sum(map(lambda x : x[0], val[1::])))
-	print(sum(map(lambda x : x[1], val[1::])))
-	print()
-	print(real_ticks)
-	print(sum(real_ticks))
+	#print(val[1::])
+	#print(sum(map(lambda x : x[0], val[1::])))
+	#print(sum(map(lambda x : x[1], val[1::])))
+	#print()
+	#print(real_ticks)
+	#print(sum(real_ticks))
 
 def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel):
 	moteur.get_encoder_ticks()
@@ -201,21 +201,21 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 	for k in range(0,n_decel + 1):
 		dvitesse = k * vitesse / n_decel
 		supposed_ticks.append((vitesse -dvitesse)*time_step*100 + supposed_ticks[-1])
-	print(supposed_ticks)
+	#print(supposed_ticks)
 
 	for k in range(0, n_accel + n_parcours + n_decel + 2):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
-		print("curr", curr_ticks)     
+		#print("curr", curr_ticks)     
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
-		print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
-		print("speed", [speed_left, speed_right])
+		#print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		#print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	moteur.set_motor_speed(0,0)
-	print([supposed_ticks[-1], curr_ticks])
+	#print([supposed_ticks[-1], curr_ticks])
 
 def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
 	"""permet d'avancer le robot de dist cm"""
@@ -228,7 +228,7 @@ def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
 		if dist < 0:
 			ticks = -ticks
 		for spd in poss_speed:
-			print('patate')
+			#print('patate')
 			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
 			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
 			tick_parc = ticks - acc_tick - dec_tick
@@ -242,7 +242,7 @@ def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
 		position_robot.avancer(dist)
 		position_robot.stop_moving()
 	else:
-		print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
+		#print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
 
 def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel, side):
 	if side == "right":
@@ -263,17 +263,17 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 	for k in range(0,n_decel + 1):
 		dvitesse = k * vitesse / n_decel
 		supposed_ticks.append((vitesse -dvitesse)*time_step*100 + supposed_ticks[-1])
-	print(supposed_ticks)
+	#print(supposed_ticks)
 
 	for k in range(0, n_accel + n_parcours + n_decel + 2):
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
-		print("curr", curr_ticks)     
+		#print("curr", curr_ticks)     
 		speed_left = int((- supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
-		print("tickgap",  - supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
-		print("speed", [speed_left, speed_right])
+		#print("tickgap",  - supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
+		#print("speed", [speed_left, speed_right])
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	moteur.set_motor_speed(0,0)
@@ -305,7 +305,7 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 		position_robot.tourner(-deg)
 		position_robot.stop_moving()
 	else:
-		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
+		#print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
 
 def rota_16_angles(time_step, temps_accel, temps_decel):
 	moteur.get_encoder_ticks()
@@ -360,7 +360,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 				t.sleep(0.5)
 				curr_tick[0] += curr_ticks_ins[0]
 				curr_tick[1] += curr_ticks_ins[1]
-				print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
+				#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
 				t.sleep(4)
 				break
 	moteur.set_motor_speed(0,0)
