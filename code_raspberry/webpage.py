@@ -128,8 +128,7 @@ def go_to():
 
 	if epreuve_intermediaire:
 		found_flag(5, target_x, target_y)
-		moteur.rota_deg(180, current_pos)
-		moteur.rota_deg(180, current_pos)
+		moteur.tour_sur_soi_meme()
 
 	return render_template("page.html")	
 
