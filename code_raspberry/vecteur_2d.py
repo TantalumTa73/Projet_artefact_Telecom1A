@@ -80,5 +80,26 @@ def test_angle_vect():
     assert float_equal(angle_vect((1, 0), (0, 1)), -90.0), "erreur tet_angle_vect (3)"
     assert float_equal(angle_vect((0, 1), (1/sqrt(2), 1/sqrt(2))), 45.0), "erreur tet_angle_vect (4)"
 
+def vect_mean(directions:list):
+    """renvoie la 'moyenne' des vecteurs et le plus grand écart d'angle entre eux
+    hypothèses : tous les vecteurs sont normalises"""
+    n = len(directions)
+    if n<1:
+        return None
+    angles = [0] #angles par rapport à direction[0]
+    for i in range(1, n):
+        angles.append(angle_vect(directions[0], directions[i]))
+    s = 0
+    min_angle = 0
+    max_angle = 0
+    for i in range(n):
+        s+= angles[i]
+        if angles[i]>max_angle :
+            max_angle = angles[i]
+        if angles[i]<min_angle : 
+            min_angle = angles[i]
+    angle = s/(n) #moyenne des angles 
+    return rotate_vect(directions[0], angle), (max_angle-min_angle)
+
 if __name__ == '__main__':
     test_rotate_vect()

@@ -16,6 +16,7 @@ largeur_image = 640
 hauteur_image = 480
 angle_vue = 28 #degrés
 dist_foyer_ecran = (largeur_image//2)/tan(radians(angle_vue/2))
+dist_camera_centre = 6
 
 
 ### CHANGER LA POSITION DES MARKERS
@@ -34,6 +35,9 @@ def set_pos_marker(list_pos:list):
 def clear_dist_to_marker():
     """reset dist_to_marker à [None, None, None, None, None]
     (toutes les distances sont inconnues)"""
+
+def get_dist_from_center(dist_marker, pos_on_screen):
+    """renvoie la distance du centre du robot au marker"""
 
 def set_dist_to_marker(info_images):
     """met à jour la distance aux markers repères
