@@ -236,7 +236,9 @@ def reperage_rotation_prep():
 
 	info_images = [] 
 	orientations = []
-	for (img,orient) in main.reperage_rotation(cam):
+	res = main.reperage_rotation(cam)
+	for ((img,orient),i) in enumerate(res):
+		module_camera.save_image(image,f"image{i}")
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientations.append(orient)
 
@@ -261,7 +263,6 @@ def reperage_rotation_prep():
 
 	send_position(*current_pos.get_pos())
 
-	print("\n\n\n\n\nrotation fini")
 	return render_template("page.html")	
 
 @app.route('/test-aller-drap', methods=['POST'])

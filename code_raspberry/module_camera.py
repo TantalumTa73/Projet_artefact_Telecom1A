@@ -70,12 +70,12 @@ def get_image(cam):
         print("Image non capturée")
         return None, result
 
-def save_image(image):
+def save_image(image,name="image"):
     """sauvegarde l'image dans le fichier 'image.png'
     Return 0 s'il n'y a pas eu d'erreur, 1 sinon"""
 
     #convertion en png
-    if not cv2.imwrite(os.path.dirname(os.path.realpath(__file__))+"/static/image.png", image):
+    if not cv2.imwrite(os.path.dirname(os.path.realpath(__file__))+f"/static/{name}.png", image):
         print("writing image failed")
         return 1
     return 0
