@@ -381,7 +381,8 @@ def ultime():
 			for i in range(9):
 				# passage = True 
 				moteur.rota_petit_angle(i, curr_tick)
-				current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90+(curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6)))
+				print("\t\t"+str(90+((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))/2))
+				current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90+((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))/2))
 				image, result = module_camera.get_image(cam)
 				arus = analyse_image.detect_aruco_markers(image, current_pos)
 				for j in range(len(arus)):
