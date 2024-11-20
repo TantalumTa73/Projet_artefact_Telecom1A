@@ -395,7 +395,7 @@ def ultime():
 				# if not passage:
 				# 	break
 			moteur.reajustement(curr_tick)
-			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90)
+			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90))
 					
 			if flags!=[]:
 				print("		"+f"flag found {flags}")
