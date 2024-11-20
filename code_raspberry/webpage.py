@@ -328,7 +328,8 @@ def update():
 			if result:
 				module_camera.save_image(image)
 				analyse = analyse_image.detect_aruco_markers(image,current_pos)
-				last_analyse=""
+				if len(analyse) != 0:
+					last_analyse=""
 				for a in analyse:
 					last_analyse += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
 			else:
@@ -346,6 +347,7 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
+    updated_content+=f"<p>Analyse d'aruco:</p>"
 	updated_content+=f"<ul>{last_analyse}</ul>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
