@@ -8,6 +8,7 @@ Created on Tue Nov 19 09:43:58 2024
 
 import cv2
 import numpy as np
+import position_from_arucos as pfa
 
 def get_marker_info(rvec, tvec):
     # Distance en utilisant la norme du vecteur de translation
@@ -27,6 +28,23 @@ def get_marker_info(rvec, tvec):
 
     return dist_cm, angle_deg
 
+def position_drapeau(liste_aru, position_robot):
+
+    """ Détermine la position d'un drapeau sur la grille en fonction
+        de la liste d'info d'une aruco et de la position du robot """
+
+    angle = position_robot.get_angle_orientation()
+    x,y = position_robot.get_pos()
+
+    distance = liste_aru[1]
+    angle_aru =  pfa.get_angle_with_flag(liste_aru)
+    angle_absolu_aruco =  angle_aru + angle
+    var_x = np.sin(angle_absolu_aruco) * distance 
+    var_y = np.cos(angle_absolu_aruco) * distance 
+    x_drapeau = x+var_x
+    y_drapeau = y+var_y
+
+    return (x_drapeau, y_drapeau)
 
 def detect_aruco_markers(image):
     """
@@ -34,7 +52,7 @@ def detect_aruco_markers(image):
     sortie : liste de tableau 
             de la forme
             tableau [id,distance en bcm, angle en degré, coordonée du centre du marqueur
-                      par rapport au centre de l'image]
+                      par rapport au centre de l'image, un tuple des coordonées du drapeau]
             pour chaque aruco détéctée .
             
     """
@@ -84,5 +102,7 @@ def detect_aruco_markers(image):
 
             # Afficher les informations du marqueur
             liste_retour.append([marker_id, dist_cm,angle_deg,centre])
+            pos_drap = position_drapeau(liste_retour[-1])
+            liste_retour[-1].append(pos_drap)
     return liste_retour
         

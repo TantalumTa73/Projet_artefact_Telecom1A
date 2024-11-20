@@ -3,16 +3,14 @@ import numpy as np
 import module_camera
 import moteur
 import main
-import position_from_arucos as pfa
 import analyse_image as anal
 
-
-def drapeau_proche(liste_aru):
+def drapeau_proche(liste_liste_aru):
     """
     Renvoie la liste d'info de la aruco la plus proche sur une image contenant 
     au moins une aruco
     """
-    det_aruco = liste_aru
+    det_aruco = liste_liste_aru
     d_min = det_aruco[0][1]
     i_min = 0
     for i in range(len(det_aruco)):
@@ -21,25 +19,6 @@ def drapeau_proche(liste_aru):
             i_min = i
     
     return det_aruco[i_min]
-
-def position_drapeau(liste_aru, position_robot):
-
-    """ Détermine la position d'un drapeau sur la grille en fonction
-        de la liste d'info d'une aruco et de la position du robot """
-
-    angle = position_robot.get_angle_orientation()
-    x,y = position_robot.get_pos()
-
-    aru= drapeau_proche(liste_aru)
-    distance = aru[1]
-    angle_aru =  pfa.get_angle_with_flag(aru)
-    angle_absolu_aruco =  angle_aru + angle
-    var_x = np.sin(angle_absolu_aruco) * distance 
-    var_y = np.cos(angle_absolu_aruco) * distance 
-    x_drapeau = x+var_x
-    y_drapeau = y+var_y
-
-    return (x_drapeau, y_drapeau)
 
 def analyser_drapeau(liste_aru, position_robot):
     """
