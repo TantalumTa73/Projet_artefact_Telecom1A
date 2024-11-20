@@ -20,7 +20,7 @@ def drapeau_proche(liste_liste_aru):
     
     return det_aruco[i_min]
 
-def analyser_drapeau(liste_aru, position_robot):
+def analyser_drapeau(liste_aru, position_robot, cam):
     """
     ! cette fonction ne fonctionne que si il y a au moins un drapeau de visible .  
     elle fait se délacer le robot vers la case adjacente au drapeau la plus
@@ -94,7 +94,7 @@ def analyser_drapeau(liste_aru, position_robot):
     if ou_est_drapeau == "a_gauche":
         for _ in range(4):
             moteur.rota_deg(-45, position_robot)
-            image, result = module_camera.get_image()
+            image, result = module_camera.get_image(cam)
             aru = drapeau_proche(anal.detect_aruco_markers(image, position_robot))
             if aru[0] != 0 :
                 moteur.rota_deg(45, position_robot)
@@ -107,7 +107,7 @@ def analyser_drapeau(liste_aru, position_robot):
     else:
         for _ in range(4):
             moteur.rota_deg(45, position_robot)
-            image, result = module_camera.get_image()
+            image, result = module_camera.get_image(cam)
             aru = drapeau_proche(anal.detect_aruco_markers(image, position_robot))
             if aru[0] != 0 :
                 moteur.rota_deg(-45, position_robot)
