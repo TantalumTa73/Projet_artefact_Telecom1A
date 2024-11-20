@@ -365,7 +365,7 @@ def ultime():
 		while flags == []:
 			angle = current_pos.get_angle_orientation()
 
-            # S'orienter vers 90 (droit/est)
+			# S'orienter vers 90 (droit/est)
 			if -45 < angle and angle < 45 :
 				print("		"+"looking north")
 				moteur.rota_deg(90, current_pos)
@@ -377,11 +377,11 @@ def ultime():
 				moteur.rota_deg(-90, current_pos)
 				
 			curr_tick = [0,0]
-            # Tourner 9 fois 
+			# Tourner 9 fois 
 			for i in range(9):
 				# passage = True 
 				moteur.rota_petit_angle(i, curr_tick)
-				current_pos.set_orientation(90+(curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))
+				current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90+(curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6)))
 				image, result = module_camera.get_image(cam)
 				arus = analyse_image.detect_aruco_markers(image, current_pos)
 				for j in range(len(arus)):
