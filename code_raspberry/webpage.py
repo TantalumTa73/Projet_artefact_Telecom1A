@@ -232,7 +232,7 @@ def reperage_rotation_prep():
 
 	info_images = [] 
 	orientations = []
-	for (img,orient) in main.reperage_rotation(cam, current_pos):
+    for (img,orient) in main.reperage_rotation(cam):
 		info_images.append(analyse_imagedetect_aruco_markers(img,current_pos))
 		orientation.append(orient)
 
