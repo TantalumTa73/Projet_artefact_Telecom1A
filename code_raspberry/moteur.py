@@ -238,7 +238,7 @@ def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
 				break
 		position_robot.avancer(dist)
 		position_robot.stop_moving()
-    else:
+	else:
 		print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
 
 def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel, side):
