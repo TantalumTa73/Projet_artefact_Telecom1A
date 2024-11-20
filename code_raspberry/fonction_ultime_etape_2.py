@@ -2,13 +2,15 @@
 import module_camera
 import moteur
 import main
-import analyse_image as anal_i
-import analyser_drapeau as anal_d
+import analyse_image 
+import analyser_drapeau
 
 def ultime(position_robot,cam):
     image, result = module_camera.get_image(cam)
-    liste_aru = anal_d.drapeau_proche(anal_i.detect_aruco_markers(image, position_robot))
-    id_1,coord_1 = anal_d.analyser_drapeau(liste_aru,position_robot,cam)
+    liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, position_robot))
+    moteur.tour_sur_soi_meme()
+    # ENVOYER L'ID AU SERV
+    id_1,coord_1 = analyser_drapeau.analyser_drapeau(liste_aru,position_robot,cam)
     x1,y1 = coord_1
     x,y = position_robot.get_pos()
     
@@ -34,13 +36,15 @@ def ultime(position_robot,cam):
     for i in range(17):
         curr_tick = moteur.rota_petit_angle(l, curr_tick)
         image, result = module_camera.get_image(cam)
-        arus = anal_i.detect_aruco_markers(image, position_robot)
+        arus = analyse_image.detect_aruco_markers(image, position_robot)
         for j in range(len(arus)):
             if arus[j][0] not in [1,2,3,4]:
                 next_flag = arus[j]
                 break
     moteur.reajustement(curr_tick)
-    id_2,coord_2 = anal_d.analyser_drapeau(next_flag,position_robot,cam)
+    id_2,coord_2 = analyser_drapeau.analyser_drapeau(next_flag,position_robot,cam)
+    moteur.tour_sur_soi_meme()
+    # ENVOYER L'ID AU SERV
     
     
     
