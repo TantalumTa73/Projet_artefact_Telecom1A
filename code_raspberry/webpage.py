@@ -42,7 +42,7 @@ c = controller.Controller()
 c.standby()
 
 def send_position(x,y):
-	print(f"Sending request {url+f'/api/pos?x={x}&y={y}'}")
+	#print(f"Sending request {url+f'/api/pos?x={x}&y={y}'}")
 	r = requests.post(url+f"/api/pos?x={x}&y={y}")
 
 	if r.status_code != 200: 
@@ -50,7 +50,7 @@ def send_position(x,y):
 		pass
 
 def get_status():
-	print(f"Sending request {url+'/api/status'}")
+	#print(f"Sending request {url+'/api/status'}")
 	r = requests.get(url+"/api/status")
 	if r.status_code != 200: 
 		print(f"Failed to retrieve data from server {r.status_code}")
@@ -398,7 +398,8 @@ def ultime():
 				# if not passage:
 				# 	break
 			moteur.reajustement(curr_tick)
-			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90))
+			moteur.rota_deg(-90)
+			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),0))
 					
 			if flags!=[]:
 				print("		"+f"flag found {flags}")
