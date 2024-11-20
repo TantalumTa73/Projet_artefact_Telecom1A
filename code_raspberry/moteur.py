@@ -121,7 +121,7 @@ def straight_line(vitesse, time_step=0.01, temps=2):
 	return supposed_ticks[-1], curr_ticks
 
 
-    
+	
 
 
 def avance_corrige(moteur_princ, ratio, vitesse):
@@ -207,7 +207,7 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 		ticks = moteur.get_encoder_ticks()
 		curr_ticks[0] += ticks[0]
 		curr_ticks[1] += ticks[1]
-		#print("curr", curr_ticks)     
+		#print("curr", curr_ticks)	 
 		speed_left = int((supposed_ticks[k+1] - curr_ticks[0]) / (time_step * 100))
 		speed_right = int((supposed_ticks[k+1] - curr_ticks[1]) / (time_step * 100))
 		#print("tickgap", supposed_ticks[k+1] - curr_ticks[0], supposed_ticks[k+1] - curr_ticks[1])
@@ -242,7 +242,8 @@ def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
 		position_robot.avancer(dist)
 		position_robot.stop_moving()
 	else:
-		#print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
+        
+		print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
 
 def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel, side):
 	if side == "right":
@@ -305,7 +306,7 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 		position_robot.tourner(-deg)
 		position_robot.stop_moving()
 	else:
-		#print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
+		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
 
 def rota_16_angles(time_step, temps_accel, temps_decel):
 	moteur.get_encoder_ticks()
