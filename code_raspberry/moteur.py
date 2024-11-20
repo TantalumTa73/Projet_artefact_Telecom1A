@@ -384,7 +384,7 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 		tick_parc_left = - tot_tick[0] - acc_tick_left - dec_tick_left
 		tick_parc_right = tot_tick[1] - acc_tick_right - dec_tick_right
 		if tick_parc_left < 0 and tick_parc_right > 0:
-			temps_parc = - tick_parc_left/(left_speed*100)
+			temps_parc = tick_parc_left/(left_speed*100)
 			n_accel = int(temps_accel/time_step)
 			n_parcours = int(temps_parc/time_step)
 			n_decel = int(temps_decel/time_step)
@@ -401,6 +401,7 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 				dvitesse_right = k * right_speed / n_decel
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
+			print( n_accel , n_decel , n_parcours)
 			for k in range(0, n_accel + n_decel + n_parcours  + 2):
 				ticks = moteur.get_encoder_ticks()
 				curr_ticks_ins[0] += ticks[0]
