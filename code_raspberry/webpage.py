@@ -243,6 +243,7 @@ def reperage_rotation_prep():
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientations.append(orientation)
 
+    print(f"infro image: {info_images}")
 	res = position_from_arucos.get_position_from_markers(info_images)
 
 	if res is None:
