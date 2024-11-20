@@ -11,7 +11,6 @@ dist_to_marker = [None, None, None, None, None] #la première valeur est inutile
                                                 #pour les autres valeurs, None signifie que la distance est inconnue
 angle_with_marker = [None, None, None, None, None] #les angles sont en degrés
 pos_marker = [None, (0, 300), (150, 300), (150, 0), (0, 0)] #coorodonées en cemtimètres des markers
-
 largeur_image = 640
 hauteur_image = 480
 angle_vue = 28 #degrés
@@ -70,7 +69,8 @@ def set_dist_to_marker(info_images):
         for info_marker in info_image :
             id_marker, dist_marker, angle_marker, pos_on_screen, _ = info_marker
             if 1<= id_marker and id_marker <=4:
-                dists_to_marker[id_marker].append(get_dist_from_center(dist_marker, pos_on_screen))
+                #dists_to_marker[id_marker].append(get_dist_from_center(dist_marker, pos_on_screen))
+                dists_to_marker[id_marker].append(dist_marker)
     clear_dist_to_marker()
     for id_marker in range(1, 5):
         n = len(dists_to_marker[id_marker])
@@ -233,7 +233,47 @@ def get_position_from_markers(info_images):
         print(f"get_position_from_arucos : {n} markers repères détectés n'est pas suffisant pour déterminer la position")
         return None
 
-    
+    ### TEST ROTATION DES REPERES
+
+    if n==3:
+        pos_trouvees = []
+        for (i, j, k) in [(0, 1, 2), (1, 2, 0), (2, 0, 1)]:
+            #on cherche l'intersection des cercles de centre marker_i, marker_j
+            #on change à chaque boucle k qui est le marker qui permet de 
+            #départager les deux intersections trouvees
+            
+            pt_a = pos_marker[id_markers[i]] #1er marker détecté
+            pt_b = pos_marker[id_markers[j]] #2eme marker détecté
+            ac = dist_to_marker[id_markers[i]]
+            bc = dist_to_marker[id_markers[j]]
+            pos_possibles = get_sommet(pt_a, pt_b, ac, bc)
+            if pos_possibles!=[]:
+                id_marker = id_markers[k]
+                #on regarde la difference entre la distance entre les positions possibles et le troisieme marker
+                #et la distance réelle entre le robot et le troisieme marker
+                diff_dist_i = abs(get_dist(pos_possibles[0], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+                diff_dist_j = abs(get_dist(pos_possibles[1], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+                if diff_dist_i < diff_dist_j:
+                    erreur_distance = diff_dist_i
+                    pos_trouvees.append(pos_possibles[0])
+                    pos = pos_possibles[0]
+                else:
+                    erreur_distance = diff_dist_j
+                    pos_trouvees.append(pos_possibles[1])
+                    pos = pos_possibles[1]
+                #print("position possiblement trouvée :", pos)
+        x = (pos_trouvees[0][0] + pos_trouvees[1][0] + pos_trouvees[2][0])/3
+        y = (pos_trouvees[0][1] + pos_trouvees[1][1] + pos_trouvees[2][1])/3
+        pos = (x,y)
+        max_erreur = 0 
+        for id_marker in id_markers:
+            erreur = abs(get_dist(pos_marker[id_marker], pos) - dist_to_marker[id_marker])
+            if erreur>max_erreur : 
+                max_erreur = erreur 
+        return pos, max_erreur
+        #print("meillruer position trouvee : ", pos)
+
+    ########### TEST ROTATION DES REPERES
 
     pt_a = pos_marker[id_markers[0]] #1er marker détecté
     pt_b = pos_marker[id_markers[1]] #2eme marker détecté
@@ -253,6 +293,8 @@ def get_position_from_markers(info_images):
                 return pos_possibles[0], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
             return pos_possibles[1], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
         elif n>=3 : 
+
+            
 
             #on a deux positions possibles. On les départage avec un troisieme marker
             id_marker = id_markers[2]
