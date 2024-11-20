@@ -30,7 +30,7 @@ epreuve_intermediaire = True
 
 current_pos = Position_robot((25,25),(0,1))
 
-last_distance = ""
+last_analyse = ""
 last_update_time = time.time()
 users_connected = dict() 
 cam = None 
@@ -285,7 +285,7 @@ def aller_drap():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected, cam, last_distance, current_pos
+	global last_update_time, users_connected, cam, last_analyse, current_pos
 	"""send current content"""
 
 	now = time.time()
@@ -328,8 +328,9 @@ def update():
 			if result:
 				module_camera.save_image(image)
 				analyse = analyse_image.detect_aruco_markers(image,current_pos)
+                last_analyse=""
 				for a in analyse:
-					last_distance += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
+					last_analyse += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
 			else:
 				print("Image did not save")
 
@@ -345,7 +346,7 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
-	updated_content+=f"<ul>{last_distance}</ul>"
+	updated_content+=f"<ul>{last_analyse}</ul>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
 	updated_content+="<ul>"
