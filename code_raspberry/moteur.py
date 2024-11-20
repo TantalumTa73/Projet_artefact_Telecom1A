@@ -21,6 +21,9 @@ def action_moteur(type_action):
 		# CALCUL SAVANT POUR CONVERTIR CENTIMETRE EN TICK
 		avance_corrige("left", 1, dist)
 
+def set_speed(lspeed, rspeed):
+	moteur.set_motor_speed(lspeed, rspeed)
+
 def acceleration(vitesse,time_step=0.01, temps_accel=2):
 
 	""" Accélère de façon progressive jusqu'à une certaine vitesse """
