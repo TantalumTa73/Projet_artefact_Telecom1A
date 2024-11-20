@@ -14,7 +14,11 @@ import analyse_image
 # Moteurs 
 
 global vitesse
+global left_speed
+global right_speed
 vitesse = 0
+left_speed = 0
+right_speed = 0
 
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
@@ -123,32 +127,72 @@ def change_speed():
 
 @app.route('/forward-press', methods=['POST'])
 def forward():
-	global vitesse
-	moteur.avance_corrige("left", 1, vitesse)
-	return render_template("page.html")	
+	global vitesse, left_speed, right_speed
+	left_speed += vitesse
+	right_speed += vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
-	global vitesse
-	moteur.avance_corrige("left", 1, -vitesse)
-	return render_template("page.html")	
+	global vitesse, left_speed, right_speed
+	left_speed -= vitesse
+	right_speed -= vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
 
 @app.route('/right-press', methods=['POST'])
 def right():
-	global vitesse
-	moteur.avance_corrige("left", -1, vitesse)
-	return render_template("page.html")	
+	global vitesse, left_speed, right_speed
+	if left_speed == 0 and right_speed == 0:
+		right_speed -= vitesse
+		left_speed += vitesse
+	else:
+		left_speed += vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
 
 @app.route('/left-press', methods=['POST'])
 def left():
-	global vitesse
-	moteur.avance_corrige("right", -1, vitesse)
-	return render_template("page.html")	
+	global vitesse, left_speed, right_speed
+	if left_speed == 0 and right_speed == 0:
+		right_speed += vitesse
+		left_speed -= vitesse
+	else:
+		right_speed += vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
 
-@app.route('/button-release', methods=['POST'])
-def test_button_release():
-	moteur.avance_corrige("left", 1, 0)
-	return render_template("page.html")	
+@app.route('/forward-release', methods=['POST'])
+def forward_rel():
+	global vitesse, left_speed, right_speed
+	left_speed -= vitesse
+	right_speed -= vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
+
+@app.route('/backward-release', methods=['POST'])
+def backward_rel():
+	global vitesse, left_speed, right_speed
+	left_speed += vitesse
+	right_speed += vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
+
+@app.route('/right-release', methods=['POST'])
+def right_rel():
+	global vitesse, left_speed, right_speed
+	if left_speed == -right_speed:
+		right_speed += vitesse
+		left_speed -= vitesse
+	else:
+		left_speed -= vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
+
+@app.route('/left-release', methods=['POST'])
+def left_rel():
+	global vitesse, left_speed, right_speed
+	if left_speed == - right_speed:
+		right_speed -= vitesse
+		left_speed += vitesse
+	else:
+		right_speed -= vitesse
+	moteur.set_speed(int(left_speed), int(right_speed))
+
 
 @app.route('/toggle-image-view', methods=['POST'])
 def toggle_image_view():
@@ -211,7 +255,7 @@ def update():
 
 		
 	# Contenu renvoier
-	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
+	updated_content+=f"<p>En mouvement: {current_pos.is_move()}</p>"
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
 	updated_content+=f"<p>Position actuelle (cm) x:{current_pos.get_pos()[0]} y:{current_pos.get_pos()[1]} angle:{current_pos.get_angle_orientation()}</p>"
 	case_x,case_y= pos_to_case(current_pos.get_pos())
