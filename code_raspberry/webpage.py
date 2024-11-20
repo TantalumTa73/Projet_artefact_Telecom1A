@@ -108,7 +108,8 @@ def init_position():
 	print(case_x,case_y,orientation)
 
 	current_pos.set_pos(*case_to_pos(string_to_case((case_x,case_y))))
-	current_pos.set_orientation(vecteur_2d.rotate_vect((0,1),int(orientation)))
+    if orientation is not None:
+        current_pos.set_orientation(vecteur_2d.rotate_vect((0,1),int(orientation)))
 
 	send_position(*current_pos.get_pos())
 	return render_template("page.html")	
