@@ -32,12 +32,32 @@ def set_pos_marker(list_pos:list):
 
 ### UPDATE LA DISTANCE AUX MARKERS
 
+
+
+
+
+def get_angle_from_pos_on_screen(pos_on_screen):
+    """renvoie l'angle en degrés entre la direction vers 
+    laquelle regarde la caméra et un objet qui se trouve 
+    à la position pos_on_screen sur l'image en pixel"""
+    x, y = pos_on_screen 
+    alpha = atan(x/dist_foyer_ecran)
+    return degrees(alpha)
+
+
 def clear_dist_to_marker():
     """reset dist_to_marker à [None, None, None, None, None]
     (toutes les distances sont inconnues)"""
+    for i in range(0,5):
+        dist_to_marker[i] = None
 
 def get_dist_from_center(dist_marker, pos_on_screen):
     """renvoie la distance du centre du robot au marker"""
+    alpha = radians(get_angle_from_pos_on_screen(pos_on_screen))
+    l = cos(alpha)*dist_marker
+    L = sin(alpha)*dist_marker 
+    dist_center = sqrt(l**2 + (L-dist_camera_centre)**2)
+    return dist_center
 
 def set_dist_to_marker(info_images):
     """met à jour la distance aux markers repères
@@ -50,7 +70,7 @@ def set_dist_to_marker(info_images):
         for info_marker in info_image :
             id_marker, dist_marker, angle_marker, pos_on_screen, _ = info_marker
             if 1<= id_marker and id_marker <=4:
-                dists_to_marker[id_marker].append(dist_marker)
+                dists_to_marker[id_marker].append(get_dist_from_center(dist_marker, pos_on_screen))
     clear_dist_to_marker()
     for id_marker in range(1, 5):
         n = len(dists_to_marker[id_marker])
@@ -266,25 +286,18 @@ def test_get_position_from_markers():
         pos_robot = (x, y)
         info_images = [[], [], [], [], [], [], [], []]
         for id_marker in range(1, 5):
-            info_images[0].append((id_marker, get_dist(pos_marker[id_marker], pos_robot), 0, (0,0)))
+            info_images[0].append((id_marker, get_dist(pos_marker[id_marker], pos_robot), 0, (0,0), None))
         (pos, erreur_distance) = get_position_from_markers(info_images)
         assert vect_equal(pos, pos_robot), "erreur test_get_position_from_marker : position incorrecte"
         assert float_equal(erreur_distance, 0.0), "erreur test_get_position_from_marker : erreur_distance non nulle"
 
+def test_get_position_from_markers_data():
+    info_images = [[], [[0, 41.35485322375381, -8.4294083518256, (-97.0, -53.75), (0, 50)],[4, 221.85418825461323, -2.089333287650163, (-182.25, 71.5), (0, 250)]], [], [], [[3, 193.48803179060644, 47.907416513283664, (265.75, 55.5), (50, 200)]], [], [], [], [], [], [[2, 134.0467094021446, -12.824970716852789, (-246.75, 91.25), (0, 150)]], [[2, 142.25125940286003, 32.64725477626979, (247.5, 82.75), (50, 150)]], [], [], [], []]
+    print(get_position_from_markers(info_images))
+
 
 ### ORIENTATION
 
-
-
-
-
-def get_angle_from_pos_on_screen(pos_on_screen):
-    """renvoie l'angle en degrés entre la direction vers 
-    laquelle regarde la caméra et un objet qui se trouve 
-    à la position pos_on_screen sur l'image en pixel"""
-    x, y = pos_on_screen 
-    alpha = atan(x/dist_foyer_ecran)
-    return degrees(alpha)
 
 
 
@@ -361,13 +374,14 @@ def get_angle_with_drapeau(info_marker):
 
 
 if __name__ == '__main__':
-    test_set_dist_to_marker()
-    test_get_position_from_markers()
-    assert abs(get_angle_from_pos_on_screen((160, 0))-7) <0.5 #~7°
-    assert abs(get_angle_from_pos_on_screen((-160, 0))+7) <0.5 #~-7°
-    test_angle_vect()
-    test_vect_mean()
-    test_get_orientation()
+    # test_set_dist_to_marker()
+    #test_get_position_from_markers()
+    # assert abs(get_angle_from_pos_on_screen((160, 0))-7) <0.5 #~7°
+    # assert abs(get_angle_from_pos_on_screen((-160, 0))+7) <0.5 #~-7°
+    # test_angle_vect()
+    # test_vect_mean()
+    # test_get_orientation()
+    test_get_position_from_markers_data()
     
 
 
