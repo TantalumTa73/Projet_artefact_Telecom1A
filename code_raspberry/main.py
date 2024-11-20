@@ -13,20 +13,22 @@ def aller_case(x_dest, y_dest, position_robot):
     distX = x_dest - x_dep
     distY = y_dest - y_dep
 
-    if float_equal(distX, 0.0):
+    delta = 2 
+
+    if abs(distX) < delta:
         #on avance que selon y
-        if not float_equal(distY,0.0):
+        if abs(distY) > delta:
             if distY > 0 :
                 moteur.rota_deg(position_robot.get_angle_to_point_cardinal("n"), position_robot)
                 moteur.avance_cm(distY, position_robot)
             elif distY <0 :
                 moteur.rota_deg(position_robot.get_angle_to_point_cardinal("s"), position_robot)
                 moteur.avance_cm(-distY, position_robot)
-    elif distX >0:
+    elif distX > 0:
         moteur.rota_deg(position_robot.get_angle_to_point_cardinal("e"), position_robot)
         #le robot est orienté vers l'est
         moteur.avance_cm(distX, position_robot)
-        if not float_equal(distY,0.0):
+        if abs(distY) > delta:
             if distY > 0 :
                 moteur.rota_deg(-90, position_robot)
                 moteur.avance_cm(distY, position_robot)
@@ -37,7 +39,7 @@ def aller_case(x_dest, y_dest, position_robot):
         moteur.rota_deg(position_robot.get_angle_to_point_cardinal("o"), position_robot)
         #le robot est orienté vers l'ouest
         moteur.avance_cm(-distX, position_robot)
-        if not float_equal(distY,0.0):
+        if abs(distY) > delta:
             if distY > 0 :
                 moteur.rota_deg(90, position_robot)
                 moteur.avance_cm(distY, position_robot)
