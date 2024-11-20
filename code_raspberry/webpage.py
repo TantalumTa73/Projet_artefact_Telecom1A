@@ -257,7 +257,7 @@ def reperage_rotation_prep():
 
 	send_position(*current_pos.get_pos())
 
-    print("\n\n\n\n\nrotation fini")
+	print("\n\n\n\n\nrotation fini")
 	return render_template("page.html")	
 
 @app.route('/test-aller-drap', methods=['POST'])
