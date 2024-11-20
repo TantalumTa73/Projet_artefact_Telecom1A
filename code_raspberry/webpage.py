@@ -26,6 +26,7 @@ right_speed = 0
 
 url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
+epreuve_intermediaire = True
 
 current_pos = Position_robot((25,25),(0,1))
 
@@ -124,6 +125,11 @@ def go_to():
 	if not current_pos.is_moving():
 		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
 		main.aller_case(target_x, target_y, current_pos)
+
+	if epreuve_intermediaire:
+		found_flag(5, target_x, target_y)
+		moteur.rota_deg(180, current_pos)
+		moteur.rota_deg(180, current_pos)
 
 	return render_template("page.html")	
 
@@ -243,7 +249,7 @@ def reperage_rotation_prep():
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientations.append(orientation)
 
-    print(f"infro image: {info_images}")
+	print(f"infro image: {info_images}")
 	res = position_from_arucos.get_position_from_markers(info_images)
 
 	if res is None:
