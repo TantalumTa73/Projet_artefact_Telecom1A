@@ -228,26 +228,26 @@ def toggle_image_view():
 
 @app.route('/reperage-rotation', methods=['POST'])
 def reperage_rotation_prep():
-    global current_pos
+	global current_pos
 
-    info_images = [] 
-    orientations = []
-    for (img,orient) in main.reperage_rotation(cam, current_pos):
-        info_images.append(analyse_imagedetect_aruco_markers(img,current_pos))
-        orientation.append(orient)
+	info_images = [] 
+	orientations = []
+	for (img,orient) in main.reperage_rotation(cam, current_pos):
+		info_images.append(analyse_imagedetect_aruco_markers(img,current_pos))
+		orientation.append(orient)
 
-    real_pos, err = position_from_arucos.get_position_from_markers(info_images)
+	real_pos, err = position_from_arucos.get_position_from_markers(info_images)
 
-    orientations = []
-    for i in range(len(info_images)):
-        orient_img, err = position_from_arucos.get_orientation(real_pos, info_images[i])
-        if orient_img is not None:
-            orientations = vecteur_2d.rotate_vec(orient_img,-orientation[i]) 
+	orientations = []
+	for i in range(len(info_images)):
+		orient_img, err = position_from_arucos.get_orientation(real_pos, info_images[i])
+		if orient_img is not None:
+			orientations = vecteur_2d.rotate_vec(orient_img,-orientation[i]) 
 
-    orientation = vecteur_2d.vect_mean(orientations)
-    
-    current_pos.set_pos(*real_pos)
-    current_pos.set_orientation(*orientation)
+	orientation = vecteur_2d.vect_mean(orientations)
+	
+	current_pos.set_pos(*real_pos)
+	current_pos.set_orientation(*orientation)
 
 	send_position(*current_pos.get_pos())
 
