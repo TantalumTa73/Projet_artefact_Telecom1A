@@ -333,7 +333,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 				t.sleep(0.5)
 				curr_tick[0] += curr_ticks_ins[0]
 				curr_tick[1] += curr_ticks_ins[1]
-				print(curr_tick)
+				print(supposed_ticks)
 				t.sleep(3)
 				break
 	moteur.set_motor_speed(0,0)
