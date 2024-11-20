@@ -104,9 +104,11 @@ def init_position():
 	global current_pos
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
-	print(case_x,case_y)
+	orientation = request.form.get('orientation')
+	print(case_x,case_y,orientation)
 
 	current_pos.set_pos(*case_to_pos(string_to_case((case_x,case_y))))
+	current_pos.set_orientation(vecteur_2d.rotate_vect((0,1),int(orientation)))
 
 	send_position(*current_pos.get_pos())
 	return render_template("page.html")	
