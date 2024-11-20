@@ -104,6 +104,6 @@ def detect_aruco_markers(image, position_robot):
             # Afficher les informations du marqueur
             liste_retour.append([marker_id, dist_cm,angle_deg,centre,None])
             pos_drap = position_drapeau(liste_retour[-1], position_robot)
-            liste_retour[-1].append(pos_drap)
+            liste_retour[-1][-1]= pos_drap
     return liste_retour
         
