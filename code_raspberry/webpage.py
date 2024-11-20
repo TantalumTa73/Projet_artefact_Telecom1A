@@ -128,16 +128,20 @@ def change_speed():
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse, left_speed, right_speed
-	left_speed += vitesse
-	right_speed += vitesse
+	if left_speed < vitesse and right_speed < vitesse:
+		left_speed += vitesse
+		right_speed += vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/backward-press', methods=['POST'])
 def backward():
 	global vitesse, left_speed, right_speed
-	left_speed -= vitesse
-	right_speed -= vitesse
+	if left_speed > - vitesse and right_speed > -vitesse:
+		left_speed -= vitesse
+		right_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/right-press', methods=['POST'])
 def right():
@@ -145,9 +149,10 @@ def right():
 	if left_speed == 0 and right_speed == 0:
 		right_speed -= vitesse
 		left_speed += vitesse
-	else:
+	elif left_speed <= vitesse:
 		left_speed += vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/left-press', methods=['POST'])
 def left():
@@ -155,9 +160,10 @@ def left():
 	if left_speed == 0 and right_speed == 0:
 		right_speed += vitesse
 		left_speed -= vitesse
-	else:
+	elif right_speed <= vitesse:
 		right_speed += vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/forward-release', methods=['POST'])
 def forward_rel():
@@ -165,6 +171,7 @@ def forward_rel():
 	left_speed -= vitesse
 	right_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/backward-release', methods=['POST'])
 def backward_rel():
@@ -172,6 +179,7 @@ def backward_rel():
 	left_speed += vitesse
 	right_speed += vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/right-release', methods=['POST'])
 def right_rel():
@@ -182,6 +190,7 @@ def right_rel():
 	else:
 		left_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 @app.route('/left-release', methods=['POST'])
 def left_rel():
@@ -192,6 +201,7 @@ def left_rel():
 	else:
 		right_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
 
 
 @app.route('/toggle-image-view', methods=['POST'])
