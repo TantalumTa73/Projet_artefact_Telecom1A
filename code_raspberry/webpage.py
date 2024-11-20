@@ -251,6 +251,7 @@ def reperage_rotation_prep():
 	current_pos.set_orientation(*orientation)
 
 	send_position(*current_pos.get_pos())
+	return render_template("page.html")	
 
 @app.route('/test-aller-drap')
 def aller_drap():
