@@ -360,11 +360,11 @@ def ultime():
 		while len(next_flag) == 0:
 			angle = current_pos.get_angle_orientation()
 			if -45 < angle and angle < 45 :
-				moteur.rota_deg(-90, current_pos)
-			elif 135 > angle and angle > 45 :
+				moteur.rota_deg(90, current_pos)
+			elif -135 < angle and angle < -45 :
 				moteur.rota_deg(180, current_pos)
 			elif angle < -135 and angle >135 :
-				moteur.rota_deg(90, current_pos)
+				moteur.rota_deg(-90, current_pos)
 				
 			curr_tick = [0,0]
 			for i in range(17):
