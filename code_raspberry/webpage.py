@@ -149,7 +149,7 @@ def right():
 	if left_speed == 0 and right_speed == 0:
 		right_speed -= vitesse
 		left_speed += vitesse
-	elif left_speed <= vitesse:
+	elif left_speed <= vitesse and right_speed > 0:
 		left_speed += vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
@@ -160,7 +160,7 @@ def left():
 	if left_speed == 0 and right_speed == 0:
 		right_speed += vitesse
 		left_speed -= vitesse
-	elif right_speed <= vitesse:
+	elif right_speed <= vitesse	and left_speed > 0:
 		right_speed += vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
