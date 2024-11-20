@@ -10,15 +10,19 @@ def drapeau_proche(liste_liste_aru):
     Renvoie la liste d'info de la aruco la plus proche sur une image contenant 
     au moins une aruco
     """
-    det_aruco = liste_liste_aru
-    d_min = det_aruco[0][1]
-    i_min = 0
-    for i in range(len(det_aruco)):
-        if (det_aruco[i][0] not in [1,2,3,4]) and det_aruco[i][1]< d_min:
-            d_min = det_aruco[i][1]
-            i_min = i
-    
-    return det_aruco[i_min]
+    if len(liste_liste_aru) > 0:
+        det_aruco = liste_liste_aru
+        d_min = det_aruco[0][1]
+        i_min = 0
+        for i in range(len(det_aruco)):
+            if (det_aruco[i][0] not in [1,2,3,4]) and det_aruco[i][1]< d_min:
+                d_min = det_aruco[i][1]
+                i_min = i
+        
+        return det_aruco[i_min]
+    else:
+        print("No aruco detected")
+        return None
 
 def analyser_drapeau(liste_aru, position_robot, cam):
     """
@@ -96,7 +100,7 @@ def analyser_drapeau(liste_aru, position_robot, cam):
             moteur.rota_deg(-45, position_robot)
             image, result = module_camera.get_image(cam)
             aru = drapeau_proche(anal.detect_aruco_markers(image, position_robot))
-            if aru[0] != 0 :
+            if are is not None and aru[0] != 0 :
                 moteur.rota_deg(45, position_robot)
                 return aru[0], (x_drapeau, y_drapeau)
             moteur.rota_deg(45, position_robot)
