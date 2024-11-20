@@ -416,7 +416,7 @@ def ultime():
 					moteur.tour_sur_soi_meme()
 					#i, j = case_to_pos(x1, y1)
 					#found_flag(id_1, i, j)
-					found_flag(id_1, *case_to_string(*pos_to_case((x1, y1))))
+					found_flag(id_1, *case_to_string(pos_to_case((x1, y1))))
 
 				x,y = current_pos.get_pos()
 				
