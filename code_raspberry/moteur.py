@@ -285,10 +285,9 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 	"""permet de tourner le robot de deg degrés dans le sens horaire"""
 	if not position_robot.is_moving():
 		position_robot.get_moving()
-		deg = deg%360
 		side = "right"
-		if deg > 180:
-			deg = 360 - deg
+		if deg < 0:
+			deg = -deg
 			side = "left"
 		ticks = int((deg * 183.6 * 2 * 3.141592 * 7.85) / 360)
 		poss_speed = [20,15,12,10,5,3]
