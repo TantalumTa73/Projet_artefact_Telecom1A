@@ -153,6 +153,8 @@ def right():
 		left_speed += vitesse
 	elif left_speed <= vitesse and right_speed > 0:
 		left_speed += vitesse
+	elif left_speed < 0 and right_speed < 0 and right_speed >= -vitesse:
+		right_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
 
@@ -164,6 +166,8 @@ def left():
 		left_speed -= vitesse
 	elif right_speed <= vitesse	and left_speed > 0:
 		right_speed += vitesse
+	elif left_speed < 0 and right_speed < 0 and left_speed >= -vitesse:
+		left_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
 	return render_template("page.html")	
 
@@ -190,6 +194,8 @@ def right_rel():
 	if left_speed == -right_speed:
 		right_speed += vitesse
 		left_speed -= vitesse
+	elif left_speed < 0 and right_speed < 0:
+		right_speed += vitesse
 	else:
 		left_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
@@ -201,6 +207,8 @@ def left_rel():
 	print(left_speed, right_speed)
 	if left_speed == - right_speed:
 		right_speed -= vitesse
+		left_speed += vitesse
+	elif left_speed < 0 and right_speed < 0:
 		left_speed += vitesse
 	else:
 		right_speed -= vitesse
@@ -249,7 +257,7 @@ def update():
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
 		# Envoi vers l'api 
-		#send_position(x, y)
+		send_position(*current_pos.get_pos())
 		#status = get_status()
 		#found_flag(marquer_id, col, row)
 
@@ -276,8 +284,8 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
-	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
+	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
 	updated_content+="<ul>"
 	for user in sorted(users_connected):
