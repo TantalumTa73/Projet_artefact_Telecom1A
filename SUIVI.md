@@ -161,8 +161,10 @@ Utilisation du module python `requests` pour envoyer des requetes au serveur de 
 
 ### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DES MARQUEURS (Alice) 
 
-Creation d'une fonction qui prend en argument une liste de liste de markers detectés et qui renvoie la position estimée du robot ainsi que l'erreur en cm.
-On utilise une méthode de triangulation en prenant pour distance à chaque marker repère détecté la moyenne de toutes les distances mesurées.
+Creation d'une fonction qui prend en argument une liste de liste de markers detectés et qui 
+renvoie la position estimée du robot ainsi que l'erreur en cm.
+On utilise une méthode de triangulation en prenant pour distance à chaque marker repère 
+détecté la moyenne de toutes les distances mesurées.
 
 
 ### OBTENTION DES DONNÉES DE LECTURE DU ACURO VU PAR LA RASPBERRY (Joshua, Jeffrey) 
@@ -182,8 +184,79 @@ Résolution de conflit de modules python et implementation du code
 ### ASSERVISEMENT DES MOTEURS POUR AJUSTER LE POSITIONNEMENT (Martin, Jeffrey, Edouard)
 Asservisement en ligne droite (Martin, Jeffrey): detection du décalage de tick des moteurs et adaptation en conséquence 
 
-Asservisement par rotation (pouvoir tourner le robot d'un certain angle) (Edouard)
+Asservisement par rotation (pouvoir tourner le robot d'un certain angle) (Edouard et Martin)
 
 ### DETERMINATION DE LA POSITION DU ROBOT A PARTIR DES DONNÉE DES MARQUEURS (Alice)
 
+creation du module position_from_arucos qui contient notamment get_position_from_markers qui permet de 
+trouver la position du robot par triangulation en connaissant la distance aux repères du terrain (grace à la caméra).
+La fonction get_orientation permet quant à elle d'avoir l'orientation du robot à partir des reperes visibles sur une image
+prise depuis une position donnée. (non testée sur le terrain)
+
 ### FONCTIONS POUR COMMUNIQUER AVEC LE SERVEUR DE SUIVI (Jeffrey)
+
+Creation de fonction dans webpage permettant d'envoyer la position du robot sur le serveur de suivi.
+Remarque : le serveur de suivi n'a pas la meme origine que nous dans le repère du terrain, ce qui nous oblige
+à faire une petite conversion.
+
+### DEPLACEMENT AUTOMATIQUE SELON X ET Y (Edouard)
+
+fonction aller_vers_case du fichier main.py : le robot se rend à la position demandé en se déplaçant uniquement
+selon les axes (Ox) et (Oy)
+
+
+## 20/11/2024 (Matin)
+
+### GESTION DE LA POSITION DU ROBOT LORS DES DEPLACEMENTS AUTOMATIQUES (Alice)
+
+Creation de la classe Position_robot qui garde en mémoire la position et l'orientation actuelle
+du robot. La position et l'orientation sont modifiées par les fonctions avance_cm et rota_deg de
+moteur.py. On peut également modifier la position grâce à des boutons sur la page web.
+
+### ALGORITHME DE GUIDAGE VERS LES DRAPEAU (Joshua)
+
+Si on detecte un drapeau grace à la caméra, le robot calcule sa position grâce à l'image, se rend
+sur la case adjacente la plus proche, puis tourne autour du drapeau jusqu'à trouver l'id.
+
+### GUIDAGE VERS UNE CASE DEPUIS PAGE WEB (Jeffrey)
+
+Boutons sur le site web pour initialiser la position du robot (avec la case où il se trouve).
+Boutons sur le site web pour se rendre sur une autre case.
+
+### RECONSTRUCTION DU TERRAIN EN 0A128 (Alice, Martin)
+
+On retrace sur le sol la grille du terrain et on positionne les reperes sur des pieds de chaises
+aux quatre coins. Cela permet à tout le groupe 6 de faire ses tests sans avoir à aller loin.
+(Un autre terrain avait déjà été dessiné par nos soin en 1A318 avant qu'on soit délocalisés)
+
+
+## 20/11/2024 (Après-midi)
+
+### PILOTAGE MANUEL DU ROBOT AVEC LES TOUCHES DU CLAVIER (Edouard)
+
+Jusqu'ici, on pouvait diriger de manière approximative le robot via des boutons sur le site.
+Désormais, le pilotage du robot est beaucoup plus aisé et précis.
+
+### TESTS RECHERCHE DRAPEAU (Joshua, Edouard)
+
+Test de l'algorithme pour chercher les drapeau
+
+### PRISE EN COMPTE DU DECALAGE DE LA CAMERA PAR RAPPORT AU CENTRE LORS DE LA TRIANGULATION (Alice)
+
+Amelioration de la triangulation.
+
+### TOUR SUR LUI MEME AVEC ARRET (Martin)
+
+Creation d'un fonction permettant au robot de tourner de petits angles plusieurs fois
+en minimisant les erreurs d'approximation (s'assure que le robot a bien fait un tour complet
+à la fin)
+
+### REPERAGE GRACE AUX REPERES EN TOURNANT SUR SOI-MEME (Jeffrey, Alice)
+
+(utilise la fonction précédente)
+Creation d'une fonction ordonnant au robot de faire un tour sur lui meme et de prendre
+des photos autour de lui pour ensuite proceder à la triangulation.
+
+### TESTS ET DEBOGAGE DU REPERAGE GRACE AUX REPERES (Martin, Jeffrey)
+
+Tests de la fonction précédante avec le robot sur le terrain.
