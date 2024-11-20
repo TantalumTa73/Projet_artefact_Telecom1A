@@ -368,9 +368,9 @@ def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=
 			t.sleep(0.5)
 			break
 
-def reajustement(curr_tick, time_step=0.01, temps_accel=2, temps_decel=2):
+def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 	turntick = int(183.6 * 2 * 3.141592 * 7.85)
-	tot_tick = [2 * turntick + curr_tick[0] , 2 * turntick - curr_tick[0]]
+	tot_tick = [2 * turntick + curr_tick[0] , 2 * turntick - curr_tick[1]]
 	moteur.get_encoder_ticks()
 	poss_speed = [20,15,10,5,3]
 	for spd in poss_speed:
@@ -384,7 +384,7 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=2, temps_decel=2):
 		tick_parc_left = - tot_tick[0] - acc_tick_left - dec_tick_left
 		tick_parc_right = tot_tick[1] - acc_tick_right - dec_tick_right
 		if tick_parc_left < 0 and tick_parc_right > 0:
-			temps_parc = tick_parc_left/(left_speed*100)
+			temps_parc = - tick_parc_left/(left_speed*100)
 			n_accel = int(temps_accel/time_step)
 			n_parcours = int(temps_parc/time_step)
 			n_decel = int(temps_decel/time_step)
@@ -415,3 +415,4 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=2, temps_decel=2):
 			curr_tick[1] += curr_ticks_ins[1]
 			#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
 			t.sleep(0.5)
+			break
