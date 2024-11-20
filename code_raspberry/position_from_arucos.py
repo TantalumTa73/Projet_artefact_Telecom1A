@@ -337,6 +337,8 @@ def get_orientation(pos_robot, info_image):
     for id_marker in id_markers:
         u = sub_vect(pos_marker[id_marker], pos_robot)
         directions.append(normalize(rotate_vect(u, angle_with_marker[id_marker])))
+    if directions==[]:
+        return None
     direction, erreur_angle = vect_mean(directions)
     return direction, erreur_angle
         
