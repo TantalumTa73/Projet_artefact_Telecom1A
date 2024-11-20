@@ -302,7 +302,7 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 				break
 		moteur.set_motor_speed(0,0)
 		t.sleep(2)
-		position_robot.tourner(deg)
+		position_robot.tourner(-deg)
 		position_robot.stop_moving()
 	else:
 		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
