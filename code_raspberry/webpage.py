@@ -10,6 +10,7 @@ import os
 import moteur
 import requests
 import analyse_image
+import main
 
 # Moteurs 
 
@@ -115,6 +116,7 @@ def go_to():
 	case_y = request.form.get('y')
 
 	target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
+	main.aller_case(target_x, target_y, position_robot)
 
 	return render_template("page.html")	
 
