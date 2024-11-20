@@ -302,7 +302,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 			print(tick_parc_left, tick_parc_right)
 			if tick_parc_left < 0 and tick_parc_right > 0:
 				left_speed = - spd
-				right_speed = tick_parc_right/tick_parc_left * spd
+				right_speed = tick_parc_right/tick_parc_left * left_speed
 				temps_parc = - tick_parc_left/(spd*100)
 				n_accel = int(temps_accel/time_step)
 				n_parcours = int(temps_parc/time_step)
