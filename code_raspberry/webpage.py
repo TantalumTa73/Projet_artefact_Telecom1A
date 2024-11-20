@@ -329,6 +329,7 @@ def update():
 			if result:
 				module_camera.save_image(image)
 				analyse = analyse_image.detect_aruco_markers(image,current_pos)
+                last_analyse=""
 				for a in analyse:
 					last_analyse += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
 			else:
@@ -381,10 +382,7 @@ def ultime():
 			for i in range(9):
 				# passage = True 
 				moteur.rota_petit_angle(i, curr_tick)
-				print("\t\t"+str(90+((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))/2))
-				print("\t\t"+str(current_pos.get_angle_orientation()))
 				current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90+((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))/2))
-				print("\t\t"+str(current_pos.get_angle_orientation()))
 				image, result = module_camera.get_image(cam)
 				arus = analyse_image.detect_aruco_markers(image, current_pos)
 				for j in range(len(arus)):
