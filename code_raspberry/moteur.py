@@ -314,7 +314,9 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 
 
 def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=1.5):
-	moteur.get_encoder_ticks()
+	ticks = moteur.get_encoder_ticks()
+	curr_tick[0] += ticks[0]
+	curr_tick[1] += ticks[1]
 	tot_tick = int(183 * 2 * 3.141592 * 7.85)
 	tick_per_turn = tot_tick/16
 	supposed_ticks_turn = [tick_per_turn * i for i in range(17)]
