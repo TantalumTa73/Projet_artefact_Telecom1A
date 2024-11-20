@@ -419,3 +419,7 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 			#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
 			t.sleep(0.5)
 			break
+
+def tour_sur_soi_meme():
+	turntick = int(183.6 * 2 * 3.141592 * 7.85)
+	reajustement([-turntick, turntick])
