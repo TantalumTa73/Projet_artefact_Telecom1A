@@ -47,7 +47,7 @@ def reperage_rotation(cam):
     """ Tourne sur soi même et prend 16 photos qui sont renvoier avec la position
     du robot au moment ou l'image à été prise"""
     images = [] 
-    curr_ticks=[0,0]
+    curr_tick=[0,0]
     for l in range(1,17):
         moteur.rota_petit_angle(l, curr_tick)
         img, res = module_camera.get_image(cam)
