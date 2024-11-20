@@ -357,7 +357,7 @@ def update():
 def ultime():
 	for i in range(2):
 		next_flag = []
-        while len(next_flag) == 0:
+		while len(next_flag) == 0:
 			angle = current_pos.get_angle_orientation()
 			if -45 < angle and angle < 45 :
 				moteur.rota_deg(-90, current_pos)
@@ -368,20 +368,20 @@ def ultime():
 				
 			curr_tick = [0,0]
 			for i in range(17):
-                passage = True 
+				passage = True 
 				moteur.rota_petit_angle(i, curr_tick)
 				image, result = module_camera.get_image(cam)
 				arus = analyse_image.detect_aruco_markers(image, current_pos)
 				for j in range(len(arus)):
 					if arus[j][0] not in [1,2,3,4]:
 						next_flag = arus[j]
-                        passage = False
+						passage = False
 						break
-                if not passage:
-                    break
+				if not passage:
+					break
 			moteur.reajustement(curr_tick)
 					
-            if len(next_flag) != 0:
+			if len(next_flag) != 0:
 				liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
 				id_1,coord_1 = analyser_drapeau.analyser_drapeau(liste_aru,current_pos,cam)
 				x1,y1 = coord_1
