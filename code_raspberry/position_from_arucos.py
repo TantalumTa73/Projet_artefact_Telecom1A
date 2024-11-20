@@ -48,7 +48,7 @@ def set_dist_to_marker(info_images):
                                             # on prendra la moyenne
     for info_image in info_images:
         for info_marker in info_image :
-            id_marker, dist_marker, angle_marker, pos_on_screen = info_marker
+            id_marker, dist_marker, angle_marker, pos_on_screen, _ = info_marker
             if 1<= id_marker and id_marker <=4:
                 dists_to_marker[id_marker].append(dist_marker)
     clear_dist_to_marker()
