@@ -257,7 +257,7 @@ def update():
 	###### Code qui s'exécute toute les secondes #######
 	if now - last_update_time >= 0.9:
 		# Envoi vers l'api 
-		#send_position(x, y)
+		send_position(*current_pos.get_pos())
 		#status = get_status()
 		#found_flag(marquer_id, col, row)
 
@@ -284,8 +284,8 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
-	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+=f"<p>Analyse aruco {last_distance}</p>"
+	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
 	updated_content+="<p>Utilisateurs connectés</p>"
 	updated_content+="<ul>"
 	for user in sorted(users_connected):
