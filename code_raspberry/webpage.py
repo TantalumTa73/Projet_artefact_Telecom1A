@@ -329,7 +329,7 @@ def update():
 			if result:
 				module_camera.save_image(image)
 				analyse = analyse_image.detect_aruco_markers(image,current_pos)
-                last_analyse=""
+				last_analyse=""
 				for a in analyse:
 					last_analyse += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
 			else:
@@ -400,13 +400,7 @@ def ultime():
 			if flags!=[]:
 				print("		"+f"flag found {flags}")
 				#on cherche le flag le plus proche
-				if len(flags)==2:
-					if flags[0][1] < flags[1][1]:
-						next_flag = flags[0]
-					else:
-						next_flag = flags[1]
-				else:
-					next_flag = flags[0]
+				next_flag = analyser_drapeau.drapeau_proche(flags)
 				print("		"+f"closet flag {next_flag[0]}")
 
 				#liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
