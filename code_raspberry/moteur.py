@@ -297,12 +297,12 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 		for spd in poss_speed:
 			acc_tick = calc_tick_accel(spd, time_step, temps_accel)
 			dec_tick = calc_tick_decel(spd, time_step, temps_decel)
-			tick_parc_left = supposed_ticks_turn[l] - curr_tick[0] - acc_tick - dec_tick
+			tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] + acc_tick + dec_tick
 			tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick - dec_tick
-			if tick_parc_left > 0 and tick_parc_right > 0:
-				left_speed = spd
+			if tick_parc_left < 0 and tick_parc_right > 0:
+				left_speed = - spd
 				right_speed = tick_parc_right/tick_parc_left * spd
-				temps_parc = tick_parc_left/(spd*100)
+				temps_parc = - tick_parc_left/(spd*100)
 				n_accel = int(temps_accel/time_step)
 				n_parcours = int(temps_parc/time_step)
 				n_decel = int(temps_decel/time_step)
@@ -324,7 +324,7 @@ def rota_16_angles(time_step, temps_accel, temps_decel):
 					ticks = moteur.get_encoder_ticks()
 					curr_ticks_ins[0] += ticks[0]
 					curr_ticks_ins[1] += ticks[1]   
-					speed_left = int((- supposed_ticks[k+1][0] - curr_ticks_ins[0]) / (time_step * 100))
+					speed_left = int((supposed_ticks[k+1][0] - curr_ticks_ins[0]) / (time_step * 100))
 					speed_right = int((supposed_ticks[k+1][1] - curr_ticks_ins[1]) / (time_step * 100))
 					moteur.set_motor_speed(speed_left, speed_right)
 					t.sleep(time_step)
