@@ -16,21 +16,21 @@ class Position_robot:
 		"""retourne l'angle entre le vecteur (0,1) et l'orientation"""
 		return angle_vect((0,1), self.__vect_orientation)
 
-    def get_angle_to_point_cardinal(self, pt_cardinal ):
-        """renvoie l'angle à tourner pour être dans une 
-        4 directions n, s, e, o"""
-        assert pt_cardinal in ['n', 's', 'e', 'o']
-        if pt_cardinal=="n":
-            return angle_vect(self.__vect_orientation, (0,1))
-        elif pt_cardinal=="s":
-            return angle_vect(self.__vect_orientation, (0,-1))
-        elif pt_cardinal=="e":
-            return angle_vect(self.__vect_orientation, (1,0))
-        elif pt_cardinal=="o":
-            return angle_vect(self.__vect_orientation, (-1,0))
+	def get_angle_to_point_cardinal(self, pt_cardinal ):
+		"""renvoie l'angle à tourner pour être dans une 
+		4 directions n, s, e, o"""
+		assert pt_cardinal in ['n', 's', 'e', 'o']
+		if pt_cardinal=="n":
+			return angle_vect(self.__vect_orientation, (0,1))
+		elif pt_cardinal=="s":
+			return angle_vect(self.__vect_orientation, (0,-1))
+		elif pt_cardinal=="e":
+			return angle_vect(self.__vect_orientation, (1,0))
+		elif pt_cardinal=="o":
+			return angle_vect(self.__vect_orientation, (-1,0))
 
-    def is_moving(self):
-        return self.__is_moving
+	def is_moving(self):
+		return self.__is_moving
 
 	### SETTER
 
