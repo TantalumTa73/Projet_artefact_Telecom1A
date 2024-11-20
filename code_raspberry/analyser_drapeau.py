@@ -106,7 +106,7 @@ def analyser_drapeau(liste_aru, position_robot):
     else:
         for _ in range(4):
             moteur.rota_deg(45, position_robot)
-            aru = drapeau_proche()
+            aru = drapeau_proche(anal.detect_aruco_markers(module_camera.get_image, position_robot))
             if aru[0] != 0 :
                 moteur.rota_deg(-45, position_robot)
                 return aru[0]
