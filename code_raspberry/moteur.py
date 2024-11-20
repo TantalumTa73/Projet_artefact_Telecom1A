@@ -325,9 +325,9 @@ def rota_16_angles(time_step, temps_accel_decel):
 					curr_ticks_ins[0] += ticks[0]
 					curr_ticks_ins[1] += ticks[1]
 					print("curr", curr_ticks_ins)     
-					speed_left = int((- supposed_ticks[k+1] - curr_ticks_ins[0]) / (time_step * 100))
-					speed_right = int((supposed_ticks[k+1] - curr_ticks_ins[1]) / (time_step * 100))
-					print("tickgap",  - supposed_ticks[k+1] - curr_ticks_ins[0], supposed_ticks[k+1] - curr_ticks_ins[1])
+					speed_left = int((- supposed_ticks[k+1][0] - curr_ticks_ins[0]) / (time_step * 100))
+					speed_right = int((supposed_ticks[k+1][0] - curr_ticks_ins[1]) / (time_step * 100))
+					print("tickgap",  - supposed_ticks[k+1][0] - curr_ticks_ins[0], supposed_ticks[k+1][1] - curr_ticks_ins[1])
 					print("speed", [speed_left, speed_right])
 					moteur.set_motor_speed(speed_left, speed_right)
 					t.sleep(time_step)
