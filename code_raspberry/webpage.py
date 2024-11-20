@@ -356,8 +356,9 @@ def update():
 @app.route('/test-ultime', methods=['POST'])
 def ultime():
 	for i in range(2):
-		next_flag = []
-		while len(next_flag) == 0:
+		#next_flag = None #info du aruco (id_marker, dist_marker, )
+		flags = []
+		while flags == []:
 			angle = current_pos.get_angle_orientation()
 			if -45 < angle and angle < 45 :
 				moteur.rota_deg(-90, current_pos)
@@ -367,28 +368,38 @@ def ultime():
 				moteur.rota_deg(90, current_pos)
 				
 			curr_tick = [0,0]
-			for i in range(17):
-				passage = True 
+			for i in range(9):
+				# passage = True 
 				moteur.rota_petit_angle(i, curr_tick)
 				image, result = module_camera.get_image(cam)
 				arus = analyse_image.detect_aruco_markers(image, current_pos)
 				for j in range(len(arus)):
 					if arus[j][0] not in [1,2,3,4]:
-						next_flag = arus[j]
-						passage = False
-						break
-				if not passage:
-					break
+						#next_flag = arus[j]
+						#passage = False
+						flags.append(arus[j])
+				# if not passage:
+				# 	break
 			moteur.reajustement(curr_tick)
 					
-			if len(next_flag) != 0:
-				liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
-				id_1,coord_1 = analyser_drapeau.analyser_drapeau(liste_aru,current_pos,cam)
+			if flags!=[]:
+				#on cherche le flag le plus proche
+				if len(flags)==2:
+					if flags[0][1] < flags[1][1]:
+						next_flag = flags[0]
+					else:
+						next_flag = flags[1]
+				else:
+					next_flag = flags[0]
+
+				#liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
+				id_1, coord_1 = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
 				x1,y1 = coord_1
 				if id_1 != -1:
 					moteur.tour_sur_soi_meme()
-					i, j = case_to_pos(x1, y1)
-					found_flag(id_1, i, j)
+					#i, j = case_to_pos(x1, y1)
+					#found_flag(id_1, i, j)
+					found_flag(id_1, x1, y1)
 
 				x,y = current_pos.get_pos()
 				
