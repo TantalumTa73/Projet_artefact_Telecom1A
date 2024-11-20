@@ -1,3 +1,8 @@
+"""Les fonctions à utiliser pour déplacer le robot sont
+	- avancer_cm
+	- rota_deg
+	"""
+
 import controller as c
 import time as t
 import os 
@@ -209,25 +214,33 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 	moteur.set_motor_speed(0,0)
 	print([supposed_ticks[-1], curr_ticks])
 
-def avance_cm(dist, time_step, temps_accel_decel):
-	ticks = int(dist * 183.6)
-	"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
-	poss_speed = [70, 60, 50, 40, 30, 20, 10]
-	if dist < 0:
-		ticks = -ticks
-	for spd in poss_speed:
-		print('patate')
-		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
-		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
-		tick_parc = ticks - acc_tick - dec_tick
-		if tick_parc > 0:
-			temps_parc = tick_parc/(100 * spd)
-			if dist < 0:
-				avance_asservi(-spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
-			else:
-				avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
-			break
-        
+def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
+	"""permet d'avancer le robot de dist cm"""
+	if not position_robot.is_moving():
+		position_robot.get_moving()
+
+		ticks = int(dist * 183.6)
+		"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
+		poss_speed = [70, 60, 50, 40, 30, 20, 10]
+		if dist < 0:
+			ticks = -ticks
+		for spd in poss_speed:
+			print('patate')
+			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
+			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
+			tick_parc = ticks - acc_tick - dec_tick
+			if tick_parc > 0:
+				temps_parc = tick_parc/(100 * spd)
+				if dist < 0:
+					avance_asservi(-spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
+				else:
+					avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
+				break
+		position_robot.avancer(dist)
+		position_robot.stop_moving()
+    else:
+		print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
+
 def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel, side):
 	if side == "right":
 		vitesse = - vitesse
@@ -265,24 +278,31 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 	return([supposed_ticks[-1], curr_ticks])
 
 
-def rota_deg(deg, time_step, temps_accel_decel):
-	deg = deg%360
-	side = "right"
-	if deg > 180:
-		deg = 360 - deg
-		side = "left"
-	ticks = int((deg * 183.6 * 2 * 3.141592 * 7.85) / 360)
-	poss_speed = [20,15,12,10,5,3]
-	for spd in poss_speed:
-		acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
-		dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
-		tick_parc = ticks - acc_tick - dec_tick
-		if tick_parc > 0:
-			temps_parc = tick_parc/(100 * spd)
-			rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, side)
-			break
-	moteur.set_motor_speed(0,0)
-	t.sleep(2)
+def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
+	"""permet de tourner le robot de deg degrés dans le sens horaire"""
+	if not position_robot.is_moving():
+		position_robot.get_moving()
+		deg = deg%360
+		side = "right"
+		if deg > 180:
+			deg = 360 - deg
+			side = "left"
+		ticks = int((deg * 183.6 * 2 * 3.141592 * 7.85) / 360)
+		poss_speed = [20,15,12,10,5,3]
+		for spd in poss_speed:
+			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
+			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
+			tick_parc = ticks - acc_tick - dec_tick
+			if tick_parc > 0:
+				temps_parc = tick_parc/(100 * spd)
+				rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, side)
+				break
+		moteur.set_motor_speed(0,0)
+		t.sleep(2)
+		position_robot.tourner(deg)
+		position_robot.stop_moving()
+	else:
+		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
 
 def rota_16_angles(time_step, temps_accel, temps_decel):
 	moteur.get_encoder_ticks()

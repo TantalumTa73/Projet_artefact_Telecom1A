@@ -3,7 +3,7 @@ import moteur
 global orient
 orient = ["nord", "est", "sud", "ouest"] # Donne une correspondance numéro direction
 
-def aller_case(x_dep, y_dep, x_dest, y_dest, orientation):
+def aller_case(x_dep, y_dep, x_dest, y_dest, orientation, position_robot):
 
     """ Envoie le robot sur une case depuis une autre case"""
     
@@ -14,51 +14,51 @@ def aller_case(x_dep, y_dep, x_dest, y_dest, orientation):
         if distY > 0:
             moteur.avance(distY)
         else:
-            moteur.avance(-distY)
+            moteur.avance_cm(-distY,  position_robot)
         if distX > 0:
-            moteur.tourne(90)
-            moteur.avance(distX)
+            moteur.rota_deg(90, position_robot)
+            moteur.avance_cm(distX,  position_robot)
             return 1
         else:
-            moteur.tourne(-90)
-            moteur.avance(distX)
+            moteur.rota_deg(-90, position_robot)
+            moteur.avance_cm(distX,  position_robot)
             return 3
     elif orientation == 2:
         if distY < 0:
-            moteur.avance(distY)
+            moteur.avance_cm(distY,  position_robot)
         else:
-            moteur.avance(-distY)
+            moteur.avance_cm(-distY,  position_robot)
         if distX > 0:
-            moteur.tourne(-90)
-            moteur.avance(distX)
+            moteur.rota_deg(-90, position_robot)
+            moteur.avance_cm(distX,  position_robot)
             return 1
         else:
-            moteur.tourne(90)
-            moteur.avance(distX)
+            moteur.rota_deg(90, position_robot)
+            moteur.avance_cm(distX,  position_robot)
             return 3
     elif orientation == 3:
         if distX < 0:
-            moteur.avance(distX)
+            moteur.avance_cm(distX,  position_robot)
         else:
-            moteur.avance(-distX)
+            moteur.avance_cm(-distX,  position_robot)
         if distY > 0:
-            moteur.tourne(90)
-            moteur.avance(distY)
+            moteur.rota_deg(90, position_robot)
+            moteur.avance_cm(distY,  position_robot)
             return 0
         else:
-            moteur.tourne(-90)
-            moteur.avance(distY)
+            moteur.rota_deg(-90, position_robot)
+            moteur.avance_cm(distY,  position_robot)
             return 2
     else:
         if distX > 0:
-            moteur.avance(distX)
+            moteur.avance_cm(distX,  position_robot)
         else:
-            moteur.avance(-distX)
+            moteur.avance_cm(-distX,  position_robot)
         if distY > 0:
-            moteur.tourne(-90)
-            moteur.avance(distY)
+            moteur.rota_deg(-90, position_robot)
+            moteur.avance_cm(distY,  position_robot)
             return 0
         else:
-            moteur.tourne(90)
-            moteur.avance(distY)
+            moteur.rota_deg(90, position_robot)
+            moteur.avance_cm(distY,  position_robot)
             return 2
