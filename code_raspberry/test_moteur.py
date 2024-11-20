@@ -2,4 +2,5 @@ import moteur
 import time as t
 
 # Access the argument from the command line
-moteur.reajustement([0,0])
+moteur.tour_sur_soi_meme()
+t.sleep(3)
