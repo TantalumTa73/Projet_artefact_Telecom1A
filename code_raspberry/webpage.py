@@ -21,10 +21,7 @@ url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
 
 
 
-current_x = 25
-current_y = 25
-current_angle = 0
-current_orientation_
+current_pos = Position_robot((25,25),(0,1))
 
 last_distance = ""
 last_update_time = time.time()
@@ -65,21 +62,21 @@ def pos_to_case(pos):
 	return (x//50, (25+y)//50)
 
 def case_to_string(case):
-    """renvoie le string lettre+chiffre à partir de la case (i,j)"""
-    i,j = case
-    if not (0<=i<7 or 0<=j<7):
-        return "Hors du terrain"
-        print("Hors du terrain")
-    string = "GFEDCBA"[j]
-    return (string,str(i+1))
+	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
+	i,j = case
+	if not (0<=i<7 or 0<=j<7):
+		return "Hors du terrain"
+		print("Hors du terrain")
+	string = "GFEDCBA"[j]
+	return (string,str(i+1))
 
 def string_to_case(case):
-    """renvoie la case (i,j) correspondant au string
-    None si le format est incorrect"""
-    j = "GFEDCBA".find(case[0])
-    if j==-1:
-        "gfedcba".find(case[0])
-    return (int(case[1])-1,j)
+	"""renvoie la case (i,j) correspondant au string
+	None si le format est incorrect"""
+	j = "GFEDCBA".find(case[0])
+	if j==-1:
+		"gfedcba".find(case[0])
+	return (int(case[1])-1,j)
 
 
 # Flask constructor takes the name of 
@@ -96,24 +93,24 @@ def page():
 
 @app.route('/init_position', methods=['POST'])
 def init_position():
-	global current_x, current_y
+	global current_pos
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 	print(case_x,case_y)
 
-	current_x, current_y = case_to_pos(string_to_case((case_x,case_y)))
+	current_pos.set_pos(*case_to_pos(string_to_case((case_x,case_y))))
 
-	send_position(current_x,current_y)
+	send_position(*current_pos.get_pos())
 	return render_template("page.html")	
 
 
 @app.route('/go_to', methods=['POST'])
 def go_to():
-	global current_x, current_y
+	global current_pos
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 
-	x, y = case_to_pos(string_to_case((case_x,case_y)))
+	target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
 
 	return render_template("page.html")	
 
@@ -181,7 +178,7 @@ def toggle_image_view():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected, cam, last_distance, current_x, current_y, current_angle
+	global last_update_time, users_connected, cam, last_distance, current_pos
 	"""send current content"""
 
 	now = time.time()
@@ -232,9 +229,10 @@ def update():
 
 		
 	# Contenu renvoier
+	updated_content+=f"<p>En mouvement: {current_pos.is_move()}</p>"
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
-	updated_content+=f"<p>Position actuelle (cm) x:{current_x} y:{current_y} angle:{current_angle}</p>"
-	case_x,case_y= pos_to_case((current_x,current_y))
+	updated_content+=f"<p>Position actuelle (cm) x:{current_pos.get_pos()[0]} y:{current_pos.get_pos()[1]} angle:{current_pos.get_angle_orientation()}</p>"
+	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
