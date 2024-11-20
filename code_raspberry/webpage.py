@@ -398,7 +398,7 @@ def ultime():
 				# if not passage:
 				# 	break
 			moteur.reajustement(curr_tick)
-			moteur.rota_deg(-90)
+			moteur.rota_deg(-90,current_pos)
 			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),0))
 					
 			if flags!=[]:
