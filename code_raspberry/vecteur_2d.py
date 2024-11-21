@@ -81,7 +81,8 @@ def test_angle_vect():
     assert float_equal(angle_vect((0, 1), (1/sqrt(2), 1/sqrt(2))), 45.0), "erreur tet_angle_vect (4)"
 
 def vect_mean(directions:list):
-    """renvoie la 'moyenne' des vecteurs et le plus grand écart d'angle entre eux
+    """renvoie la 'moyenne' de vecteur qui pointent environ vers la meme direction
+     et le plus grand écart d'angle entre eux
     hypothèses : tous les vecteurs sont normalises"""
     n = len(directions)
     if n<1:
@@ -100,6 +101,18 @@ def vect_mean(directions:list):
             min_angle = angles[i]
     angle = s/(n) #moyenne des angles 
     return rotate_vect(directions[0], angle), (max_angle-min_angle)
+
+def barycentre(points:list):
+    """renvoie le barycentre des points""" 
+    assert points!=[], "un barycentre d'une liste vide n'a pas de sens"
+    s_x = 0 
+    s_y = 0 
+    n = len(points)
+    for i in range(n):
+        x,y = points[i]
+        s_x += x
+        s_y += y 
+    return (s_x/n, s_y/n)
 
 if __name__ == '__main__':
     test_rotate_vect()

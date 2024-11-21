@@ -235,7 +235,23 @@ def get_position_from_markers(info_images):
 
     ### TEST ROTATION DES REPERES
 
-    if n==3:
+    if n==2 :
+        pt_a = pos_marker[id_markers[0]] #1er marker détecté
+        pt_b = pos_marker[id_markers[1]] #2eme marker détecté
+        ac = dist_to_marker[id_markers[0]]
+        bc = dist_to_marker[id_markers[1]]
+        pos_possibles = get_sommet(pt_a, pt_b, ac, bc)
+        if pos_possibles == []:
+            print("get_position_from_arucos : aucune position possible trouvée avec la triangulation")
+            return None 
+        else: 
+            dist_0 = get_dist_to_terrain(pos_possibles[0])
+            dist_1 = get_dist_to_terrain(pos_possibles[1])
+            if dist_0<dist_1:
+                return pos_possibles[0], (norme(sub_vect(pos_possibles[0], pos_possibles[1]))) #ou 2 mètres ?
+            return pos_possibles[1], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
+
+    elif n==3:
         pos_trouvees = []
         for (i, j, k) in [(0, 1, 2), (1, 2, 0), (2, 0, 1)]:
             #on cherche l'intersection des cercles de centre marker_i, marker_j
@@ -262,9 +278,13 @@ def get_position_from_markers(info_images):
                     pos_trouvees.append(pos_possibles[1])
                     pos = pos_possibles[1]
                 #print("position possiblement trouvée :", pos)
-        x = (pos_trouvees[0][0] + pos_trouvees[1][0] + pos_trouvees[2][0])/3
-        y = (pos_trouvees[0][1] + pos_trouvees[1][1] + pos_trouvees[2][1])/3
-        pos = (x,y)
+
+        if pos_trouvees == []:
+            print("get_position_from_arucos : aucune position possible trouvée avec la triangulation")
+            return None 
+        # x = (pos_trouvees[0][0] + pos_trouvees[1][0] + pos_trouvees[2][0])/3
+        # y = (pos_trouvees[0][1] + pos_trouvees[1][1] + pos_trouvees[2][1])/3
+        pos = barycentre(pos_trouvees)
         max_erreur = 0 
         for id_marker in id_markers:
             erreur = abs(get_dist(pos_marker[id_marker], pos) - dist_to_marker[id_marker])
@@ -273,54 +293,99 @@ def get_position_from_markers(info_images):
         return pos, max_erreur
         #print("meillruer position trouvee : ", pos)
 
-    ########### TEST ROTATION DES REPERES
+    elif n==4 :
+        pos_trouvees = []
+        for (i,j,k) in [(0,1,2), (0,1,3), (0,2,1), (0,2,3), (0,3,1), (0,3,2), 
+                        (1,2,0), (1,2,3), (1,3,0), (1,3,2), (2,3,1), (2,3,2)]:
+            #on cherche l'intersection des cercles de centre marker_i, marker_j
+            #on change à chaque boucle k qui est le marker qui permet de 
+            #départager les deux intersections trouvees
+            
+            pt_a = pos_marker[id_markers[i]] #1er marker détecté
+            pt_b = pos_marker[id_markers[j]] #2eme marker détecté
+            ac = dist_to_marker[id_markers[i]]
+            bc = dist_to_marker[id_markers[j]]
+            pos_possibles = get_sommet(pt_a, pt_b, ac, bc)
+            if pos_possibles!=[]:
+                id_marker = id_markers[k]
+                #on regarde la difference entre la distance entre les positions possibles et le troisieme marker
+                #et la distance réelle entre le robot et le troisieme marker
+                diff_dist_i = abs(get_dist(pos_possibles[0], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+                diff_dist_j = abs(get_dist(pos_possibles[1], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+                if diff_dist_i < diff_dist_j:
+                    erreur_distance = diff_dist_i
+                    pos_trouvees.append(pos_possibles[0])
+                    pos = pos_possibles[0]
+                else:
+                    erreur_distance = diff_dist_j
+                    pos_trouvees.append(pos_possibles[1])
+                    pos = pos_possibles[1]
 
-    pt_a = pos_marker[id_markers[0]] #1er marker détecté
-    pt_b = pos_marker[id_markers[1]] #2eme marker détecté
-    ac = dist_to_marker[id_markers[0]]
-    bc = dist_to_marker[id_markers[1]]
-    pos_possibles = get_sommet(pt_a, pt_b, ac, bc)
-    if pos_possibles == []:
-        print("get_position_from_arucos : aucune position possible trouvée avec la triangulation")
-        return None 
-    elif len(pos_possibles) == 2:
+        if pos_trouvees == []:
+            print("get_position_from_arucos : aucune position possible trouvée avec la triangulation")
+            return None 
+        pos = barycentre(pos_trouvees)
+        max_erreur = 0 
+        for id_marker in id_markers:
+            erreur = abs(get_dist(pos_marker[id_marker], pos) - dist_to_marker[id_marker])
+            if erreur>max_erreur : 
+                max_erreur = erreur 
+        return pos, max_erreur
+    else:
+        print("get_position_from_markers : pas assez de reperes trouves")
+        return None
 
-        if n==2 : 
-            #deux positions possibles, on doit choisir la plus logique
-            dist_0 = get_dist_to_terrain(pos_possibles[0])
-            dist_1 = get_dist_to_terrain(pos_possibles[1])
-            if dist_0<dist_1:
-                return pos_possibles[0], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
-            return pos_possibles[1], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
-        elif n>=3 : 
+    ########### ANCIENNE VERSION
+
+    # pt_a = pos_marker[id_markers[0]] #1er marker détecté
+    # pt_b = pos_marker[id_markers[1]] #2eme marker détecté
+    # ac = dist_to_marker[id_markers[0]]
+    # bc = dist_to_marker[id_markers[1]]
+    # pos_possibles = get_sommet(pt_a, pt_b, ac, bc)
+    # if pos_possibles == []:
+    #     print("get_position_from_arucos : aucune position possible trouvée avec la triangulation")
+    #     return None 
+    # elif len(pos_possibles) == 2:
+
+    #     if n==2 : 
+    #         #deux positions possibles, on doit choisir la plus logique
+    #         dist_0 = get_dist_to_terrain(pos_possibles[0])
+    #         dist_1 = get_dist_to_terrain(pos_possibles[1])
+    #         if dist_0<dist_1:
+    #             return pos_possibles[0], (norme(sub_vect(pos_possibles[0], pos_possibles[1]))) #ou 2 mètres ?
+    #         return pos_possibles[1], (norme(sub_vect(pos_possibles[0], pos_possibles[1])))
+        
+    #     elif n>=3 : 
 
             
 
-            #on a deux positions possibles. On les départage avec un troisieme marker
-            id_marker = id_markers[2]
-            #on regarde la difference entre la distance entre les positions possibles et le troisieme marker
-            #et la distance réelle entre le robot et le troisieme marker
-            diff_dist_0 = abs(get_dist(pos_possibles[0], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
-            diff_dist_1 = abs(get_dist(pos_possibles[1], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
-            if diff_dist_0 < diff_dist_1:
-                erreur_distance = diff_dist_0
-                pos = pos_possibles[0]
-            else:
-                erreur_distance = diff_dist_1
-                pos = pos_possibles[1]
-            if n == 4:
-                # on vérifie la position avec le 4eme marker 
-                id_marker = id_markers[2]
-                diff_dist = abs(get_dist(pos, pos_marker[id_marker]) - dist_to_marker[id_marker]) 
-                erreur_distance = max(erreur_distance, diff_dist)
-            return (pos, erreur_distance)
+    #         #on a deux positions possibles. On les départage avec un troisieme marker
+    #         id_marker = id_markers[2]
+    #         #on regarde la difference entre la distance entre les positions possibles et le troisieme marker
+    #         #et la distance réelle entre le robot et le troisieme marker
+    #         diff_dist_0 = abs(get_dist(pos_possibles[0], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+    #         diff_dist_1 = abs(get_dist(pos_possibles[1], pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+    #         if diff_dist_0 < diff_dist_1:
+    #             erreur_distance = diff_dist_0
+    #             pos = pos_possibles[0]
+    #         else:
+    #             erreur_distance = diff_dist_1
+    #             pos = pos_possibles[1]
+    #         if n == 4:
+    #             # on vérifie la position avec le 4eme marker 
+    #             id_marker = id_markers[2]
+    #             diff_dist = abs(get_dist(pos, pos_marker[id_marker]) - dist_to_marker[id_marker]) 
+    #             erreur_distance = max(erreur_distance, diff_dist)
+    #         return (pos, erreur_distance)
 
-    else:
-        assert False, "get_position_from_arucos : erreur lors de la triangulation"
+    # else:
+    #     assert False, "get_position_from_arucos : erreur lors de la triangulation"
 
 
 
 def test_get_position_from_markers():
+    """ne marchera pas : valeurs ideales ne prennent pas en compte 
+    la deistance camera-centre du robot"""
     erreur_flottant = 0.1
     for i in range(100):
         x = random.random()*150
@@ -330,7 +395,8 @@ def test_get_position_from_markers():
         for id_marker in range(1, 5):
             info_images[0].append((id_marker, get_dist(pos_marker[id_marker], pos_robot), 0, (0,0), None))
         (pos, erreur_distance) = get_position_from_markers(info_images)
-        assert vect_equal(pos, pos_robot), "erreur test_get_position_from_marker : position incorrecte"
+        
+        assert vect_equal(pos, pos_robot), "erreur test_get_position_from_marker : position incorrecte" + str(pos) +"   "+ str(pos_robot)
         assert float_equal(erreur_distance, 0.0), "erreur test_get_position_from_marker : erreur_distance non nulle"
 
 def test_get_position_from_markers_data():
@@ -395,14 +461,15 @@ def get_orientation(pos_robot, info_image):
     if directions==[]:
         return None
     direction, erreur_angle = vect_mean(directions)
+    
     return direction, erreur_angle
         
 def test_get_orientation():
-    pos_robot = (50, 250)
+    pos_robot = (50, 200)
     x = dist_foyer_ecran*tan(radians(22.5))
-    info_image = [(1, 111.8, None, (x,0))]
+    info_image = [(1, None, None, (x,0), None)]
     direction, erreur = get_orientation(pos_robot, info_image)
-    assert vect_equal(direction, (0,1)), "erreur test_get_orientation (1)"
+    assert vect_equal(direction, (0,1)), "erreur test_get_orientation (1) "
     assert float_equal(erreur, 0.0), "erreur test_get_orientation (2)"
 
 
@@ -417,7 +484,7 @@ def get_angle_with_drapeau(info_marker):
 
 if __name__ == '__main__':
     # test_set_dist_to_marker()
-    #test_get_position_from_markers()
+    # test_get_position_from_markers()
     # assert abs(get_angle_from_pos_on_screen((160, 0))-7) <0.5 #~7°
     # assert abs(get_angle_from_pos_on_screen((-160, 0))+7) <0.5 #~-7°
     # test_angle_vect()
