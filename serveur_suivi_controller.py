@@ -28,9 +28,11 @@ while True:
 	print(f"1) Update position")
 	print(f"2) Capture flag")
 	print(f"3) Start race")
-	print(f"4) Get race status")
-	print(f"5) Write to registers")
-	print(f"6) Read registers")
+	print(f"4) Stop race")
+	print(f"5) Get race status")
+	print(f"6) Get flags")
+	print(f"7) Write to registers")
+	print(f"8) Read registers")
 	choice = int(input("\nChoice: "))
 	print()
 
@@ -48,20 +50,25 @@ while True:
 			print("Starting race")
 			send_request(f"/api/start")
 		case 4:
+			print("Stopping race")
+			send_request(f"/api/stop")
+		case 5:
 			print("Getting status")
 			send_request(f"/api/status")
-		case 5:
+		case 6:
+			print("Getting flags")
+			send_request(f"/api/checkboard")
+		case 7:
 			print("Writing to register")
 			register_id = int(input("Register id (1..5): "))
 			option = input("Writing to all (true|false): ")
 			data = input("Data to write to register: ")
 			send_request(f"/api/udta?idx={register_id}&all={option}",data=data)
-		case 6:
+		case 8:
 			print("Reading a register")
 			register_id = int(input("Register id (1..5): "))
 			team_id = int(input("Team id who's reading (1..5): "))
 			send_request(f"/api/udta?idx={register_id}&t={team_id}")
-
 
 
 
