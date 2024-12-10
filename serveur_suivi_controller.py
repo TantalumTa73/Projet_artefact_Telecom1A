@@ -1,5 +1,6 @@
 import requests
 import time
+import json
 
 url = "http://proj103.r2.enst.fr"
 mode_test = False
@@ -24,7 +25,7 @@ def send_request(api,data=None,method="POST"):
 
 	print(f"Status code {r.status_code}")
 	try:
-		print(r.json())
+		print(json.dumps(r.json(),indent=4))
 	except:
 		print("Response unreadable")
 	print("-"*10)
