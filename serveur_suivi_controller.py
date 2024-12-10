@@ -43,6 +43,7 @@ while True:
 		print(f"Mode test enabled, using team {test_team_id}")
 	else:
 		print(f"Mode test not active")
+	print("Ctrl-C to quit")
 	print(f"Choose action:\n")
 	print(f"1) Update position")
 	print(f"2) Capture flag")
