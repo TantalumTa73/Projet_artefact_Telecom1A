@@ -24,7 +24,7 @@ vitesse = 0
 left_speed = 0
 right_speed = 0
 
-url = "http://proj103.r2.enst.fr/"#"https://comment.requestcatcher.com/"
+url = "http://proj103.r2.enst.fr"#"https://comment.requestcatcher.com"
 
 epreuve_intermediaire = True
 
@@ -78,8 +78,8 @@ def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
 	i,j = case
 	if not (0<=i<7 or 0<=j<7):
-		return "Hors du terrain"
 		print("Hors du terrain")
+		return None
 	string = "GFEDCBA"[int(j)]
 	return (string,str(int(i)+1))
 
@@ -252,7 +252,7 @@ def reperage_rotation_prep():
 		info_images.append(analyse_image.detect_aruco_markers(img,current_pos))
 		orientations.append(orientation)
 
-	print(f"infro image: {info_images}")
+	print(f"info image: {info_images}")
 	res = position_from_arucos.get_position_from_markers(info_images)
 
 	if res is None:
@@ -286,6 +286,67 @@ def aller_drap():
 		print(analyser_drapeau.analyser_drapeau(list_aru, current_pos, cam))
 	return render_template("page.html")	
 
+@app.route('/test-ultime', methods=['POST'])
+def ultime():
+	nb_drapeaux = 2 
+	for i in range(nb_drapeaux):
+		#next_flag = None #info du aruco (id_marker, dist_marker, )
+		flags = []
+		while flags == []:
+			angle = current_pos.get_angle_orientation()
+
+			# S'orienter vers 90 (droit/est)
+			if -45 < angle and angle < 45 :
+				print("		"+"looking north")
+				moteur.rota_deg(90, current_pos)
+			elif -135 < angle and angle < -45 :
+				print("		"+"looking west")
+				moteur.rota_deg(180, current_pos)
+			elif angle < -135 and angle >135 :
+				print("		"+"looking south")
+				moteur.rota_deg(-90, current_pos)
+				
+			curr_tick = [0,0]
+			# Tourner 9 fois 
+			for i in range(9):
+				moteur.rota_petit_angle(i, curr_tick)
+				current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90-((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))/2))
+				image, result = module_camera.get_image(cam)
+				arus = analyse_image.detect_aruco_markers(image, current_pos)
+				for j in range(len(arus)):
+					print("		"+f"Aruco {arus[j][0]} found")
+					if arus[j][0] not in [1,2,3,4]:
+						print("		"+"it is a target")
+						flags.append(arus[j])
+
+			moteur.reajustement(curr_tick)
+			moteur.rota_deg(-90,current_pos)
+			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),0))
+					
+			if flags!=[]:
+				print("		"+f"flag found {flags}")
+				#on cherche le flag le plus proche
+				next_flag = analyser_drapeau.drapeau_proche(flags)
+				print("		"+f"closet flag {next_flag[0]}")
+
+				id_flag, coord_flag = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
+				x_flag,y_flag = coord_flag
+
+				x,y = current_pos.get_pos()
+				print("		"+f" flag coords {x_flag} {y_flag}")
+				if id_flag != -1:
+					print("		"+f"!!! Flag Found !!! {id_flag} at coords {x_flag} {y_flag} by standing in {x} {y}")
+					moteur.tour_sur_soi_meme()
+					found_flag(id_1, *case_to_string(pos_to_case((x, y))))
+
+				
+				main.aller_case(75,y_flag+25,current_pos)
+			else:
+
+				print("		"+"no flag found")
+				x, y = current_pos.get_pos()
+				main.aller_case(x, y + 100, current_pos)
+	return render_template("page.html")	
 
 @app.route('/update')
 def update():
@@ -313,6 +374,7 @@ def update():
 	# Connection de la camera
 	if image_view:
 		if cam is None:
+			print("Camera not connected, Connecting to camera")
 			cam = module_camera.connect()
 		connexion = module_camera.check_camera_status(cam,verbose=False)
 		updated_content+=f"<p>Connexion camera : {connexion}</p>"
@@ -361,71 +423,6 @@ def update():
 
 	return updated_content
 
-@app.route('/test-ultime', methods=['POST'])
-def ultime():
-	for i in range(2):
-		#next_flag = None #info du aruco (id_marker, dist_marker, )
-		flags = []
-		while flags == []:
-			angle = current_pos.get_angle_orientation()
-
-			# S'orienter vers 90 (droit/est)
-			if -45 < angle and angle < 45 :
-				print("		"+"looking north")
-				moteur.rota_deg(90, current_pos)
-			elif -135 < angle and angle < -45 :
-				print("		"+"looking west")
-				moteur.rota_deg(180, current_pos)
-			elif angle < -135 and angle >135 :
-				print("		"+"looking south")
-				moteur.rota_deg(-90, current_pos)
-				
-			curr_tick = [0,0]
-			# Tourner 9 fois 
-			for i in range(9):
-				# passage = True 
-				moteur.rota_petit_angle(i, curr_tick)
-				current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),90-((curr_tick[1]*360)/(2*3.141592*7.85*183.6)-(curr_tick[0]*360)/(2*3.141592*7.85*183.6))/2))
-				image, result = module_camera.get_image(cam)
-				arus = analyse_image.detect_aruco_markers(image, current_pos)
-				for j in range(len(arus)):
-					print("		"+f"Aruco {arus[j][0]} found")
-					if arus[j][0] not in [1,2,3,4]:
-						print("		"+"it is target")
-						#next_flag = arus[j]
-						#passage = False
-						flags.append(arus[j])
-				# if not passage:
-				# 	break
-			moteur.reajustement(curr_tick)
-			moteur.rota_deg(-90,current_pos)
-			current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),0))
-					
-			if flags!=[]:
-				print("		"+f"flag found {flags}")
-				#on cherche le flag le plus proche
-				next_flag = analyser_drapeau.drapeau_proche(flags)
-				print("		"+f"closet flag {next_flag[0]}")
-
-				#liste_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
-				id_1, coord_1 = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
-				x1,y1 = coord_1
-				print("		"+f" flag coords {x1} {y1}")
-				if id_1 != -1:
-					print("		"+f"!!! Flag Found !!! {id_1}")
-					moteur.tour_sur_soi_meme()
-					#i, j = case_to_pos(x1, y1)
-					#found_flag(id_1, i, j)
-					found_flag(id_1, *case_to_string(pos_to_case((x1, y1))))
-
-				x,y = current_pos.get_pos()
-				
-				main.aller_case(75,y1+25,current_pos)
-			else:
-				print("		"+"no flag found")
-				x, y = current_pos.get_pos()
-				main.aller_case(x, y + 100, current_pos)
-	return render_template("page.html")	
 
 
 # main driver function
