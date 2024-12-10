@@ -5,9 +5,12 @@ import json
 url = "http://proj103.r2.enst.fr"
 mode_test = False
 test_team_id = -1
+thick_line_width = 50
+slim_line_width = 50
 
 def send_request(api,data=None,method="POST"):
-	print("\n"+"-"*10)
+	print()
+	print("-"*slim_line_width)
 	full_url = url+api
 	print(f"Sending request {full_url}",end=" ")
 	if data is not None:
@@ -24,17 +27,18 @@ def send_request(api,data=None,method="POST"):
 			print(f"\nUnrecognized method {method}")
 
 	print(f"Status code {r.status_code}")
+	print(f"Return data:")
 	try:
 		print(json.dumps(r.json(),indent=4))
 	except:
-		print("Response unreadable")
-	print("-"*10)
+		print(r.content.decode('utf-8'))
+	print("-"*slim_line_width)
 	return r
 	
 
 while True:
-	print("\n"+"="*30)
-	print("="*30)
+	print()
+	print("="*thick_line_width)
 	if mode_test:
 		print(f"Mode test enabled, using team {test_team_id}")
 	else:
@@ -49,21 +53,24 @@ while True:
 	print(f"7) Write to registers")
 	print(f"8) Read registers")
 	print(f"9) Toggle test mode")
-	choice = int(input("\nChoice: "))
+	print()
+	choice = int(input("\tChoice: "))
+	print()
+	print("="*thick_line_width)
 	print()
 
 	match choice:
 		case 1:
 			print(f"Updating position")
-			x,y = map(int,input("New position (x y): ").split(" "))
+			x,y = map(int,input("\tNew position (x y): ").split(" "))
 			if mode_test:
 				send_request(f"/api/pos?x={x}&y={y}&t={test_team_id}")
 			else:
 				send_request(f"/api/pos?x={x}&y={y}")
 		case 2:
 			print("Capturing flag")
-			marker = int(input("Marker id: "))
-			col,row = input("Flag position (col(1..6) row(A..G): ").split(" ")
+			marker = int(input("\tMarker id: "))
+			col,row = input("\tFlag position (col(1..6) row(A..G): ").split(" ")
 			if mode_test:
 				send_request(f"/api/marker?id={marker}&col={col}&row={row}&t={test_team_id}")
 			else:
@@ -82,14 +89,14 @@ while True:
 			send_request(f"/api/checkboard",method="GET")
 		case 7:
 			print("Writing to register")
-			register_id = int(input("Register id (1..5): "))
-			option = input("Writing to all (true|false): ")
-			data = input("Data to write to register: ")
+			register_id = int(input("\tRegister id (1..5): "))
+			option = input("\tWriting to all (true|false): ")
+			data = input("\tData to write to register: ")
 			send_request(f"/api/udta?idx={register_id}&all={option}",data=data)
 		case 8:
 			print("Reading a register")
-			register_id = int(input("Register id (1..5): "))
-			team_id = int(input("Team id who's reading (1..5): "))
+			register_id = int(input("\tRegister id (1..5): "))
+			team_id = int(input("\tTeam id who's reading (1..5): "))
 			send_request(f"/api/udta?idx={register_id}&t={team_id}",method="GET")
 		case 9:
 			if mode_test:
@@ -97,7 +104,7 @@ while True:
 				mode_test = False
 			else:
 				print("Activating test mode")
-				test_team_id = int(input("Team id: "))
+				test_team_id = int(input("\tTeam id: "))
 				mode_test = True
 
 
