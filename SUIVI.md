@@ -264,3 +264,15 @@ Tests de la fonction précédante avec le robot sur le terrain.
 ### CREATION D'UN PETIT DRAPEAU ROUGE A ACCROCHER SUR LE ROBOT (Alice)
 
 Il est écrit notre groupe et notre équpie (6.1) sur notre robot de sorte qu'on puisse le reconnaitre.
+
+## 10/12/2024
+
+### STRATÉGISATION AVEC LES AUTRES GROUPES (Tout le monde)
+
+### DÉBUGAGE DES PROBLÈMES RENCONTRÉES PENDENT L'ÉVALUATION INTERMÉDAIRE (Jeffrey)
+
+Correction de la requête qui indique la capture d'un drapeau et netoyage du code.
+
+### CREATION D'UN CONTROLLEUR DU SERVEUR DE SUIVI (Jeffrey)
+
+Écriture d'un script python permettant d'énvoier tout types de requetes accepté par le serveur de suivi à la main.
