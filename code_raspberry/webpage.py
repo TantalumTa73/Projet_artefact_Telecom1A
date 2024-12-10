@@ -1,6 +1,7 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
 from flask import Flask, render_template, request, Response
+import logging 
 from position_robot import Position_robot
 import position_from_arucos
 import controller
@@ -24,9 +25,13 @@ vitesse = 0
 left_speed = 0
 right_speed = 0
 
-url = "http://proj103.r2.enst.fr"#"https://comment.requestcatcher.com"
-
+###################################
+########## Configuration ##########
+###################################
+url = "http://proj103.r2.enst.fr" #"https://comment.requestcatcher.com"
 epreuve_intermediaire = True
+no_logs = True
+
 
 current_pos = Position_robot((25,25),(0,1))
 
@@ -95,6 +100,9 @@ def string_to_case(case):
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__, static_url_path='/static/')
+if no_logs:
+    log = logging.getLogger('werkzeug')
+    log.disabled = True
 
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
@@ -106,6 +114,7 @@ def page():
 
 @app.route('/init_position', methods=['POST'])
 def init_position():
+	print("Request to /init_position")
 	global current_pos
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
@@ -122,6 +131,7 @@ def init_position():
 
 @app.route('/go_to', methods=['POST'])
 def go_to():
+	print("Request to /go_to")
 	global current_pos
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
@@ -138,6 +148,7 @@ def go_to():
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
+	print("Request to /change-speed")
 	global vitesse
 	vitesse = int(request.form.get('speed'))
 	print(f"Setting speed to {vitesse}")
@@ -235,12 +246,14 @@ def left_rel():
 
 @app.route('/toggle-image-view', methods=['POST'])
 def toggle_image_view():
+	print("Request to /toggle-image-view")
 	global image_view
 	image_view = not image_view
 	return render_template("page.html")	
 
 @app.route('/reperage-rotation', methods=['POST'])
 def reperage_rotation_prep():
+	print("Request to /reperage-rotation")
 	global current_pos
 
 	info_images = [] 
@@ -280,6 +293,7 @@ def reperage_rotation_prep():
 
 @app.route('/test-aller-drap', methods=['POST'])
 def aller_drap():
+	print("Request to /test-aller-drap")
 	image, result = module_camera.get_image(cam)
 	list_aru = analyser_drapeau.drapeau_proche(analyse_image.detect_aruco_markers(image, current_pos))
 	if list_aru is not None and len(list_aru) > 0: 
@@ -288,6 +302,7 @@ def aller_drap():
 
 @app.route('/test-ultime', methods=['POST'])
 def ultime():
+	print("Request to /test-ultime")
 	nb_drapeaux = 2 
 	for i in range(nb_drapeaux):
 		#next_flag = None #info du aruco (id_marker, dist_marker, )
