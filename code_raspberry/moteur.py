@@ -422,3 +422,17 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 def tour_sur_soi_meme():
 	turntick = int(183.6 * 2 * 3.141592 * 7.85)
 	reajustement([-turntick, turntick])
+
+
+def avance_tick(position_robot, tick_left, tick_right, time_step = 0.01):
+	poss_speed = [70, 60, 50, 40, 30, 20, 15, 10, 5, 3]
+	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0}
+	ticks = moteur.get_encoder_ticks()
+	position_robot.add_tick_offset(ticks)
+	ticks = position_robot.get_tick_offset()
+	tick_left += - ticks[0]
+	tick_right += - ticks[1]
+	left_forward = tick_left > 0
+	right_forward = tick_right > 0
+	
+ 
