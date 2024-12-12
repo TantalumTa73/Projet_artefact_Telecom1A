@@ -73,6 +73,11 @@ This file contains a python class which is used to represents the position of th
 
 This module contains a function to go to a specific cell.
 
+## `fonction_ultime_etape_2.py`
+
+This file contains a function to send the robot to catch the flags during the évaluation intermédiaire.
+
+
 
 
 # Tests
