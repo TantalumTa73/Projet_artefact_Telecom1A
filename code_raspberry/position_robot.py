@@ -5,6 +5,7 @@ class Position_robot:
 		self.__pos = pos_robot
 		self.__vect_orientation = normalize(vect_orientation)
 		self.__is_moving = False
+		self.__tick_offset = [0, 0]
 
 
 	### GETTER 
@@ -32,9 +33,19 @@ class Position_robot:
 	def is_moving(self):
 		return self.__is_moving
 
+	def get_tick_offset(self):
+		return self.__tick_offset 
+
 	### SETTER
 
 	# /!\ Les fonctions ci-dessous ne doivent être appelées que par moteur.py
+
+	def set_tick_offset(self, tick_off):
+		self.__tick_offset = tick_off
+
+	def add_tick_offset(self, tick_off):
+		self.__tick_offset[0] += tick_off[0]
+		self.__tick_offset[1] += tick_off[1]
 
 	def set_pos(self, x,y):
 		self.__pos = (x,y)
