@@ -2,7 +2,6 @@
 grâce aux positions relatives des aruco présents autour de lui
 Fonction a utiliser : get_position_from_markers """
 
-import fonction_detection_aruco as detection_aruco
 from math import sqrt, radians, degrees, tan, atan, acos, cos, sin
 import random
 from vecteur_2d import *
@@ -489,7 +488,7 @@ if __name__ == '__main__':
     # assert abs(get_angle_from_pos_on_screen((-160, 0))+7) <0.5 #~-7°
     # test_angle_vect()
     # test_vect_mean()
-    # test_get_orientation()
+    # jtest_get_orientation()
     test_get_position_from_markers_data()
     
 
