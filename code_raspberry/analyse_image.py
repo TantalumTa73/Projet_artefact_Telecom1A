@@ -87,7 +87,7 @@ def detect_aruco_markers(image, position_robot):
                 rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.1, camera_matrix, dist_coeffs)
             else:
                 rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.02, camera_matrix, dist_coeffs)
-                
+            print("marker : ", marker_id, "rvec : ", rvec)
             # Récupérer les informations de distance et d'angle
             dist_cm, angle_deg = get_marker_info(rvec, tvec)
 
