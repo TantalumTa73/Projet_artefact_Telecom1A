@@ -276,3 +276,14 @@ Correction de la requête qui indique la capture d'un drapeau et netoyage du cod
 ### CREATION D'UN CONTROLLEUR DU SERVEUR DE SUIVI (Jeffrey)
 
 Écriture d'un script python permettant d'énvoier tout types de requetes accepté par le serveur de suivi à la main.
+
+
+## 12/12/2024
+
+### PRESENTATION STRATEGIE DE GROUPE (Alice)
+
+Présentation orale avec d'autres membres d'autres équipes.
+
+### NETTOYAGE CODE, FICHIERS, DOCUMENTATION DES FICHIERS (Alice)
+
+Suppression des fichiers inutiles, création du fichier ARCHITECTURE_CODE.md qui répertorie tous les fichiers pythons.
