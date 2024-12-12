@@ -17,19 +17,19 @@
 		</form>
 
 		<form action="/init_position" method="POST">
-			<label for="x">Case initial x:</label>
+			<label for="x">Case initial (colonne) :</label>
 			<input type="text" id="x" step="any" name="x" required>
-			<label for="y">Case initial y:</label>
+			<label for="y">Case initial (ligne) :</label>
 			<input type="text" id="y" step="any" name="y" required>
-			<label for="orientation">Orientation intinal:</label>
+			<label for="orientation">Orientation initial (angle) :</label>
 			<input type="text" id="orientation" step="any" name="orientation" required>
 			<button type="submit">Envoyer position initial</button>
 		</form>
 		
 		<form action="/go_to" method="POST">
-			<label for="x">Position x:</label>
+			<label for="x">Case destination (colonne) :</label>
 			<input type="text" id="x" step="any" name="x" required>
-			<label for="y">Position y:</label>
+			<label for="y">Case destination (ligne) :</label>
 			<input type="text" id="y" step="any" name="y" required>
 			<button type="submit">Envoyer position</button>
 		</form>
