@@ -29,36 +29,36 @@ def check_camera_status(cam,verbose=False):
     return True
 
 
-def get_id_aruco(cam):
-    """renvoie l'id du premier aruco détecté, -1 si aucun n'est détécté"""
-    try :
-        result, image = cam.read()
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
-        corners, ids, rejected = detector.detectMarkers(gray)
-        if ids is not None:
-            return ids[0][0]
-        return -1
+# def get_id_aruco(cam):
+#     """renvoie l'id du premier aruco détecté, -1 si aucun n'est détécté"""
+#     try :
+#         result, image = cam.read()
+#         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
+#         corners, ids, rejected = detector.detectMarkers(gray)
+#         if ids is not None:
+#             return ids[0][0]
+#         return -1
 
 
-    except :
-        #print("erreur lors de la capture d'image")
-        return -1
+#     except :
+#         #print("erreur lors de la capture d'image")
+#         return -1
 
-def check_aruco(cam):
-    """renvoie True si au moins un aruco est détecté, False sinon"""
-    try :
-        result, image = cam.read()
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
-        corners, ids, rejected = detector.detectMarkers(gray)
-        if ids is not None:
-            return True 
-        return False
+# def check_aruco(cam):
+#     """renvoie True si au moins un aruco est détecté, False sinon"""
+#     try :
+#         result, image = cam.read()
+#         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #conversion en niveau de gris
+#         corners, ids, rejected = detector.detectMarkers(gray)
+#         if ids is not None:
+#             return True 
+#         return False
 
 
-    except :
-        #print("erreur lors de la capture d'image")
-        return False
-    return get_id_aruco() != -1
+#     except :
+#         #print("erreur lors de la capture d'image")
+#         return False
+#     return get_id_aruco() != -1
 
 def get_image(cam):
     """capture une image de la camera en la renvoie ainsi que le status de l'operation (erreur)"""
@@ -68,7 +68,7 @@ def get_image(cam):
         return image, result
     else:
         print("Image non capturée")
-        return None, result
+        return None, result 
 
 def save_image(image,name="image"):
     """sauvegarde l'image dans le fichier 'image.png'
