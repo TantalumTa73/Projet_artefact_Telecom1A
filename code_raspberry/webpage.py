@@ -16,6 +16,11 @@ import analyser_drapeau
 import main
 import vecteur_2d
 
+os.environ["ARTEFACT_SERVER_HOST"] = "robotpi-6X.enst.fr"
+import strat
+from strat.client.utils import receive_instructions, Instruction, send_flag
+from strat.common.grid import Cell, Direction, Flag
+
 # Moteurs 
 
 global vitesse
@@ -362,6 +367,30 @@ def ultime():
 				x, y = current_pos.get_pos()
 				main.aller_case(x, y + 100, current_pos)
 	return render_template("page.html")	
+
+
+def goto_case(case: Cell):
+    main.aller_case(*case_to_pos(case.row,case.col),current_pos)
+
+def scan_direction(direction: Direction) -> Flag:
+    moteur.rota_deg(-45 + 90 * direction.value,current_pos)
+
+def capture(flag: Flag):
+    moteur.tour_sur_soi_meme()
+    found_flag(flag.id, *case_to_string(pos_to_case(flag.cell.row,flag.cell.col)))
+
+@app.route('/master_control', methods=['POST'])
+def await_instruction():
+    for instruction in receive_instructions():
+        match instruction:
+            case Instruction.GOTO:
+                goto_case(instruction.case)
+            case Instruction.SCAN:
+                scan_direction(instruction.direction)
+            case Instruction.CAPTURE:
+                capture(instruction.flag)
+
+
 
 @app.route('/update')
 def update():
