@@ -357,7 +357,7 @@ def ultime():
 				if id_flag != -1:
 					print("		"+f"!!! Flag Found !!! {id_flag} at coords {x_flag} {y_flag} by standing in {x} {y}")
 					moteur.tour_sur_soi_meme()
-					found_flag(id_1, *case_to_string(pos_to_case((x, y))))
+					found_flag(id_flag, *case_to_string(pos_to_case((x, y))))
 
 				
 				main.aller_case(75,y_flag+25,current_pos)
@@ -375,6 +375,12 @@ def goto_case(case: Cell):
 def scan_direction(direction: Direction) -> Flag:
     moteur.rota_deg(-45 + 90 * direction.value,current_pos)
 
+    image, result = module_camera.get_image(cam)
+    arus = analyse_image.detect_aruco_markers(image, current_pos)
+    if len(arus) != 0:
+        return Flag(Cell(*pos_to_case(current_pos.get_pos())),direction,arus[0][0])
+    return no_flag()
+
 def capture(flag: Flag):
     moteur.tour_sur_soi_meme()
     found_flag(flag.id, *case_to_string(pos_to_case(flag.cell.row,flag.cell.col)))
@@ -386,7 +392,7 @@ def await_instruction():
             case Instruction.GOTO:
                 goto_case(instruction.case)
             case Instruction.SCAN:
-                scan_direction(instruction.direction)
+                send_flag(scan_direction(instruction.direction))
             case Instruction.CAPTURE:
                 capture(instruction.flag)
 
