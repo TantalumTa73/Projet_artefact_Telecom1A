@@ -68,7 +68,7 @@ h1{
     
     
     .resume{
-    width : 70%;
+    width : 60%;
     margin : auto;
     padding : 12px;
     border : 3px solid black;
@@ -78,6 +78,10 @@ h1{
     text-align : justify;
     }
     
+
+    input {
+        width : 20%;
+    }
     
     
     /*rose : #fee7f0  #fec7f0 #fd8c9e #fd8c9e -> #rose très pâle  #rose pâle   #rose normal   #rose vif*/
