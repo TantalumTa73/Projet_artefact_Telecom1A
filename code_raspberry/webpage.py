@@ -16,10 +16,11 @@ import analyser_drapeau
 import main
 import vecteur_2d
 
-os.environ["ARTEFACT_SERVER_HOST"] = "robotpi-6X.enst.fr"
+
 import strat
 from strat.client.utils import receive_instructions, Instruction, send_flag
 from strat.common.grid import Cell, Direction, Flag
+from strat.common.protocol import MsgType
 
 # Moteurs 
 
@@ -33,6 +34,9 @@ right_speed = 0
 ###################################
 ########## Configuration ##########
 ###################################
+
+host_robot = 0
+os.environ["ARTEFACT_SERVER_HOST"] = f"robotpi-6{host_robot}.enst.fr"
 
 url = "http://proj103.r2.enst.fr" #"https://comment.requestcatcher.com"
 epreuve_intermediaire = True
@@ -419,14 +423,14 @@ def capture(flag: Flag):
 
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
-	for instruction in receive_instructions():
-		match instruction:
-			case Instruction.GOTO:
-				goto_case(instruction.case)
-			case Instruction.SCAN:
-				send_flag(scan_direction(instruction.direction))
-			case Instruction.CAPTURE:
-				capture(instruction.flag)
+	for instruction in receive_instructions(CASE_DEPART):
+		match instruction.type():
+			case MsgType.INSTRUCTION_GOTO:
+				goto_case(instruction.content)
+			case MsgType.INSTRUCTION_SCAN:
+				send_flag(scan_direction(instruction.content))
+			case MsgType.INSTRUCTION_CAPTURE:
+				capture(instruction.content)
 
 ################################################################################
 ################################################################################
@@ -497,6 +501,8 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
+	updated_content+=f"<p>Host robot {host_robot}</p>"
+	updated_content+=f"<p>Server url {url}</p>"
 	updated_content+=f"<p>Analyse d'aruco:</p>"
 	updated_content+=f"<ul>{last_analyse}</ul>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
