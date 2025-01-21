@@ -87,7 +87,7 @@ h1{
     /*rose : #fee7f0  #fec7f0 #fd8c9e #fd8c9e -> #rose très pâle  #rose pâle   #rose normal   #rose vif*/
     
     body.rose{
-    background-image: url(images/fond_rose.jpg); /*image vague*/
+    background-image: url(../images/fond_rose.jpg); /*image vague*/
     background-size: 20%;
     
     }
@@ -123,7 +123,7 @@ h1{
     /*bleu*/
     
     body.bleu{
-        background-image: url(images/fond_bleu.jpg);
+        background-image: url(../images/fond_bleu.jpg);
         background-size: 20%;
     
     }
@@ -155,7 +155,7 @@ h1{
     /*vert*/
     
     body.vert{
-    background-image: url(images/fond_vert.jpg);
+    background-image: url(../images/fond_vert.jpg);
     background-size: 20%;
     
     }
@@ -189,7 +189,7 @@ h1{
     /*jaune*/
     
     body.jaune{
-        background-image: url(images/fond_jaune.jpg);
+        background-image: url(../images/fond_jaune.jpg);
         background-size: 20%;
     }
     header.jaune{
@@ -222,7 +222,7 @@ h1{
     /*violet*/
     
     body.violet{
-    background-image: url(images/fond_violet.jpg);
+    background-image: url(../images/fond_violet.jpg);
     background-size: 20%;
     
     }
