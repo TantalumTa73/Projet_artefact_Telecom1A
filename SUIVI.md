@@ -287,3 +287,32 @@ Présentation orale avec d'autres membres d'autres équipes.
 ### NETTOYAGE CODE, FICHIERS, DOCUMENTATION DES FICHIERS (Alice)
 
 Suppression des fichiers inutiles, création du fichier ARCHITECTURE_CODE.md qui répertorie tous les fichiers pythons.
+
+## 14/01/2025
+
+### TRAVAIL SUR STRATÉGIE DE GROUPE (Alice, Jeffrey)
+
+Normalisation des moyen de communiquer les données parmis les robots.
+Échange sur le fonctionnement du serveur commun de communication établit par Lothaire.
+
+### DÉBUT D'IMPLEMENTATION DU CODE DE COMMUNICATION AVEC LE SERVEUR COMMUN (Jeffrey)
+
+Écriture du prototype du code qui communique avec les autres robots
+
+### DESIGN DU ROBOT / MODÉLISATION 3D (Edouard)
+
+Choix du design (Seamoth de subnautica) et création de plans / début de la conception du modèle 3D
+
+## 21/02/2025
+
+### FINALISATION DU CODE POUR COMMUNIQUER AVEC LE SERVEUR COMMUN (Jeffrey)
+
+Travail avec Lothaire pour tester la communication entre robot.
+
+### DESIGN DE LA PAGEWEB (Alice)
+
+Ajout d'un fichier CSS à la page de la raspberry
+
+### PERFECTION DU CONTRÔLE DES MOTEURS / AMÉLIORATION DES FONCTIONS MOTEURS (Martin)
+
+
