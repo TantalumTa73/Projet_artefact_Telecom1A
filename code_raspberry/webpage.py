@@ -17,6 +17,8 @@ import main
 import vecteur_2d
 
 
+host_robot = 0
+os.environ["ARTEFACT_SERVER_HOST"] = f"robotpi-6{host_robot}.enst.fr"
 import strat
 from strat.client.utils import receive_instructions, Instruction, send_flag
 from strat.common.grid import Cell, Direction, Flag
@@ -34,9 +36,6 @@ right_speed = 0
 ###################################
 ########## Configuration ##########
 ###################################
-
-host_robot = 0
-os.environ["ARTEFACT_SERVER_HOST"] = f"robotpi-6{host_robot}.enst.fr"
 
 url = "http://proj103.r2.enst.fr" #"https://comment.requestcatcher.com"
 epreuve_intermediaire = True
