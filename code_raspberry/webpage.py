@@ -410,16 +410,24 @@ def goto_case(case: Cell):
 
 def scan_direction(direction: Direction) -> Flag:
 	target_angle = ( - 45 - 90 * direction.value) % 360
-    # 0 3
-    # 1 2 
+	# 0 3
+	# 1 2 
 	print(f"Scanning to {direction.value} -> {target_angle}")
 	moteur.rota_deg((target_angle - current_pos.get_angle_orientation())%360, current_pos)
 
 	image, result = module_camera.get_image(cam)
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
+
 	if len(arus) != 0:
-		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,arus[0][0])
+		next_flag = analyser_drapeau.drapeau_proche(arus)
+		id_flag, coord_flag = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
+
+		print("Flag {id_flag} found at {coord_flag}")
+		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
+
+	print("No flag found")
 	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
+
 def capture(flag: Flag):
 	print(f"Capturing {flag.id} at {cell_to_case(flag.cell)}")
 	moteur.tour_sur_soi_meme()
