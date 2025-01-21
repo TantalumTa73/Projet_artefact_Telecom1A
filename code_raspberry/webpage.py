@@ -17,7 +17,7 @@ import main
 import vecteur_2d
 
 
-host_robot = 0
+host_robot = 4
 os.environ["ARTEFACT_SERVER_HOST"] = f"robotpi-6{host_robot}.enst.fr"
 import strat
 from strat.client.utils import receive_instructions, Instruction, send_flag
@@ -87,10 +87,10 @@ def found_flag(marquer_id,col,row):
 ################################################
 
 def cell_to_case(c):
-	return (c.row,c.col)
+	return (c.col,-c.row)
 
 def case_to_cell(case):
-	return Cell(*case)
+	return Cell(case[1],case[0])
 
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
@@ -142,7 +142,7 @@ def page():
 @app.route('/init_position', methods=['POST'])
 def init_position():
 	print("Request to /init_position")
-	global current_pos
+	global current_pos, CASE_DEPART
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 	orientation = request.form.get('orientation')
@@ -153,7 +153,7 @@ def init_position():
 		current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),int(orientation)))
 
 	send_position(*current_pos.get_pos())
-	CASE_DEPART = case_to_cell(current_pos.get_pos())
+	CASE_DEPART = case_to_cell(pos_to_case(current_pos.get_pos()))
 	return render_template("page.html")	
 
 @app.route('/toggle-image-view', methods=['POST'])
@@ -405,24 +405,31 @@ def ultime():
 CASE_DEPART = None
 
 def goto_case(case: Cell):
+	print(f"Going to {cell_to_case(case)} ie {''.join(case_to_string(cell_to_case(case)))}")
 	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
 
 def scan_direction(direction: Direction) -> Flag:
-	moteur.rota_deg(-45 + 90 * direction.value,current_pos)
+	target_angle = ( - 45 - 90 * direction.value) % 360
+    # 0 3
+    # 1 2 
+	print(f"Scanning to {direction.value} -> {target_angle}")
+	moteur.rota_deg((target_angle - current_pos.get_angle_orientation())%360, current_pos)
 
 	image, result = module_camera.get_image(cam)
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
 	if len(arus) != 0:
 		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,arus[0][0])
-	return Flag.NO_FLAG()
-
+	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
 def capture(flag: Flag):
+	print(f"Capturing {flag.id} at {cell_to_case(flag.cell)}")
 	moteur.tour_sur_soi_meme()
 	found_flag(flag.id, *case_to_string(pos_to_case(cell_to_case(flag.cell))))
 
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
+	print("Request to /master_control")
 	for instruction in receive_instructions(CASE_DEPART):
+		print("Instruction received")
 		match instruction.type():
 			case MsgType.INSTRUCTION_GOTO:
 				goto_case(instruction.content)
@@ -430,6 +437,7 @@ def await_instruction():
 				send_flag(scan_direction(instruction.content))
 			case MsgType.INSTRUCTION_CAPTURE:
 				capture(instruction.content)
+		print("\nAwaiting for instruction... ", end="")
 
 ################################################################################
 ################################################################################
