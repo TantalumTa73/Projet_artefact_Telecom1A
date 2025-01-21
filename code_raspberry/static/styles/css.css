@@ -1,0 +1,459 @@
+/*code général*/
+
+
+h1{
+    display : inline-block;
+    vertical-align : middle;
+    width : 80%;
+    }
+    h2{
+    text-align : center;
+    }
+    
+    #logo{
+    display : inline-block;
+    width : 15%;
+    margin : 2%;
+    vertical-align : middle;
+    }
+    .centre{
+    text-align : center;
+    }
+    .souligne{
+    text-decoration: underline
+    }
+    .align_droite{
+    display : block;
+    width : 95%;
+    text-align : right;
+    }
+    
+    .image{ /* murs (snk) et zenitsu_demon (demon slayer)*/
+    display : block;
+    margin: auto;
+    width: 100%;
+    height: auto;
+    }
+    
+    
+    
+    
+    .fiche{
+    width : 35%;
+    padding : 12px;
+    border : 3px solid black;
+    margin : auto;
+    margin-bottom : 5%;
+    margin-top : 5%;
+    }
+    
+    .fiche2{
+    display: inline-block;
+    vertical-align: middle;
+    width: 35%;
+    margin: 5%;
+    padding: 12px;
+    border : 3px solid black;
+    }
+    
+    .fiche3{
+    display: inline-block;
+    vertical-align: middle;
+    width: 35%;
+    margin: 5%;
+    margin-left : 30%;
+    padding: 12px;
+    border : 3px solid black;
+    }
+    
+    
+    .resume{
+    width : 60%;
+    margin : auto;
+    padding : 12px;
+    border : 3px solid black;
+    margin : auto;
+    margin-bottom : 5%;
+    margin-top : 5%;
+    text-align : justify;
+    }
+    
+
+    input {
+        width : 20%;
+    }
+    
+    
+    /*rose : #fee7f0  #fec7f0 #fd8c9e #fd8c9e -> #rose très pâle  #rose pâle   #rose normal   #rose vif*/
+    
+    body.rose{
+    background-image: url(../images/fond_rose.jpg); /*image vague*/
+    background-size: 20%;
+    
+    }
+    header.rose{
+    background-color : #fee7f0; /*rose très pâle*/
+    }
+    #rose{ /* cadres dans le corps de la page*/
+    background-color : #fee7f0; /*rose très pâle*/
+    }
+    table.rose{
+    width : 100%;
+    margin : auto;
+    }
+    th.rose{
+    background-color :#fec7f0 ; /*rose pâle*/
+    border : inset #fea7f0; /*rose normal*/
+    font-size : 1.5em;
+    }
+    
+    a.rose{
+    color : #f9429e; /*rose vif*/
+    }
+    a.rose:hover{
+    color : white
+    }
+    a.rose2:hover{
+    color : #f9429e;
+    }
+    footer.rose{
+    border-top : 5px dashed #fea7f0  ; /*rose normal*/
+    }
+    
+    /*bleu*/
+    
+    body.bleu{
+        background-image: url(../images/fond_bleu.jpg);
+        background-size: 20%;
+    
+    }
+    header.bleu{
+        background-color : #dff2ff;
+    }
+    #bleu{
+        background-color : #dff2ff;
+    }
+    table.bleu{
+        width : 100%;
+        margin : auto;
+    }
+    th.bleu{
+        background-color :#dff2ff;
+        border : inset #cfe2ef;
+        font-size : 1.5em;
+    }
+    a.bleu{
+        color : #0f9de8;
+    }
+    a.bleu:hover{
+        color : white;
+    }
+    footer.bleu{
+        border-top : 5px dashed #8fe2ff  ;
+    }
+    
+    /*vert*/
+    
+    body.vert{
+    background-image: url(../images/fond_vert.jpg);
+    background-size: 20%;
+    
+    }
+    header.vert{
+        background-color : #d0f6c6;
+    }
+    #vert{
+    background-color : #d0f6c6;
+    }
+    table.vert{
+    width : 100%;
+    margin : auto;
+    background-color :#d0f6c6;
+    }
+    th.vert{
+        background-color :#d0f6c6;
+        border : inset #c0e6b6;
+        font-size : 1.5em;
+    }
+    a.vert{
+        color : #16b84e;
+    }
+    a.vert:hover{
+        color : white;
+    }
+    footer.vert{
+        border-top : 5px dashed #c0e6b6  ;
+    }
+    
+    
+    /*jaune*/
+    
+    body.jaune{
+        background-image: url(../images/fond_jaune.jpg);
+        background-size: 20%;
+    }
+    header.jaune{
+        background-color : #fafac0;
+    }
+    #jaune{
+        background-color : #fafac0;
+    }
+    table.jaune{
+        width : 100%;
+        margin : auto;
+        background-color :#fafac0;
+    }
+    th.jaune{
+        background-color :#fafac0;
+        border : inset #eaeab0;
+        font-size : 1.5em;
+    }
+    a.jaune{
+    color : #ffd700;
+    }
+    a.jaune:hover{
+        color : white;
+    }
+    footer.jaune{
+        border-top : 5px dashed #faeaa0  ;
+    }
+    
+    
+    /*violet*/
+    
+    body.violet{
+    background-image: url(../images/fond_violet.jpg);
+    background-size: 20%;
+    
+    }
+    header.violet{
+    background-color :#ecdcff;
+    }
+    #violet{
+    background-color : #ecdcff;
+    }
+    table.violet{
+    width : 100%;
+    margin : auto;
+    background-color :#ecdcff;
+    }
+    th.violet{
+    background-color :#ecdcff;
+    border : inset #dcccef;
+    font-size : 1.5em;
+    }
+    a.violet{
+    color : #660099;
+    }
+    a.violet:hover{
+    color : white;
+    }
+    footer.violet{
+    border-top : 5px dashed #dcbcef;
+    }
+    
+    
+    
+    /*code pour la page d'accueil*/
+    
+    #page_manga{
+    margin : auto;
+    width : 400px;
+    height :500px;
+    border : 3px solid black;
+    font-size :0;
+    background-color:black;
+    }
+    
+    #div1{
+    font-size :4rem;
+    text-align :center;
+    vertical-align :middle;
+    line-height :125px;
+    color :black;
+    width :400px;
+    height :125px;
+    border :1px solid black;
+    background-color:white;
+    
+    }
+    #div4{
+    font-size :4rem;
+    text-align :center;
+    vertical-align :middle;
+    line-height :125px;
+    display : inline-block;
+    width :100px;
+    height :124px;
+    border :1px solid black;
+    background-color:white;
+    }
+    #div3, #div2{
+    font-size :4rem;
+    text-align :center;
+    vertical-align :middle;
+    line-height :125px;
+    display : inline-block;
+    width :147px;
+    height :124px;
+    border :1px solid black;
+    background-color:white;
+    }
+    #div7, #div6{
+    font-size :4rem;
+    text-align :center;
+    vertical-align :middle;
+    line-height :125px;
+    display : inline-block;
+    width :147px;
+    height :124px;
+    border :1px solid black;
+    background-color:white;
+    }
+    #div5{
+    font-size :4rem;
+    text-align :center;
+    vertical-align :middle;
+    line-height :245px;
+    float : right;
+    display : inline-block;
+    width :100px;
+    height :248px;
+    border :1px solid black;
+    background-color:white;
+    }
+    #div8{
+    font-size :4rem;
+    text-align :center;
+    vertical-align :middle;
+    line-height :125px;
+    display : inline-block;
+    width :296px;
+    height :122px;
+    border :1px solid black;
+    background-color:white;
+    }
+    
+    /*code pour tpn*/
+    
+    .case{
+    position : relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20%;
+    }
+    #lewis{
+    display : block;
+    margin: auto;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    }
+    .masque1{
+    /*border : 3px solid red;*/
+    height:30%;
+    width:20%;
+    position:absolute;
+    top: 15%;
+    left: 40%;
+    }
+    
+    .masque2{
+    /*border : 3px solid red;*/
+    height:20%;
+    width:10%;
+    position:absolute;
+    top: 25%;
+    left: 40%;
+    }
+    
+    /*code pour snk*/
+    
+    .case2{
+    position : relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 35%;
+    margin: 50px;
+    }
+    
+    
+    #armin, #eren{
+    display : inline-block;
+    margin : 5%;
+    width : 10%;
+    height : auto;
+    vertical-align : middle;
+    }
+    
+    #logo1{
+    position: absolute;
+    width: 10%;
+    height: auto;
+    top: 8%;
+    left: 45%;
+    }
+    
+    #logo2{
+    position: absolute;
+    width: 10%;
+    height: auto;
+    top: 25%;
+    left: 59%;
+    }
+    
+    #logo3{
+    position: absolute;
+    width: 10%;
+    height: auto;
+    top: 40%;
+    left: 73%;
+    }
+    
+    
+    /*code pour mha */
+    
+    .case4{
+    display: inline-block;
+    margin : 6%;
+    width : 15%;
+    vertical-align : middle;
+    }
+    
+    #all_might{
+    display : block;
+    margin : auto;
+    width : 90%;
+    height : auto;
+    vertical-align : middle;
+    }
+    #all_might2{
+    display :block;
+    margin : auto;
+    width : 140%;
+    height : auto;
+    vertical-align : middle;
+    }
+    
+    /*code pour demon slayer (ds)*/
+    
+    .case3{
+    margin:auto;
+    width : 70%;
+    }
+    
+    #demon, #zenitsu{
+    display : inline-block;
+    width : 45%;
+    height: auto;
+    margin : 2%;
+    }
+    
+    #aide, #sieste, #hamburger{
+    width : 20%;
+    margin-left: 6%;
+    margin-right : 6%;
+    }
+    
+    0
+    

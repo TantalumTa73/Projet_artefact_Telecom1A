@@ -8,40 +8,59 @@
 		<head>
 			<meta charset="UTF-8">
 			<title>Strawberrypi!</title>
+			<link rel="stylesheet" href="{{url_for('static', filename='styles/css.css')}}"/>
 		</head>
-		<body>
-		<h1><i> Welcome to the strawberrypi webpage!</i></h1>
+		<body class="rose">
+			<header class="rose">
+				<h1><i> Welcome to the strawberrypi webpage!</i></h1>
+				</header>
+
+		<div id="rose" class="resume">
 
 		<form action="/toggle-image-view" method="POST">
 			<button type="submit">Arrêter / Continuer flux image</button>
-		</form>
+		</form><br/>
 
 		<form action="/init_position" method="POST">
 			<label for="x">Case initial (colonne) :</label>
 			<input type="text" id="x" step="any" name="x" required>
+			<br/>
 			<label for="y">Case initial (ligne) :</label>
 			<input type="text" id="y" step="any" name="y" required>
-			<div><label for="orientation">Orientation initiale (angle) :</label></div>
+			<br/>
+			<label for="orientation">Orientation initiale (angle) :</label>
 			<input type="text" id="orientation" step="any" name="orientation" required>
+			<br/>
 			<button type="submit">Envoyer position initiale</button>
-		</form>
+			<br/>
+		</form> <br/>
 		
 		<form action="/go_to" method="POST">
 			<label for="x">Case destination (colonne) :</label>
 			<input type="text" id="x" step="any" name="x" required>
+			<br/>
 			<label for="y">Case destination (ligne) :</label>
 			<input type="text" id="y" step="any" name="y" required>
+			<br/>
 			<button type="submit">Envoyer position</button>
-		</form>
+		</form><br/>
+
+	
 
 		<form action="/change-speed" method="POST">
 			<label for="speed">Vitesse (entière): </label>
-			<input type="number" id="speed" name="speed" required><br><br>
+			<input type="number" id="speed" name="speed" required><br>
 			<button type="submit">Change vitesse</button>
 		</form>
+	
+	</div>
 
 		<form action="/avance-test" method="POST">
 			<button type="submit">Test avance</button>
+		</form>
+
+		<form action="/master_control" method="POST">
+			<button type="submit">Control par server</button>
 		</form>
 
 		<form action="/reperage-rotation" method="POST">
@@ -55,6 +74,8 @@
 		<form action="/test-ultime" method="POST">
 			<button type="submit">Test ultime</button>
 		</form>
+
+		
 
 		<span id="time"></span>
 

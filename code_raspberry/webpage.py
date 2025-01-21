@@ -16,6 +16,14 @@ import analyser_drapeau
 import main
 import vecteur_2d
 
+
+host_robot = 4
+os.environ["ARTEFACT_SERVER_HOST"] = f"robotpi-6{host_robot}.enst.fr"
+import strat
+from strat.client.utils import receive_instructions, Instruction, send_flag
+from strat.common.grid import Cell, Direction, Flag
+from strat.common.protocol import MsgType
+
 # Moteurs 
 
 global vitesse
@@ -28,6 +36,7 @@ right_speed = 0
 ###################################
 ########## Configuration ##########
 ###################################
+
 url = "http://proj103.r2.enst.fr" #"https://comment.requestcatcher.com"
 epreuve_intermediaire = True
 no_logs = True
@@ -45,6 +54,10 @@ aruco_detectes = []
 
 c = controller.Controller()
 c.standby()
+
+################################################
+######### Communication serveur suivi ##########
+################################################
 
 def send_position(x,y):
 	#print(f"Sending request {url+f'/api/pos?x={x}&y={y}'}")
@@ -68,6 +81,16 @@ def found_flag(marquer_id,col,row):
 
 	if r.status_code != 200: 
 		print(f"Failed to send data to server {r.status_code}")
+
+################################################
+######### Conversion cases/coord/autre #########
+################################################
+
+def cell_to_case(c):
+	return (c.col,-c.row)
+
+def case_to_cell(case):
+	return Cell(case[1],case[0])
 
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
@@ -96,13 +119,17 @@ def string_to_case(case):
 		"gfedcba".find(case[0])
 	return (int(case[1])-1,j)
 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__, static_url_path='/static/')
 if no_logs:
-    log = logging.getLogger('werkzeug')
-    log.disabled = True
+	log = logging.getLogger('werkzeug')
+	log.disabled = True
 
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
@@ -115,7 +142,7 @@ def page():
 @app.route('/init_position', methods=['POST'])
 def init_position():
 	print("Request to /init_position")
-	global current_pos
+	global current_pos, CASE_DEPART
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 	orientation = request.form.get('orientation')
@@ -126,25 +153,20 @@ def init_position():
 		current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),int(orientation)))
 
 	send_position(*current_pos.get_pos())
+	CASE_DEPART = case_to_cell(pos_to_case(current_pos.get_pos()))
+	return render_template("page.html")	
+
+@app.route('/toggle-image-view', methods=['POST'])
+def toggle_image_view():
+	print("Request to /toggle-image-view")
+	global image_view
+	image_view = not image_view
 	return render_template("page.html")	
 
 
-@app.route('/go_to', methods=['POST'])
-def go_to():
-	print("Request to /go_to")
-	global current_pos
-	case_x = request.form.get('x')
-	case_y = request.form.get('y')
-
-	if not current_pos.is_moving():
-		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
-		main.aller_case(target_x, target_y, current_pos)
-
-	if epreuve_intermediaire:
-		found_flag(5, target_x, target_y)
-		moteur.tour_sur_soi_meme()
-
-	return render_template("page.html")	
+#####################################################
+############### Contrôle manuelle ###################
+#####################################################
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
@@ -243,12 +265,25 @@ def left_rel():
 	return render_template("page.html")	
 
 
+#####################################################
+############### Contrôle autonôme ###################
+#####################################################
 
-@app.route('/toggle-image-view', methods=['POST'])
-def toggle_image_view():
-	print("Request to /toggle-image-view")
-	global image_view
-	image_view = not image_view
+@app.route('/go_to', methods=['POST'])
+def go_to():
+	print("Request to /go_to")
+	global current_pos
+	case_x = request.form.get('x')
+	case_y = request.form.get('y')
+
+	if not current_pos.is_moving():
+		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
+		main.aller_case(target_x, target_y, current_pos)
+
+	if epreuve_intermediaire:
+		found_flag(5, target_x, target_y)
+		moteur.tour_sur_soi_meme()
+
 	return render_template("page.html")	
 
 @app.route('/reperage-rotation', methods=['POST'])
@@ -352,7 +387,7 @@ def ultime():
 				if id_flag != -1:
 					print("		"+f"!!! Flag Found !!! {id_flag} at coords {x_flag} {y_flag} by standing in {x} {y}")
 					moteur.tour_sur_soi_meme()
-					found_flag(id_1, *case_to_string(pos_to_case((x, y))))
+					found_flag(id_flag, *case_to_string(pos_to_case((x, y))))
 
 				
 				main.aller_case(75,y_flag+25,current_pos)
@@ -362,6 +397,60 @@ def ultime():
 				x, y = current_pos.get_pos()
 				main.aller_case(x, y + 100, current_pos)
 	return render_template("page.html")	
+
+#################################################
+########### Config serveur commun ###############
+#################################################
+
+CASE_DEPART = None
+
+def goto_case(case: Cell):
+	print(f"Going to {cell_to_case(case)} ie {''.join(case_to_string(cell_to_case(case)))}")
+	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
+
+def scan_direction(direction: Direction) -> Flag:
+	target_angle = ( - 45 - 90 * direction.value) % 360
+	# 0 3
+	# 1 2 
+	print(f"Scanning to {direction.value} -> {target_angle}")
+	moteur.rota_deg((target_angle - current_pos.get_angle_orientation())%360, current_pos)
+
+	image, result = module_camera.get_image(cam)
+	arus = analyse_image.detect_aruco_markers(image, current_pos)
+
+	if len(arus) != 0:
+		next_flag = analyser_drapeau.drapeau_proche(arus)
+		id_flag, coord_flag = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
+
+		print("Flag {id_flag} found at {coord_flag}")
+		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
+
+	print("No flag found")
+	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
+
+def capture(flag: Flag):
+	print(f"Capturing {flag.id} at {cell_to_case(flag.cell)}")
+	moteur.tour_sur_soi_meme()
+	found_flag(flag.id, *case_to_string(pos_to_case(cell_to_case(flag.cell))))
+
+@app.route('/master_control', methods=['POST'])
+def await_instruction():
+	print("Request to /master_control")
+	for instruction in receive_instructions(CASE_DEPART):
+		print("Instruction received")
+		match instruction.type():
+			case MsgType.INSTRUCTION_GOTO:
+				goto_case(instruction.content)
+			case MsgType.INSTRUCTION_SCAN:
+				send_flag(scan_direction(instruction.content))
+			case MsgType.INSTRUCTION_CAPTURE:
+				capture(instruction.content)
+		print("\nAwaiting for instruction... ", end="")
+
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 @app.route('/update')
 def update():
@@ -419,7 +508,7 @@ def update():
 	#####################################################
 
 		
-	# Contenu renvoier
+	# Contenu renvoyé
 	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
 	updated_content+=f"<p>État des moteurs {c.get_motor_speed()}</p>"
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
@@ -427,6 +516,8 @@ def update():
 	case_x,case_y= pos_to_case(current_pos.get_pos())
 	str_x, str_y = case_to_string((case_x,case_y))
 	updated_content+=f"<p>Position actuelle (case) {str_x}{str_y}</p>"
+	updated_content+=f"<p>Host robot {host_robot}</p>"
+	updated_content+=f"<p>Server url {url}</p>"
 	updated_content+=f"<p>Analyse d'aruco:</p>"
 	updated_content+=f"<ul>{last_analyse}</ul>"
 	updated_content+=f"<p>Nombre d'utilisateurs connectés {len(users_connected)}</p>"
