@@ -33,6 +33,7 @@ right_speed = 0
 ###################################
 ########## Configuration ##########
 ###################################
+
 url = "http://proj103.r2.enst.fr" #"https://comment.requestcatcher.com"
 epreuve_intermediaire = True
 no_logs = True
@@ -50,6 +51,10 @@ aruco_detectes = []
 
 c = controller.Controller()
 c.standby()
+
+################################################
+######### Communication serveur suivi ##########
+################################################
 
 def send_position(x,y):
 	#print(f"Sending request {url+f'/api/pos?x={x}&y={y}'}")
@@ -73,6 +78,16 @@ def found_flag(marquer_id,col,row):
 
 	if r.status_code != 200: 
 		print(f"Failed to send data to server {r.status_code}")
+
+################################################
+######### Conversion cases/coord/autre #########
+################################################
+
+def cell_to_case(c):
+	return (c.row,c.col)
+
+def case_to_cell(case):
+	return Cell(*case)
 
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
@@ -101,13 +116,17 @@ def string_to_case(case):
 		"gfedcba".find(case[0])
 	return (int(case[1])-1,j)
 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__, static_url_path='/static/')
 if no_logs:
-    log = logging.getLogger('werkzeug')
-    log.disabled = True
+	log = logging.getLogger('werkzeug')
+	log.disabled = True
 
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
@@ -131,25 +150,20 @@ def init_position():
 		current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),int(orientation)))
 
 	send_position(*current_pos.get_pos())
+	CASE_DEPART = case_to_cell(current_pos.get_pos())
+	return render_template("page.html")	
+
+@app.route('/toggle-image-view', methods=['POST'])
+def toggle_image_view():
+	print("Request to /toggle-image-view")
+	global image_view
+	image_view = not image_view
 	return render_template("page.html")	
 
 
-@app.route('/go_to', methods=['POST'])
-def go_to():
-	print("Request to /go_to")
-	global current_pos
-	case_x = request.form.get('x')
-	case_y = request.form.get('y')
-
-	if not current_pos.is_moving():
-		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
-		main.aller_case(target_x, target_y, current_pos)
-
-	if epreuve_intermediaire:
-		found_flag(5, target_x, target_y)
-		moteur.tour_sur_soi_meme()
-
-	return render_template("page.html")	
+#####################################################
+############### Contrôle manuelle ###################
+#####################################################
 
 @app.route('/change-speed', methods=['POST'])
 def change_speed():
@@ -248,12 +262,25 @@ def left_rel():
 	return render_template("page.html")	
 
 
+#####################################################
+############### Contrôle autonôme ###################
+#####################################################
 
-@app.route('/toggle-image-view', methods=['POST'])
-def toggle_image_view():
-	print("Request to /toggle-image-view")
-	global image_view
-	image_view = not image_view
+@app.route('/go_to', methods=['POST'])
+def go_to():
+	print("Request to /go_to")
+	global current_pos
+	case_x = request.form.get('x')
+	case_y = request.form.get('y')
+
+	if not current_pos.is_moving():
+		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
+		main.aller_case(target_x, target_y, current_pos)
+
+	if epreuve_intermediaire:
+		found_flag(5, target_x, target_y)
+		moteur.tour_sur_soi_meme()
+
 	return render_template("page.html")	
 
 @app.route('/reperage-rotation', methods=['POST'])
@@ -368,35 +395,43 @@ def ultime():
 				main.aller_case(x, y + 100, current_pos)
 	return render_template("page.html")	
 
+#################################################
+########### Config serveur commun ###############
+#################################################
+
+CASE_DEPART = None
 
 def goto_case(case: Cell):
-    main.aller_case(*case_to_pos(case.row,case.col),current_pos)
+	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
 
 def scan_direction(direction: Direction) -> Flag:
-    moteur.rota_deg(-45 + 90 * direction.value,current_pos)
+	moteur.rota_deg(-45 + 90 * direction.value,current_pos)
 
-    image, result = module_camera.get_image(cam)
-    arus = analyse_image.detect_aruco_markers(image, current_pos)
-    if len(arus) != 0:
-        return Flag(Cell(*pos_to_case(current_pos.get_pos())),direction,arus[0][0])
-    return no_flag()
+	image, result = module_camera.get_image(cam)
+	arus = analyse_image.detect_aruco_markers(image, current_pos)
+	if len(arus) != 0:
+		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,arus[0][0])
+	return Flag.NO_FLAG()
 
 def capture(flag: Flag):
-    moteur.tour_sur_soi_meme()
-    found_flag(flag.id, *case_to_string(pos_to_case(flag.cell.row,flag.cell.col)))
+	moteur.tour_sur_soi_meme()
+	found_flag(flag.id, *case_to_string(pos_to_case(cell_to_case(flag.cell))))
 
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
-    for instruction in receive_instructions():
-        match instruction:
-            case Instruction.GOTO:
-                goto_case(instruction.case)
-            case Instruction.SCAN:
-                send_flag(scan_direction(instruction.direction))
-            case Instruction.CAPTURE:
-                capture(instruction.flag)
+	for instruction in receive_instructions():
+		match instruction:
+			case Instruction.GOTO:
+				goto_case(instruction.case)
+			case Instruction.SCAN:
+				send_flag(scan_direction(instruction.direction))
+			case Instruction.CAPTURE:
+				capture(instruction.flag)
 
-
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 @app.route('/update')
 def update():
@@ -454,7 +489,7 @@ def update():
 	#####################################################
 
 		
-	# Contenu renvoier
+	# Contenu renvoyé
 	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
 	updated_content+=f"<p>État des moteurs {c.get_motor_speed()}</p>"
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"
