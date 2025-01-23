@@ -89,16 +89,10 @@ def found_flag(marquer_id,col,row):
 
 def cell_to_case(c):
 	case = (c.col,6-c.row)
-	print("cell -> case")
-	print(f"cell {c.row,c.col} --> case {case}")
-	print("case in string",case_to_string(case))
 	return case
 
 def case_to_cell(case):
-	print("case -> cell")
 	cell = Cell(6-case[1],case[0])
-	print(f"case {case} -> cell {cell.row,cell.col}")
-	print("case in string",case_to_string(case))
 	return cell
 
 def case_to_pos(case):
@@ -434,12 +428,11 @@ def scan_direction(direction: Direction) -> Flag:
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
 
 	cel = case_to_cell(pos_to_case(current_pos.get_pos()))
-	print(cel.row,cel.col)
 	if len(arus) != 0:
 		next_flag = analyser_drapeau.drapeau_proche(arus)
 
 		id_flag, distance, _, _, coord_flag = next_flag
-		print(f"Flag {id_flag} found at {coord_flag}, distance {distance}")
+		print(f"Flag {id_flag} found at {coord_flag}, distance {int(distance)}")
 
 		if distance >= CASE_MAX_DISTANCE:
 			print("Flag is too far away, not in adjacent cell")
@@ -469,7 +462,7 @@ def await_instruction():
 				send_flag(scan_direction(instruction.content))
 			case MsgType.INSTRUCTION_CAPTURE:
 				capture(instruction.content)
-		print("\n=======================================================")
+		print("\n==================================================")
 		print("Awaiting for instruction... ", end="")
 
 ################################################################################
