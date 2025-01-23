@@ -88,7 +88,7 @@ def found_flag(marquer_id,col,row):
 ################################################
 
 def cell_to_case(c):
-	case = (c.col,c.row)
+	case = (c.col,6-c.row)
 	print("cell -> case")
 	print(f"cell {c.row,c.col} --> case {case}")
 	print("case in string",case_to_string(case))
@@ -96,7 +96,7 @@ def cell_to_case(c):
 
 def case_to_cell(case):
 	print("case -> cell")
-	cell = Cell(case[1],case[0])
+	cell = Cell(6-case[1],case[0])
 	print(f"case {case} -> cell {cell.row,cell.col}")
 	print("case in string",case_to_string(case))
 	return cell
