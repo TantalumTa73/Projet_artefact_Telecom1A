@@ -438,14 +438,18 @@ def scan_direction(direction: Direction) -> Flag:
 
 		if distance >= CASE_MAX_DISTANCE:
 			print("Flag is too far away, not in adjacent cell")
+			return_flag = Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
 		else:
 			print("Sending flag to server")
-			print(Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag))
-			return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
+			return_flag =  Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
+	else:
+		print("No flag found")
+		return_flag = Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
 
-	print("No flag found")
-	print(Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG))
-	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
+	moteur.rota_deg(-to_turn, current_pos)
+
+	print(return_flag)
+	return return_flag
 
 def capture(flag: Flag):
 	print(f"¤ Capturing {flag.id} at {cell_to_case(flag.cell)}")
@@ -457,7 +461,7 @@ def await_instruction():
 	print("Request to /master_control")
 	for instruction in receive_instructions(CASE_DEPART):
 		print("Instruction received")
-		print("------------------------------------------------")
+		print("--------------------------------------------------")
 		match instruction.type():
 			case MsgType.INSTRUCTION_GOTO:
 				goto_case(instruction.content)
@@ -465,8 +469,8 @@ def await_instruction():
 				send_flag(scan_direction(instruction.content))
 			case MsgType.INSTRUCTION_CAPTURE:
 				capture(instruction.content)
-		print("------------------------------------------------")
-		print("\n\n================================================")
+		print("--------------------------------------------------")
+		print("\n\n==================================================")
 		print("¤ Awaiting for instruction... ", end="")
 
 ################################################################################

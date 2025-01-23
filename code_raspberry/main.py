@@ -13,6 +13,7 @@ def aller_case(x_dest, y_dest, position_robot):
     distX = x_dest - x_dep
     distY = y_dest - y_dep
 
+    print(f"starting {x_dep} {y_dep} dest {x_dest} {y_dest}")
     delta = 2 
 
     if abs(distX) < delta:
