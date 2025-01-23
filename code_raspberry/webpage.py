@@ -426,6 +426,7 @@ def scan_direction(direction: Direction) -> Flag:
 	image, result = module_camera.get_image(cam)
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
 
+    cel = case_to_cell(pos_to_case(current_pos.get_pos()))
 	print(cel.row,cel.col)
 	if len(arus) != 0:
 		next_flag = analyser_drapeau.drapeau_proche(arus)
@@ -437,7 +438,6 @@ def scan_direction(direction: Direction) -> Flag:
 			print("Flag is too far away, not in adjacent cell")
 		else:
 			print("Sending flag to server")
-			cel = case_to_cell(pos_to_case(current_pos.get_pos()))
 			print(Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag))
 			return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
 
