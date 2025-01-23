@@ -441,7 +441,7 @@ def avance_tick(position_robot, tick_left, tick_right, time_step = 0.01):
 		else:
 			left_speed = - spd
 		right_speed = ratio * left_speed
- 		acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
+		acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
 		dec_tick_left = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
 		acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
 		dec_tick_right = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
