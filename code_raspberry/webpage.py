@@ -409,9 +409,9 @@ CASE_DEPART = None
 
 def goto_case(case: Cell):
 	print(f"Going to {''.join(case_to_string(cell_to_case(case)))}")
-    print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} before moving")
+	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} before moving")
 	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
-    print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} after moving")
+	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} after moving")
 
 def scan_direction(direction: Direction) -> Flag:
 	target_angle = ( - 45 - 90 * direction.value) % 360
