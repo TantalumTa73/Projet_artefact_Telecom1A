@@ -424,7 +424,10 @@ def scan_direction(direction: Direction) -> Flag:
 		id_flag, distance, _, _, coord_flag = next_flag
 		print("Flag {id_flag} found at {coord_flag}, distance {distance}")
 
-		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
+		if distance >= 75:
+			print("Flag is too far away, not in adjacent cell")
+		else:
+			return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
 
 	print("No flag found")
 	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
