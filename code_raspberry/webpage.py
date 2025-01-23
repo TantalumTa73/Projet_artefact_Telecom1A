@@ -422,11 +422,14 @@ def scan_direction(direction: Direction) -> Flag:
 		next_flag = analyser_drapeau.drapeau_proche(arus)
 
 		id_flag, distance, _, _, coord_flag = next_flag
-		print("Flag {id_flag} found at {coord_flag}, distance {distance}")
+		print(f"Flag {id_flag} found at {coord_flag}, distance {distance}")
 
 		if distance >= 75:
 			print("Flag is too far away, not in adjacent cell")
 		else:
+			prtin("Sending flag to server")
+			cel = case_to_cell(pos_to_case(current_pos.get_pos()))
+			print(cel.row,cel.col)
 			return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
 
 	print("No flag found")
@@ -449,7 +452,8 @@ def await_instruction():
 				send_flag(scan_direction(instruction.content))
 			case MsgType.INSTRUCTION_CAPTURE:
 				capture(instruction.content)
-		print("\nAwaiting for instruction... ", end="")
+		print("")
+		print("Awaiting for instruction... ", end="")
 
 ################################################################################
 ################################################################################
