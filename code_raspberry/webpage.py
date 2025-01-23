@@ -91,7 +91,7 @@ def cell_to_case(c):
 	return (c.col,-c.row)
 
 def case_to_cell(case):
-	return Cell(case[1],5-case[0])
+	return Cell(case[1],6-case[0])
 
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
@@ -416,10 +416,8 @@ def scan_direction(direction: Direction) -> Flag:
 	print(f"Scanning to {direction.value} -> {target_angle}")
 
 	to_turn = (target_angle - current_pos.get_angle_orientation())%360
-	print(to_turn, (360-to_turn)%360)
-	if abs(to_turn) >= (360 - to_turn)%360:
-		to_turn = -(360-to_turn)%360
-	print(to_turn)
+	if to_turn >= (-to_turn)%360:
+		to_turn = -((-to_turn)%360)
 
 	moteur.rota_deg(to_turn, current_pos)
 
@@ -463,7 +461,7 @@ def await_instruction():
 				send_flag(scan_direction(instruction.content))
 			case MsgType.INSTRUCTION_CAPTURE:
 				capture(instruction.content)
-		print("")
+		print("\n=======================================================")
 		print("Awaiting for instruction... ", end="")
 
 ################################################################################
