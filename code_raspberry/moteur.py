@@ -224,21 +224,8 @@ def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
 
 		ticks = int(dist * 183.6)
 		"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
-		poss_speed = [70, 60, 50, 40, 30, 20, 10]
-		if dist < 0:
-			ticks = -ticks
-		for spd in poss_speed:
-			#print('patate')
-			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
-			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
-			tick_parc = ticks - acc_tick - dec_tick
-			if tick_parc > 0:
-				temps_parc = tick_parc/(100 * spd)
-				if dist < 0:
-					avance_asservi(-spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
-				else:
-					avance_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel)
-				break
+		avance_tick(position_robot, ticks, ticks)
+
 		position_robot.avancer(dist)
 		position_robot.stop_moving()
 	else:
@@ -290,20 +277,14 @@ def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
 			deg = -deg
 			side = "left"
 		ticks = int((deg * 183.6 * 2 * 3.141592 * 7.85) / 360)
-		poss_speed = [20,15,12,10,5,3]
-		for spd in poss_speed:
-			acc_tick = calc_tick_accel(spd, time_step, temps_accel_decel)
-			dec_tick = calc_tick_decel(spd, time_step, temps_accel_decel)
-			tick_parc = ticks - acc_tick - dec_tick
-			if tick_parc > 0:
-				temps_parc = tick_parc/(100 * spd)
-				rotation_asservi(spd, time_step, temps_parc, temps_accel_decel, temps_accel_decel, side)
-				break
-		moteur.set_motor_speed(0,0)
 
 		if side == "right":
+			avance_tick(position_robot, -ticks, ticks)
+			moteur.set_motor_speed(0,0)
 			position_robot.tourner(deg)
 		else:
+			avance_tick(position_robot, ticks, -ticks)
+			moteur.set_motor_speed(0,0)
 			position_robot.tourner(-deg)
 		position_robot.stop_moving()
 
@@ -421,7 +402,8 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 
 def tour_sur_soi_meme():
 	turntick = int(183.6 * 2 * 3.141592 * 7.85)
-	reajustement([-turntick, turntick])
+	avance_tick(position_robot, turntick, -turntick)
+	#reajustement([-turntick, turntick])
 
 
 def avance_tick(position_robot, tick_left, tick_right, time_step = 0.01):
@@ -481,3 +463,6 @@ def avance_tick(position_robot, tick_left, tick_right, time_step = 0.01):
 			#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
 			t.sleep(0.5)
 			break
+		ticks = moteur.get_encoder_ticks()
+		position_robot.set_tick_offset(ticks)
+
