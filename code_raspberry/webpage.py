@@ -426,7 +426,7 @@ def scan_direction(direction: Direction) -> Flag:
 	image, result = module_camera.get_image(cam)
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
 
-    cel = case_to_cell(pos_to_case(current_pos.get_pos()))
+	cel = case_to_cell(pos_to_case(current_pos.get_pos()))
 	print(cel.row,cel.col)
 	if len(arus) != 0:
 		next_flag = analyser_drapeau.drapeau_proche(arus)
