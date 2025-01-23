@@ -13,6 +13,15 @@ moteur = c.Controller()
 moteur.standby()
 moteur.set_motor_shutdown_timeout(10)
 
+TIMESTEP = 0.01 #Correspond à la fréquence de mise à jour de la vitesse des roues pendant l'asservissement
+PI = 3.141592 
+CM_TO_TICK = 183.6 #Nombre de ticks de roue nécessaires pour parcourir un cm à l'aide du robot
+DIST_INTER_ROUES = 7.85 #Demi-distance entre les deux roues, permettant notamment de connaitre le nombre de ticks nécessaires pour faire tourner le robot
+						#d'un nombre donné de degrés 
+
+#### Début de code, non utilisé durant les évaluations ####
+
+"""
 def action_moteur(type_action):
 
 	if type_action[0] == "r":
@@ -26,7 +35,7 @@ def set_speed(lspeed, rspeed):
 
 def acceleration(vitesse,time_step=0.01, temps_accel=2):
 
-	""" Accélère de façon progressive jusqu'à une certaine vitesse """
+	#Accélère de façon progressive jusqu'à une certaine vitesse
 
 	vitesse = int(vitesse)
 	n = int(temps_accel/time_step)
@@ -52,18 +61,9 @@ def acceleration(vitesse,time_step=0.01, temps_accel=2):
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
 
-def calc_tick_accel(vitesse, time_step=0.01, temps_accel=2):
-	vitesse = int(vitesse)
-	n = int(temps_accel/time_step)
-	tick = 0
-	for k in range(0, n + 1):
-		dvitesse = int(k * vitesse / n)
-		tick += dvitesse*time_step*100
-	return tick
-
 def deceleration(vitesse,time_step=0.01, temps_decel=2):
 
-	""" Décélère de façon progressive jusqu'à l'arrêt depuis une certaine vitesse """
+	#Décélère de façon progressive jusqu'à l'arrêt depuis une certaine vitesse
 
 	vitesse = int(vitesse)
 	n = int(temps_decel/time_step)
@@ -88,17 +88,9 @@ def deceleration(vitesse,time_step=0.01, temps_decel=2):
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
-
-def calc_tick_decel(vitesse, time_step=0.01, temps_accel=2):
-	vitesse = int(vitesse)
-	n = int(temps_accel/time_step)
-	tick = 0
-	for k in range(0, n + 1):
-		dvitesse = int(k * vitesse / n)
-		tick += (vitesse-dvitesse)*time_step*100
-	return tick
-
-def straight_line(vitesse, time_step=0.01, temps=2):
+	
+	
+def straight_line(vitesse, time_step, temps=2):
 	n = int(temps / time_step)
 	real_ticks = 0
 	curr_ticks = [0,0]
@@ -119,15 +111,35 @@ def straight_line(vitesse, time_step=0.01, temps=2):
 		moteur.set_motor_speed(speed_left, speed_right)
 		t.sleep(time_step)
 	return supposed_ticks[-1], curr_ticks
+"""
+
+def calc_tick_accel(vitesse, time_step, temps_accel):
+	vitesse = int(vitesse)
+	n = int(temps_accel/time_step)
+	tick = 0
+	for k in range(0, n + 1):
+		dvitesse = int(k * vitesse / n)
+		tick += dvitesse*time_step*100
+	return tick
+
+def calc_tick_decel(vitesse, time_step, temps_accel):
+	vitesse = int(vitesse)
+	n = int(temps_accel/time_step)
+	tick = 0
+	for k in range(0, n + 1):
+		dvitesse = int(k * vitesse / n)
+		tick += (vitesse-dvitesse)*time_step*100
+	return tick
 
 
-	
+#### Tentative de correction de la différence de vitesse entre les deux roues ####
 
+"""
 
 def avance_corrige(moteur_princ, ratio, vitesse):
 
-	""" Fait avancer le robot en imposant un ratio (entre 0 et 1) entre les vitesses des moteurs, 
-		le moteur le plus rapide est moteur_prin entre left et right """
+	#Fait avancer le robot en imposant un ratio (entre 0 et 1) entre les vitesses des moteurs, 
+	#	le moteur le plus rapide est moteur_prin entre left et right
 
 	ratio = float(ratio)
 	vitesse = int(vitesse)
@@ -184,6 +196,14 @@ def avance_test():
 	#print(real_ticks)
 	#print(sum(real_ticks))
 
+"""
+
+
+#### Diverses fonctions d'asservissement, utilisés pour passer l'évaluation intérmédiaire avec brio ####
+#Le seul point faible était le manque de généralité de l'asservissement, ce dernier fonctionnait lorsque l'on faisait les déplacements mais ne 
+#prenait pas en compte les petites incertitudes d'un déplacement à l'autre
+
+"""
 def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel):
 	moteur.get_encoder_ticks()
 	vitesse = int(vitesse)
@@ -216,20 +236,6 @@ def avance_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel)
 		t.sleep(time_step)
 	moteur.set_motor_speed(0,0)
 	#print([supposed_ticks[-1], curr_ticks])
-
-def avance_cm(dist, position_robot, time_step=0.01, temps_accel_decel=4):
-	"""permet d'avancer le robot de dist cm"""
-	if not position_robot.is_moving():
-		position_robot.get_moving()
-
-		ticks = int(dist * 183.6)
-		"""asserv_decel = {10:30, 20:60, 30:80, 40:100, 50:115, 60:135, 70:155}"""
-		avance_tick(position_robot, ticks, ticks)
-
-		position_robot.avancer(dist)
-		position_robot.stop_moving()
-	else:
-		print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
 
 def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_decel, side):
 	if side == "right":
@@ -267,32 +273,6 @@ def rotation_asservi(vitesse, time_step, temps_parcours, temps_accel, temps_dece
 	t.sleep(0.5)
 	return([supposed_ticks[-1], curr_ticks])
 
-
-def rota_deg(deg, position_robot, time_step=0.01, temps_accel_decel=2):
-	"""permet de tourner le robot de deg degrés dans le sens horaire"""
-	if not position_robot.is_moving():
-		position_robot.get_moving()
-		side = "right"
-		if deg < 0:
-			deg = -deg
-			side = "left"
-		ticks = int((deg * 183.6 * 2 * 3.141592 * 7.85) / 360)
-
-		if side == "right":
-			avance_tick(position_robot, -ticks, ticks)
-			moteur.set_motor_speed(0,0)
-			position_robot.tourner(deg)
-		else:
-			avance_tick(position_robot, ticks, -ticks)
-			moteur.set_motor_speed(0,0)
-			position_robot.tourner(-deg)
-		position_robot.stop_moving()
-
-		t.sleep(1)
-	else:
-		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
-
-
 def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=1.5):
 	ticks = moteur.get_encoder_ticks()
 	curr_tick[0] += ticks[0]
@@ -309,14 +289,16 @@ def rota_petit_angle(l, curr_tick, time_step=0.01, temps_accel=1.5, temps_decel=
 			ratio = (supposed_ticks_turn[l] - curr_tick[1]) / (supposed_ticks_turn[l] + curr_tick[0])
 		left_speed = - spd
 		right_speed = ratio * spd
-		acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel)
-		dec_tick_left = calc_tick_decel(left_speed, time_step, temps_decel)
-		acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel)
-		dec_tick_right = calc_tick_decel(right_speed, time_step, temps_decel)
-		tick_parc_left = - supposed_ticks_turn[l] - curr_tick[0] - acc_tick_left - dec_tick_left
-		tick_parc_right = supposed_ticks_turn[l] - curr_tick[1] - acc_tick_right - dec_tick_right
-		if tick_parc_left < 0 and tick_parc_right > 0:
-			temps_parc = tick_parc_left/(left_speed*100)
+		left_acc_tick = calc_tick_accel(left_speed, time_step, temps_accel)
+		left_dec_tick = calc_tick_decel(left_speed, time_step, temps_decel)
+		right_acc_tick = calc_tick_accel(right_speed, time_step, temps_accel)
+		right_dec_tick = calc_tick_decel(right_speed, time_step, temps_decel)
+
+		left_parc_tick = - supposed_ticks_turn[l] - curr_tick[0] - left_acc_tick - left_dec_tick
+		right_parc_tick = supposed_ticks_turn[l] - curr_tick[1] - right_acc_tick - right_dec_tick
+
+		if left_parc_tick < 0 and right_parc_tick > 0:
+			temps_parc = left_parc_tick/(left_speed*100)
 			n_accel = int(temps_accel/time_step)
 			n_parcours = int(temps_parc/time_step)
 			n_decel = int(temps_decel/time_step)
@@ -359,14 +341,14 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 		ratio = tot_tick[1]/tot_tick[0]
 		left_speed = - spd
 		right_speed = ratio * spd
-		acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel)
-		dec_tick_left = calc_tick_decel(left_speed, time_step, temps_decel)
-		acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel)
-		dec_tick_right = calc_tick_decel(right_speed, time_step, temps_decel)
-		tick_parc_left = - tot_tick[0] - acc_tick_left - dec_tick_left
-		tick_parc_right = tot_tick[1] - acc_tick_right - dec_tick_right
-		if tick_parc_left < 0 and tick_parc_right > 0:
-			temps_parc = tick_parc_left/(left_speed*100)
+		left_acc_tick = calc_tick_accel(left_speed, time_step, temps_accel)
+		left_dec_tick = calc_tick_decel(left_speed, time_step, temps_decel)
+		right_acc_tick = calc_tick_accel(right_speed, time_step, temps_accel)
+		right_dec_tick = calc_tick_decel(right_speed, time_step, temps_decel)
+		left_parc_tick = - tot_tick[0] - left_acc_tick - left_dec_tick
+		right_parc_tick = tot_tick[1] - right_acc_tick - right_dec_tick
+		if left_parc_tick < 0 and right_parc_tick > 0:
+			temps_parc = left_parc_tick/(left_speed*100)
 			n_accel = int(temps_accel/time_step)
 			n_parcours = int(temps_parc/time_step)
 			n_decel = int(temps_decel/time_step)
@@ -399,70 +381,138 @@ def reajustement(curr_tick, time_step=0.01, temps_accel=3, temps_decel=3):
 			#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
 			t.sleep(0.5)
 			break
+"""
+
+def avance_cm(dist, position_robot, time_step=TIMESTEP):
+	#permet d'avancer le robot de dist cm
+	if not position_robot.is_moving():
+		position_robot.get_moving()
+
+		ticks = int(dist * CM_TO_TICK)
+		avance_tick(position_robot, ticks, ticks)
+
+		position_robot.avancer(dist)
+		position_robot.stop_moving()
+	else:
+		print("erreur moteur.py, avance_cm : le robot est déjà en train d'avancer")
+
+def rota_deg(deg, position_robot, time_step=TIMESTEP):
+	#permet de tourner le robot de deg degrés dans le sens horaire
+	if not position_robot.is_moving():
+		position_robot.get_moving()
+		side = "right"
+		if deg < 0:
+			deg = -deg
+			side = "left"
+		ticks = int(CM_TO_TICK * (2 * PI * DIST_INTER_ROUES) * (deg / 360)) #calcul simple du perimètre avec 2*pi*r
+
+		if side == "right":
+			avance_tick(position_robot, -ticks, ticks)
+			moteur.set_motor_speed(0,0)
+			position_robot.tourner(deg)
+		else:
+			avance_tick(position_robot, ticks, -ticks)
+			moteur.set_motor_speed(0,0)
+			position_robot.tourner(-deg)
+		position_robot.stop_moving()
+
+		t.sleep(1)
+	else:
+		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
+
 
 def tour_sur_soi_meme():
-	turntick = int(183.6 * 2 * 3.141592 * 7.85)
+	turntick = int(CM_TO_TICK * (2 * PI * DIST_INTER_ROUES))
 	avance_tick(position_robot, turntick, -turntick)
 	#reajustement([-turntick, turntick])
 
 
-def avance_tick(position_robot, tick_left, tick_right, time_step = 0.01):
-	poss_speed = [70, 60, 50, 40, 30, 20, 15, 10, 5, 3]
-	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0}
+def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
+	poss_speed = [70, 60, 50, 40, 30, 20, 15, 10, 5, 3] #Tableau des différentes vitesses que le robot peut prendre, on les limite afin de ne pas avoir
+	#à tester toutes les vitesses entre 70 et 0
+	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0} #Les temps d'accélération et de décélération
+	#dépendent de la vitesse, l'objectif principal de l'asservissement est de capper l'accélération
+
 	ticks = moteur.get_encoder_ticks()
-	position_robot.add_tick_offset(ticks)
+	position_robot.add_tick_offset(ticks) #Le nombre de ticks en offset par rapport aux déplacements idéaux est gardé en mémoire, afin de pouvoir le 
+	#corriger à chaque déplacement, c'est ce qui permet une cohérence entre l'asservissement d'un déplacement à l'autre
+
 	ticks = position_robot.get_tick_offset()
-	tick_left += - ticks[0]
-	tick_right += - ticks[1]
-	forward = tick_left > 0
-	curr_tick = [0,0]
-	ratio = tick_left / tick_right
+	left_tick += - ticks[0]
+	right_tick += - ticks[1]
+
+	forward_left = left_tick > 0
+	forward_right = right_tick > 0
 	for spd in poss_speed: 
-		if forward:
+		if forward_left:
 			left_speed = spd
 		else:
 			left_speed = - spd
-		right_speed = ratio * left_speed
-		acc_tick_left = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
-		dec_tick_left = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
-		acc_tick_right = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
-		dec_tick_right = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
-		tick_parc_left = tick_left - acc_tick_left - dec_tick_left
-		tick_parc_right = tick_right - acc_tick_right - dec_tick_right
-		if tick_parc_left < 0 and tick_parc_right > 0:
-			temps_parc = tick_parc_left/(left_speed*100)
-			n_accel = int(temps_accel_decel[spd]/time_step)
+
+		if right_tick != 0:
+			ratio = left_tick / right_tick
+			right_speed = ratio * left_speed
+		else: 
+			right_speed = 0
+		#le principe ici est simple, on regarde toutes les vitesses que l'on peut prendre, on set ces vitesses sur la roue gauche, la vitesse de la roue
+		#droite est ensuite déterminé par le ratio de distance qu'elle a à parcourir par rapport à l'autre roue (notamment si les deux roues tournent
+		# dans des sens opposés, le ratio est négatif)
+
+		left_acc_tick = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
+		left_dec_tick = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
+		right_acc_tick = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
+		right_dec_tick = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
+		#calcul des ticks pris sur le déplacement total par l'accélération et la décélération
+
+		left_parc_tick = left_tick - left_acc_tick - left_dec_tick
+		right_parc_tick = right_tick - right_acc_tick - right_dec_tick
+
+		left_legit = (not(forward_left) and left_parc_tick < 0) or (forward_left and left_parc_tick > 0)
+		right_legit = (not(forward_right) and right_parc_tick < 0) or (forward_right and right_parc_tick > 0)
+		
+		#On vérifie juste que le nombre de ticks en cumulé de l'accélération et la décélération ne dépasse pas le nombre de ticks total, et donc que la roue
+		#ne change pas de sens en plein milieu du mouvement théorique, si la roue change de sens, on baisse la vitesse en continuant la boucle for
+		if left_legit and right_legit:
+			temps_parc = left_parc_tick/(left_speed*100)
+			n_accel_decel = int(temps_accel_decel[spd]/time_step)
 			n_parcours = int(temps_parc/time_step)
-			n_decel = int(temps_accel_decel[spd]/time_step)
-			curr_ticks_ins = [0,0]
-			supposed_ticks = [[0,0]]
-			for k in range(0,n_accel + 1):
-				dvitesse_left = k * left_speed / n_accel
-				dvitesse_right = k * right_speed / n_accel
+			curr_ticks_reel = [0,0] #Correspond au nombre de ticks que le robot a parcouru depuis le début du déplacement (roue gauche et droite)
+			supposed_ticks = [[0,0]] #C'est un trajet théorique, à chaque instant dt(= TIMESTEP), on annonce au robot qu'il doit atteindre un certain nombre de 
+			#ticks en dt, cela lui permet d'ajuster sa vitesse en fonction de s'il est en avance ou en retard
+
+			#Construction du trajet théorique
+			for k in range(0,n_accel_decel + 1):
+				dvitesse_left = k * left_speed / n_accel_decel
+				dvitesse_right = k * right_speed / n_accel_decel
 				supposed_ticks.append([dvitesse_left*time_step*100 + supposed_ticks[-1][0], dvitesse_right*time_step*100 + supposed_ticks[-1][1]])
 			for k in range(0,n_parcours):
 				supposed_ticks.append([left_speed*time_step*100 + supposed_ticks[-1][0], right_speed*time_step*100 + supposed_ticks[-1][1]])
-			for k in range(0,n_decel + 1):
-				dvitesse_left = k * left_speed / n_decel
-				dvitesse_right = k * right_speed / n_decel
+			for k in range(0,n_accel_decel + 1):
+				dvitesse_left = k * left_speed / n_accel_decel
+				dvitesse_right = k * right_speed / n_accel_decel
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
-			print( n_accel , n_decel , n_parcours)
-			for k in range(0, n_accel + n_decel + n_parcours  + 2):
+			#On parcourt le trajet théorique
+			for k in range(0, 2 * n_accel_decel + n_parcours  + 2):
+
+				#On update les ticks réels du robot, afin qu'il puisse se placer dans le trajet théorique
 				ticks = moteur.get_encoder_ticks()
-				curr_ticks_ins[0] += ticks[0]
-				curr_ticks_ins[1] += ticks[1]   
-				speed_left = int((supposed_ticks[k+1][0] - curr_ticks_ins[0]) / (time_step * 100))
-				speed_right = int((supposed_ticks[k+1][1] - curr_ticks_ins[1]) / (time_step * 100))
+				curr_ticks_reel[0] += ticks[0]
+				curr_ticks_reel[1] += ticks[1]
+				
+				#La vitesse des roues correspond simplement à la distance qu'ils doivent parcourir (distance qu'ils doivent atteindre - distance qu'ils ont déja parcouru)
+				#que l'on divise ensuite par le dt (= TIMESTEP)
+				speed_left = int((supposed_ticks[k+1][0] - curr_ticks_reel[0]) / (time_step * 100))
+				speed_right = int((supposed_ticks[k+1][1] - curr_ticks_reel[1]) / (time_step * 100))
 				moteur.set_motor_speed(speed_left, speed_right)
 				t.sleep(time_step)
 			moteur.set_motor_speed(0,0)
-			t.sleep(0.5)
-			curr_tick[0] += curr_ticks_ins[0]
-			curr_tick[1] += curr_ticks_ins[1]
-			#print([(curr_tick[0]*360)/(2*3.141592*7.85*183.6), (curr_tick[1]*360)/(2*3.141592*7.85*183.6)])
-			t.sleep(0.5)
+			t.sleep(0.2)
+			ticks = moteur.get_encoder_ticks()
+			curr_ticks_reel[0] += ticks[0]
+			curr_ticks_reel[1] += ticks[1]   
 			break
-		ticks = moteur.get_encoder_ticks()
+		ticks[0] = curr_ticks_reel[0] - left_tick
+		ticks[1] = curr_ticks_reel[1] - right_tick
 		position_robot.set_tick_offset(ticks)
 
