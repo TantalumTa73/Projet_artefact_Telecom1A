@@ -91,7 +91,7 @@ def cell_to_case(c):
 	return (c.col,-c.row)
 
 def case_to_cell(case):
-	return Cell(case[1],case[0])
+	return Cell(5-case[1],case[0])
 
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
@@ -419,6 +419,7 @@ def scan_direction(direction: Direction) -> Flag:
 	print(to_turn, (360-to_turn)%360)
 	if abs(to_turn) >= (360 - to_turn)%360:
 		to_turn = -(360-to_turn)%360
+	print(to_turn)
 
 	moteur.rota_deg(to_turn, current_pos)
 
