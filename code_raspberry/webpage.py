@@ -408,7 +408,7 @@ def ultime():
 CASE_DEPART = None
 
 def goto_case(case: Cell):
-	print(f"Going to {''.join(case_to_string(cell_to_case(case)))}")
+	print(f"¤ Going to {''.join(case_to_string(cell_to_case(case)))}")
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} before moving")
 	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} after moving")
@@ -417,7 +417,7 @@ def scan_direction(direction: Direction) -> Flag:
 	target_angle = ( - 45 - 90 * direction.value) % 360
 	# 0 3
 	# 1 2 
-	print(f"Scanning to {direction.value} -> {target_angle}")
+	print(f"¤ Scanning to {direction.value} -> {target_angle}")
 
 	to_turn = (target_angle - current_pos.get_angle_orientation())%360
 	if to_turn >= (-to_turn)%360:
@@ -448,7 +448,7 @@ def scan_direction(direction: Direction) -> Flag:
 	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
 
 def capture(flag: Flag):
-	print(f"Capturing {flag.id} at {cell_to_case(flag.cell)}")
+	print(f"¤ Capturing {flag.id} at {cell_to_case(flag.cell)}")
 	moteur.tour_sur_soi_meme()
 	found_flag(flag.id, *case_to_string(pos_to_case(cell_to_case(flag.cell))))
 
@@ -457,7 +457,7 @@ def await_instruction():
 	print("Request to /master_control")
 	for instruction in receive_instructions(CASE_DEPART):
 		print("Instruction received")
-		print("==================================================")
+		print("------------------------------------------------")
 		match instruction.type():
 			case MsgType.INSTRUCTION_GOTO:
 				goto_case(instruction.content)
@@ -465,8 +465,9 @@ def await_instruction():
 				send_flag(scan_direction(instruction.content))
 			case MsgType.INSTRUCTION_CAPTURE:
 				capture(instruction.content)
-		print("\n\n==================================================")
-		print("Awaiting for instruction... ", end="")
+		print("------------------------------------------------")
+		print("\n\n================================================")
+		print("¤ Awaiting for instruction... ", end="")
 
 ################################################################################
 ################################################################################
