@@ -416,8 +416,9 @@ def scan_direction(direction: Direction) -> Flag:
 	print(f"Scanning to {direction.value} -> {target_angle}")
 
 	to_turn = (target_angle - current_pos.get_angle_orientation())%360
-	if abs(to_turn) >= 360 - to_turn:
-		to_turn = (360-to_turn)%360
+	print(to_turn, (360-to_turn)%360)
+	if abs(to_turn) >= (360 - to_turn)%360:
+		to_turn = -(360-to_turn)%360
 
 	moteur.rota_deg(to_turn, current_pos)
 
@@ -425,6 +426,7 @@ def scan_direction(direction: Direction) -> Flag:
 	image, result = module_camera.get_image(cam)
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
 
+	print(cel.row,cel.col)
 	if len(arus) != 0:
 		next_flag = analyser_drapeau.drapeau_proche(arus)
 
@@ -436,10 +438,11 @@ def scan_direction(direction: Direction) -> Flag:
 		else:
 			print("Sending flag to server")
 			cel = case_to_cell(pos_to_case(current_pos.get_pos()))
-			print(cel.row,cel.col)
+			print(Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag))
 			return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
 
 	print("No flag found")
+	print(Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG))
 	return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
 
 def capture(flag: Flag):
