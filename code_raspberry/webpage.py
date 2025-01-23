@@ -420,9 +420,10 @@ def scan_direction(direction: Direction) -> Flag:
 
 	if len(arus) != 0:
 		next_flag = analyser_drapeau.drapeau_proche(arus)
-		id_flag, coord_flag = analyser_drapeau.analyser_drapeau(next_flag, current_pos,cam)
 
-		print("Flag {id_flag} found at {coord_flag}")
+		id_flag, distance, _, _, coord_flag = next_flag
+		print("Flag {id_flag} found at {coord_flag}, distance {distance}")
+
 		return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
 
 	print("No flag found")
