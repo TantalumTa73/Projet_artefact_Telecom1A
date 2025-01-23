@@ -459,19 +459,23 @@ def capture(flag: Flag):
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
 	print("Request to /master_control")
-	for instruction in receive_instructions(CASE_DEPART):
-		print("Instruction received")
-		print("--------------------------------------------------")
-		match instruction.type():
-			case MsgType.INSTRUCTION_GOTO:
-				goto_case(instruction.content)
-			case MsgType.INSTRUCTION_SCAN:
-				send_flag(scan_direction(instruction.content))
-			case MsgType.INSTRUCTION_CAPTURE:
-				capture(instruction.content)
-		print("--------------------------------------------------")
-		print("\n\n==================================================")
-		print("¤ Awaiting for instruction... ", end="")
+	try:
+		for instruction in receive_instructions(CASE_DEPART):
+			print("Instruction received")
+			print("--------------------------------------------------")
+			match instruction.type():
+				case MsgType.INSTRUCTION_GOTO:
+					goto_case(instruction.content)
+				case MsgType.INSTRUCTION_SCAN:
+					send_flag(scan_direction(instruction.content))
+				case MsgType.INSTRUCTION_CAPTURE:
+					capture(instruction.content)
+			print("--------------------------------------------------")
+			print("\n\n==================================================")
+			print("¤ Awaiting for instruction... ", end="")
+	except e:
+		pass
+	return render_template("page.html")	
 
 ################################################################################
 ################################################################################
