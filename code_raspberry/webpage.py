@@ -88,10 +88,10 @@ def found_flag(marquer_id,col,row):
 ################################################
 
 def cell_to_case(c):
-	return (c.col,-c.row)
+	return (c.col,c.row)
 
 def case_to_cell(case):
-	return Cell(case[1],6-case[0])
+	return Cell(case[1],case[0])
 
 def case_to_pos(case):
 	"""revoie la position (x,y) en centimètre du milieu de la case (i,j)"""
