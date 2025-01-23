@@ -41,7 +41,6 @@ url = "http://proj103.r2.enst.fr" #"https://comment.requestcatcher.com"
 epreuve_intermediaire = True
 no_logs = True
 
-
 current_pos = Position_robot((25,25),(0,1))
 
 last_analyse = ""
@@ -54,6 +53,8 @@ aruco_detectes = []
 
 c = controller.Controller()
 c.standby()
+
+CASE_MAX_DISTANCE = 75
 
 ################################################
 ######### Communication serveur suivi ##########
@@ -413,7 +414,13 @@ def scan_direction(direction: Direction) -> Flag:
 	# 0 3
 	# 1 2 
 	print(f"Scanning to {direction.value} -> {target_angle}")
-	moteur.rota_deg((target_angle - current_pos.get_angle_orientation())%360, current_pos)
+
+	to_turn = (target_angle - current_pos.get_angle_orientation())%360
+	if abs(to_turn) >= 360 - to_turn:
+		to_turn = (360-to_turn)%360
+
+	moteur.rota_deg(to_turn, current_pos)
+
 
 	image, result = module_camera.get_image(cam)
 	arus = analyse_image.detect_aruco_markers(image, current_pos)
@@ -424,10 +431,10 @@ def scan_direction(direction: Direction) -> Flag:
 		id_flag, distance, _, _, coord_flag = next_flag
 		print(f"Flag {id_flag} found at {coord_flag}, distance {distance}")
 
-		if distance >= 75:
+		if distance >= CASE_MAX_DISTANCE:
 			print("Flag is too far away, not in adjacent cell")
 		else:
-			prtin("Sending flag to server")
+			print("Sending flag to server")
 			cel = case_to_cell(pos_to_case(current_pos.get_pos()))
 			print(cel.row,cel.col)
 			return Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,id_flag)
