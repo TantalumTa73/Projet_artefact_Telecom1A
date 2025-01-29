@@ -151,6 +151,9 @@ def init_position():
 	orientation = request.form.get('orientation')
 	print(case_x,case_y,orientation)
 
+	current_pos.set_tick_offset([0,0])
+	moteur.setup()
+
 	current_pos.set_pos(*case_to_pos(string_to_case((case_x,case_y))))
 	if orientation is not None:
 		current_pos.set_orientation(*vecteur_2d.rotate_vect((0,1),int(orientation)))
@@ -285,7 +288,7 @@ def go_to():
 
 	if epreuve_intermediaire:
 		found_flag(5, target_x, target_y)
-		moteur.tour_sur_soi_meme()
+		moteur.tour_sur_soi_meme(current_pos)
 
 	return render_template("page.html")	
 
@@ -389,7 +392,7 @@ def ultime():
 				print("		"+f" flag coords {x_flag} {y_flag}")
 				if id_flag != -1:
 					print("		"+f"!!! Flag Found !!! {id_flag} at coords {x_flag} {y_flag} by standing in {x} {y}")
-					moteur.tour_sur_soi_meme()
+					moteur.tour_sur_soi_meme(current_pos)
 					found_flag(id_flag, *case_to_string(pos_to_case((x, y))))
 
 				
@@ -453,7 +456,7 @@ def scan_direction(direction: Direction) -> Flag:
 
 def capture(flag: Flag):
 	print(f"¤ Capturing {flag.id} at {cell_to_case(flag.cell)}")
-	moteur.tour_sur_soi_meme()
+	moteur.tour_sur_soi_meme(current_pos)
 	found_flag(flag.id, *case_to_string(pos_to_case(cell_to_case(flag.cell))))
 
 @app.route('/master_control', methods=['POST'])

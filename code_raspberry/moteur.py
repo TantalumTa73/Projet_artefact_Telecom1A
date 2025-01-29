@@ -9,9 +9,11 @@ import os
 
 # Moteurs 
 
-moteur = c.Controller()
-moteur.standby()
-moteur.set_motor_shutdown_timeout(10)
+def setup():
+	global moteur
+	moteur = c.Controller()
+	moteur.standby()
+	moteur.set_motor_shutdown_timeout(10)
 
 TIMESTEP = 0.01 #Correspond à la fréquence de mise à jour de la vitesse des roues pendant l'asservissement
 PI = 3.141592 
@@ -115,7 +117,7 @@ def straight_line(vitesse, time_step, temps=2):
 
 def calc_tick_accel(vitesse, time_step, temps_accel):
 	vitesse = int(vitesse)
-	n = int(temps_accel/time_step)
+	n = int(temps_accel/time_step) 
 	tick = 0
 	for k in range(0, n + 1):
 		dvitesse = int(k * vitesse / n)
@@ -421,7 +423,7 @@ def rota_deg(deg, position_robot, time_step=TIMESTEP):
 		print("erreur moteur.py, rota_deg : le robot est déjà en train d'avancer")
 
 
-def tour_sur_soi_meme():
+def tour_sur_soi_meme(position_robot):
 	turntick = int(CM_TO_TICK * (2 * PI * DIST_INTER_ROUES))
 	avance_tick(position_robot, turntick, -turntick)
 	#reajustement([-turntick, turntick])
@@ -430,7 +432,7 @@ def tour_sur_soi_meme():
 def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 	poss_speed = [70, 60, 50, 40, 30, 20, 15, 10, 5, 3] #Tableau des différentes vitesses que le robot peut prendre, on les limite afin de ne pas avoir
 	#à tester toutes les vitesses entre 70 et 0
-	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0} #Les temps d'accélération et de décélération
+	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0.15} #Les temps d'accélération et de décélération
 	#dépendent de la vitesse, l'objectif principal de l'asservissement est de capper l'accélération
 
 	ticks = moteur.get_encoder_ticks()
@@ -469,6 +471,8 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 
 		left_legit = (not(forward_left) and left_parc_tick < 0) or (forward_left and left_parc_tick > 0)
 		right_legit = (not(forward_right) and right_parc_tick < 0) or (forward_right and right_parc_tick > 0)
+
+		curr_ticks_reel = [0,0] #Correspond au nombre de ticks que le robot a parcouru depuis le début du déplacement (roue gauche et droite)
 		
 		#On vérifie juste que le nombre de ticks en cumulé de l'accélération et la décélération ne dépasse pas le nombre de ticks total, et donc que la roue
 		#ne change pas de sens en plein milieu du mouvement théorique, si la roue change de sens, on baisse la vitesse en continuant la boucle for
@@ -476,7 +480,6 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			temps_parc = left_parc_tick/(left_speed*100)
 			n_accel_decel = int(temps_accel_decel[spd]/time_step)
 			n_parcours = int(temps_parc/time_step)
-			curr_ticks_reel = [0,0] #Correspond au nombre de ticks que le robot a parcouru depuis le début du déplacement (roue gauche et droite)
 			supposed_ticks = [[0,0]] #C'est un trajet théorique, à chaque instant dt(= TIMESTEP), on annonce au robot qu'il doit atteindre un certain nombre de 
 			#ticks en dt, cela lui permet d'ajuster sa vitesse en fonction de s'il est en avance ou en retard
 
