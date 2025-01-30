@@ -422,7 +422,8 @@ CASE_DEPART = None
 def goto_case(case: Cell):
 	print(f"¤ Going to {''.join(case_to_string(cell_to_case(case)))}")
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} before moving")
-	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
+	#main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
+    main.aller_case_opti_zonion(*case_to_pos(cell_to_case(case)), current_pos)
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} after moving")
 
 def scan_direction(flag : Flag) -> Flag:
@@ -563,10 +564,10 @@ def update():
 						#print(f"real pos	 {real_x,real_y}, {real_angle}")
 						#print(f"imagined case {case_to_string(pos_to_case((x,y)))}")
 						#print(f"real case	 {case_to_string(pos_to_case((real_x,real_y)))}")
-						if error_x**2 + error_y**2 >= 10**2:
-							print(f"Correcting position {x,y}--> {real_x,real_y}")
+						if error_x**2 + error_y**2 >= 5**2:
+							print(f"Correcting position {x,y} --> {real_x,real_y}")
 							current_pos.set_pos(real_x,real_y)
-						if abs(error_angle) >= 20: 
+						if abs(error_angle) >= 5: 
 							print(f"Correcting angle {angle} --> {real_angle}")
 							current_pos.set_angle_orientation(real_angle)
 
