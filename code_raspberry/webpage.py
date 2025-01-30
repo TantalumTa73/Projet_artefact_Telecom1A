@@ -416,7 +416,8 @@ def goto_case(case: Cell):
 	main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} after moving")
 
-def scan_direction(direction: Direction) -> Flag:
+def scan_direction(flag : Flag) -> Flag:
+	direction = flag.direction
 	target_angle = ( - 45 - 90 * direction.value) % 360
 	# 0 3
 	# 1 2 
@@ -477,6 +478,7 @@ def await_instruction():
 			print("\n\n==================================================")
 			print("¤ Awaiting for instruction... ", end="")
 	except e:
+		print("Connection crashed")
 		pass
 	return render_template("page.html")	
 
