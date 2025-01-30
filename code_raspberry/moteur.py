@@ -121,7 +121,7 @@ def calc_tick_accel(vitesse, time_step, temps_accel):
 	tick_parc = 0
 	n_debut = 0
 	for k in range(0, n + 1):
-		dvitesse = round(k * vitesse / n)
+		dvitesse = (k * vitesse / n)
 		if abs(dvitesse) < 2:
 			tick_parc += dvitesse*time_step*100
 		else: 
@@ -137,10 +137,10 @@ def calc_tick_decel(vitesse, time_step, temps_accel):
 	tick_parc = 0
 	n_fin = 0
 	for k in range(0, n + 1):
-		dvitesse = round(k * vitesse / n)
+		dvitesse = (k * vitesse / n)
 		if abs(vitesse - dvitesse) < 2:
-            if n_fin == 0:
-                n_fin = k
+			if n_fin == 0:
+				n_fin = k
 			tick_parc += (vitesse - dvitesse)*time_step*100
 		else: 
 			tick += (vitesse - dvitesse)*time_step*100
@@ -505,8 +505,8 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 
 			#Construction du trajet théorique
 			for k in range(n_accel,n_accel_decel + 1):
-				dvitesse_left = round(k * left_speed / n_accel_decel)
-				dvitesse_right = round(k * right_speed / n_accel_decel)
+				dvitesse_left = (k * left_speed / n_accel_decel)
+				dvitesse_right =(k * right_speed / n_accel_decel)
 				if abs(dvitesse_left) < 2:
 					dvitesse_left = 0
 				if abs(dvitesse_right) < 2:
@@ -517,20 +517,21 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				supposed_ticks.append([left_parc_tick/n_parcours + supposed_ticks[-1][0], right_parc_tick/n_parcours + supposed_ticks[-1][1]])
 
 			for k in range(0, n_decel):
-				dvitesse_left = round(k * left_speed / n_accel_decel)
-				dvitesse_right = round(k * right_speed / n_accel_decel)
+				dvitesse_left = (k * left_speed / n_accel_decel)
+				dvitesse_right =(k * right_speed / n_accel_decel)
 				if abs(left_speed - dvitesse_left) < 2:
 					dvitesse_left = left_speed
 				if abs(right_speed - dvitesse_right) < 2:
 					dvitesse_right = right_speed
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
-			print(list(map(lambda x : list(map(int, x)),supposed_ticks)))
+			#print(list(map(lambda x : list(map(int, x)),supposed_ticks)))
 			print(supposed_ticks[-1])
-            print("\n")
+			print(left_tick,right_tick)
+			print("\n")
 
 			#On parcourt le trajet théorique
-			for k in range(0, len(supposed_ticks)):
+			for k in range(0, len(supposed_ticks)-1):
 
 				#On update les ticks réels du robot, afin qu'il puisse se placer dans le trajet théorique
 				ticks = moteur.get_encoder_ticks()
@@ -551,6 +552,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 
 			ticks[0] = curr_ticks_reel[0] - left_tick
 			ticks[1] = curr_ticks_reel[1] - right_tick
+
+			position_robot.set_tick_offset(ticks)
 			break
-		position_robot.set_tick_offset(ticks)
 
