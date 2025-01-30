@@ -5,6 +5,15 @@ import numpy as np
 #global orient
 #orient = ["nord", "est", "sud", "ouest"] # Donne une correspondance numéro direction
 
+
+def sg(x):
+    """renvoie le signe de x:
+    -1 si x est strictement négatif, 
+    1 si x est positif ou nul"""
+    if x<0 :
+        return -1 
+    return 1
+
 def aller_case(x_dest, y_dest, position_robot):
 
     """ Envoie le robot sur une case depuis une autre case"""
@@ -61,17 +70,20 @@ def aller_case_opti_zonion(x_dest, y_dest, position_robot):
     delta = 25
 
     if abs(distX) < delta:
+        if abs(distY) < delta : 
+            # pas de déplacement
+            return
         #on avance que selon y mais en corrigeant l'erreur de X
-        alpha = np.arctan(abs(distX) / abs(distY))
+        alpha = np.arctan(abs(distX) / abs(distY)) # distY!=0
         if abs(distY) > delta:
             if distY > 0 :
                 beta = position_robot.get_angle_to_point_cardinal("n")
-                beta = (distX / abs(distX)) * alpha + beta
+                beta = (sg(distX)) * alpha + beta
                 moteur.rota_deg(beta, position_robot)
                 moteur.avance_cm(hypo, position_robot)
             elif distY <0 :
                 beta = position_robot.get_angle_to_point_cardinal("s")
-                beta = (-distX / abs(distX)) * alpha + beta
+                beta = (-sg(distX)) * alpha + beta
                 moteur.rota_deg(beta, position_robot)
                 moteur.avance_cm(hypo, position_robot)
     elif distX > 0:
@@ -87,7 +99,7 @@ def aller_case_opti_zonion(x_dest, y_dest, position_robot):
                 moteur.avance_cm(-distY, position_robot)
         else:
             alpha = alpha = np.arctan(abs(distY) / abs(distX))
-            beta = (-distY / abs(distY)) * alpha + beta
+            beta = (-sg(distY)) * alpha + beta
             moteur.rota_deg(beta, position_robot)
             moteur.avance_cm(hypo, position_robot)
     elif distX < 0 :
@@ -103,7 +115,7 @@ def aller_case_opti_zonion(x_dest, y_dest, position_robot):
                 moteur.avance_cm(-distY, position_robot)
         else:
             alpha = alpha = np.arctan(abs(distY) / abs(distX))
-            beta = (distY / abs(distY)) * alpha + beta
+            beta = (sg(distY)) * alpha + beta
             moteur.rota_deg(beta, position_robot)
             moteur.avance_cm(hypo, position_robot)
 

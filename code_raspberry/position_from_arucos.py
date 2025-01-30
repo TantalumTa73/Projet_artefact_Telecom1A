@@ -49,13 +49,13 @@ def clear_dist_to_marker():
     for i in range(0,5):
         dist_to_marker[i] = None
 
-def get_dist_from_center(dist_marker, pos_on_screen):
-    """renvoie la distance du centre du robot au marker"""
-    alpha = radians(get_angle_from_pos_on_screen(pos_on_screen))
-    l = cos(alpha)*dist_marker
-    L = sin(alpha)*dist_marker 
-    dist_center = sqrt(l**2 + (L-dist_camera_centre)**2)
-    return dist_center
+# def get_dist_from_center(dist_marker, pos_on_screen):
+#     """renvoie la distance du centre du robot au marker"""
+#     alpha = radians(get_angle_from_pos_on_screen(pos_on_screen))
+#     l = cos(alpha)*dist_marker
+#     L = sin(alpha)*dist_marker 
+#     dist_center = sqrt(l**2 + (L-dist_camera_centre)**2)
+#     return dist_center
 
 def set_dist_to_marker(info_images):
     """met à jour la distance aux markers repères
