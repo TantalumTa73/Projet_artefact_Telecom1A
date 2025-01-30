@@ -59,6 +59,7 @@ c = controller.Controller()
 c.standby()
 
 CASE_MAX_DISTANCE = 75
+SELFCORRECTING = True 
 
 ################################################
 ######### Communication serveur suivi ##########
@@ -107,7 +108,7 @@ def case_to_pos(case):
 def pos_to_case(pos):
 	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
 	x,y = pos 
-	return (int(x/50), int(50+y)/50)
+	return (int(x/50), int(45+y)//50)
 
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
@@ -152,7 +153,7 @@ def page():
 def init_position():
 	print("Request to /init_position")
 	global current_pos, CASE_DEPART, initialised 
-    initialised = True
+	initialised = True
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 	orientation = request.form.get('orientation')
@@ -291,7 +292,8 @@ def go_to():
 
 	if not current_pos.is_moving():
 		target_x, target_y = case_to_pos(string_to_case((case_x,case_y)))
-		main.aller_case(target_x, target_y, current_pos)
+		main.aller_case_opti_zonion(target_x, target_y, current_pos)
+		#main.aller_case(target_x, target_y, current_pos)
 
 	if epreuve_intermediaire:
 		found_flag(5, target_x, target_y)
@@ -484,9 +486,8 @@ def await_instruction():
 			print("--------------------------------------------------")
 			print("\n\n==================================================")
 			print("¤ Awaiting for instruction... ", end="")
-	except e:
+	except Exception:
 		print("Connection crashed")
-		pass
 	return render_template("page.html")	
 
 ################################################################################
@@ -542,8 +543,7 @@ def update():
 				analyse = analyse_image.detect_aruco_markers(image,current_pos)
 				last_analyse=""
 				for a in analyse:
-
-                    if a[0] in corner_flags.keys() and initialised:
+					if a[0] in corner_flags.keys() and initialised and SELFCORRECTING and not current_pos.is_moving():
 						x,y = current_pos.get_pos()
 						angle = current_pos.get_angle_orientation()
 
@@ -564,11 +564,11 @@ def update():
 						#print(f"imagined case {case_to_string(pos_to_case((x,y)))}")
 						#print(f"real case	 {case_to_string(pos_to_case((real_x,real_y)))}")
 						if error_x**2 + error_y**2 >= 10**2:
+							print(f"Correcting position {x,y}--> {real_x,real_y}")
 							current_pos.set_pos(real_x,real_y)
-                        if abs(error_angle) >= 20: 
+						if abs(error_angle) >= 20: 
+							print(f"Correcting angle {angle} --> {real_angle}")
 							current_pos.set_angle_orientation(real_angle)
-
-
 
 					last_analyse += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
 			else:

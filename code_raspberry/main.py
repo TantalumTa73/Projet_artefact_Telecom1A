@@ -87,8 +87,9 @@ def aller_case_opti_zonion(x_dest, y_dest, position_robot):
                 moteur.rota_deg(beta, position_robot)
                 moteur.avance_cm(hypo, position_robot)
     elif distX > 0:
+        beta = position_robot.get_angle_to_point_cardinal("e")
         if abs(distY) > delta:
-            moteur.rota_deg(position_robot.get_angle_to_point_cardinal("e"), position_robot)
+            moteur.rota_deg(beta, position_robot)
             #le robot est orienté vers l'est
             moteur.avance_cm(distX, position_robot)
             if distY > 0 :
@@ -98,13 +99,14 @@ def aller_case_opti_zonion(x_dest, y_dest, position_robot):
                 moteur.rota_deg(90, position_robot)
                 moteur.avance_cm(-distY, position_robot)
         else:
-            alpha = alpha = np.arctan(abs(distY) / abs(distX))
+            alpha = np.arctan(abs(distY) / abs(distX))
             beta = (-sg(distY)) * alpha + beta
             moteur.rota_deg(beta, position_robot)
             moteur.avance_cm(hypo, position_robot)
     elif distX < 0 :
+        beta=position_robot.get_angle_to_point_cardinal("o")
         if abs(distY) > delta:
-            moteur.rota_deg(position_robot.get_angle_to_point_cardinal("o"), position_robot)
+            moteur.rota_deg(beta, position_robot)
             #le robot est orienté vers l'ouest
             moteur.avance_cm(-distX, position_robot)
             if distY > 0 :
@@ -114,7 +116,7 @@ def aller_case_opti_zonion(x_dest, y_dest, position_robot):
                 moteur.rota_deg(-90, position_robot)
                 moteur.avance_cm(-distY, position_robot)
         else:
-            alpha = alpha = np.arctan(abs(distY) / abs(distX))
+            alpha =  np.arctan(abs(distY) / abs(distX))
             beta = (sg(distY)) * alpha + beta
             moteur.rota_deg(beta, position_robot)
             moteur.avance_cm(hypo, position_robot)

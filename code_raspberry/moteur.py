@@ -441,7 +441,7 @@ def tour_sur_soi_meme(position_robot):
 
 
 def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
-	print(f"avance_tick {left_tick} {right_tick}")
+	#print(f"avance_tick {left_tick} {right_tick}")
 
 	ticks = moteur.get_encoder_ticks()
 	position_robot.add_tick_offset(ticks) #Le nombre de ticks en offset par rapport aux déplacements idéaux est gardé en mémoire, afin de pouvoir le 
@@ -453,17 +453,17 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 
 	position_robot.set_tick_offset([0,0])
 
-	print(f"ticks {ticks}")
-	print(f"corrected ticks {left_tick} {right_tick}")
+	#print(f"ticks {ticks}")
+	#print(f"corrected ticks {left_tick} {right_tick}")
 
 
 	forward_left = left_tick > 0
 	forward_right = right_tick > 0
 
 	if forward_left == forward_right:
-		poss_speed = [60, 50, 40, 30, 20, 15, 10, 5] #Tableau des différentes vitesses que le robot peut prendre, on les limite afin de ne pas avoir
+		poss_speed = [40, 30, 20, 15, 10, 5] #Tableau des différentes vitesses que le robot peut prendre, on les limite afin de ne pas avoir
 		#à tester toutes les vitesses entre 70 et 0
-		temps_accel_decel = {60: 4, 50: 3.5, 40: 3, 30: 2.5, 20: 2, 15: 1.75, 10: 1.5, 5: 1.25} #Les temps d'accélération et de décélération
+		temps_accel_decel = {40: 3, 30: 2.5, 20: 2, 15: 1.75, 10: 1.5, 5: 1.25} #Les temps d'accélération et de décélération
 		#dépendent de la vitesse, l'objectif principal de l'asservissement est de capper l'accélération
 	else:
 		# On essaye de tourner 
@@ -531,8 +531,8 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
 			#print(list(map(lambda x : list(map(int, x)),supposed_ticks)))
-			print(supposed_ticks[-1])
-			print(left_tick,right_tick)
+			#print(supposed_ticks[-1])
+			#print(left_tick,right_tick)
 
 			#On parcourt le trajet théorique
 			for k in range(0, len(supposed_ticks)-1):
@@ -558,8 +558,8 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			ticks[0] = curr_ticks_reel[0] - left_tick
 			ticks[1] = curr_ticks_reel[1] - right_tick
 
-			print(f"ticks {ticks}")
+			#print(f"ticks {ticks}")
 			position_robot.set_tick_offset(ticks)
-			print("\n")
+			#print("\n")
 			break
 
