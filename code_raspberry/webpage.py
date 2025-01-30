@@ -51,7 +51,9 @@ image_view = True
 
 aruco_detectes = []
 
-corner_flags = {1: (0,300), 2: (300,300), 3: (300, 0), 4 : (0,0)}
+corner_flags = {1: (0,300, 90+45), 2: (300,300,180+45), 3: (300, 0,-45), 4 : (0,0,45)}
+
+initialised = False 
 
 c = controller.Controller()
 c.standby()
@@ -105,7 +107,7 @@ def case_to_pos(case):
 def pos_to_case(pos):
 	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
 	x,y = pos 
-	return (int(x/50), int((25+y)/50))
+	return (int(x/50), int(50+y)/50)
 
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
@@ -149,7 +151,8 @@ def page():
 @app.route('/init_position', methods=['POST'])
 def init_position():
 	print("Request to /init_position")
-	global current_pos, CASE_DEPART
+	global current_pos, CASE_DEPART, initialised 
+    initialised = True
 	case_x = request.form.get('x')
 	case_y = request.form.get('y')
 	orientation = request.form.get('orientation')
@@ -493,7 +496,7 @@ def await_instruction():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected, cam, last_analyse, current_pos
+	global last_update_time, users_connected, cam, last_analyse, current_pos, initialised 
 	"""send current content"""
 
 	now = time.time()
@@ -540,22 +543,30 @@ def update():
 				last_analyse=""
 				for a in analyse:
 
-					if a[0] in corner_flags.keys():
-						print("\n")
-						flag_x,flag_y = analyse_image.position_drapeau(a,current_pos)
-						real_flag_x, real_flag_y = corner_flags[a[0]]
-
-						error_x,error_y =flag_x-real_flag_x,flag_y-real_flag_y
-
-						print(flag_x,flag_y)
-						print(real_flag_x,real_flag_y)
-						print(error_x,error_y)
-						#if abs(error_x) > 25 and abs(error_y) > 25:
+                    if a[0] in corner_flags.keys() and initialised:
 						x,y = current_pos.get_pos()
-						real_x,real_y = x-error_x,y-error_y
-						print(real_x,real_y)
-						print(case_to_string(pos_to_case((real_x,real_y))))
-						#current_pos.set_pos(real_x,real_y)
+						angle = current_pos.get_angle_orientation()
+
+						flag_x,flag_y = analyse_image.position_drapeau(a,current_pos)
+						flag_angle = a[2] + angle 
+
+						real_flag_x, real_flag_y, real_flag_angle = corner_flags[a[0]]
+
+						error_x,error_y, error_angle =flag_x-real_flag_x,flag_y-real_flag_y, flag_angle-real_flag_angle
+						real_x,real_y, real_angle = x-error_x,y-error_y, (180+angle-error_angle)%360
+
+						#print("\n")
+						#print(f"imagined flag {flag_x,flag_y}, {flag_angle}")
+						#print(f"real flag	 {real_flag_x,real_flag_y}, {real_flag_angle}")
+						#print(f"error {error_x,error_y}, {error_angle}")
+						#print(f"imagined pos {x,y}, {angle}")
+						#print(f"real pos	 {real_x,real_y}, {real_angle}")
+						#print(f"imagined case {case_to_string(pos_to_case((x,y)))}")
+						#print(f"real case	 {case_to_string(pos_to_case((real_x,real_y)))}")
+						if error_x**2 + error_y**2 >= 10**2:
+							current_pos.set_pos(real_x,real_y)
+                        if abs(error_angle) >= 20: 
+							current_pos.set_angle_orientation(real_angle)
 
 
 

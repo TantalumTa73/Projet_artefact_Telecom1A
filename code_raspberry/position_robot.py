@@ -13,8 +13,6 @@ class Position_robot:
 	def get_pos(self):
 		return self.__pos
 
-	def set_pos(self, pos):
-		self.__pos = pos
 
 	def get_angle_orientation(self):
 		"""retourne l'angle entre le vecteur (0,1) et l'orientation"""
@@ -55,6 +53,9 @@ class Position_robot:
 
 	def set_orientation(self, x, y):
 		self.__vect_orientation = normalize((x,y))
+
+	def set_angle_orientation(self, angle):
+		self.__vect_orientation = rotate_vect((0,1), angle)
 
 	def avancer(self, d):
 		"""avance la position de d cm dans la direction donnée par self.__vect_orientation"""

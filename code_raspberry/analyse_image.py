@@ -47,17 +47,6 @@ def position_drapeau(liste_aru, position_robot):
 
     return (x_drapeau, y_drapeau)
 
-def rotatoin_drapeau(liste_aru, position_robot):
-
-    angle = position_robot.get_angle_orientation()
-    x,y = position_robot.get_pos()
-
-    distance = liste_aru[1]
-    angle_aru =  pfa.get_angle_with_drapeau(liste_aru)
-    angle_absolu_aruco =  angle_aru + angle
-
-    return angle_absolu_aruco
-
 
 def detect_aruco_markers(image, position_robot):
     """
