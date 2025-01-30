@@ -11,9 +11,9 @@ import os
 
 def setup():
 	global moteur
-	moteur = c.Controller()
-	moteur.standby()
-	moteur.set_motor_shutdown_timeout(10)
+moteur = c.Controller()
+moteur.standby()
+moteur.set_motor_shutdown_timeout(10)
 
 TIMESTEP = 0.01 #Correspond à la fréquence de mise à jour de la vitesse des roues pendant l'asservissement
 PI = 3.141592 
@@ -116,21 +116,29 @@ def straight_line(vitesse, time_step, temps=2):
 
 def calc_tick_accel(vitesse, time_step, temps_accel):
 	vitesse = int(vitesse)
-	n = int(temps_accel/time_step) 
+	n = int(temps_accel/time_step)
 	tick = 0
+	tick_parc = 0
 	for k in range(0, n + 1):
 		dvitesse = int(k * vitesse / n)
-		tick += dvitesse*time_step*100
-	return tick
+		if abs(dvitesse) < 2:
+			tick_parc += dvitesse*time_step*100
+		else: 
+			tick += dvitesse*time_step*100
+	return tick, tick_parc
 
 def calc_tick_decel(vitesse, time_step, temps_accel):
 	vitesse = int(vitesse)
 	n = int(temps_accel/time_step)
 	tick = 0
+	tick_parc = 0
 	for k in range(0, n + 1):
 		dvitesse = int(k * vitesse / n)
-		tick += (vitesse-dvitesse)*time_step*100
-	return tick
+		if abs(dvitesse) < 2:
+			tick_parc += dvitesse*time_step*100
+		else: 
+			tick += dvitesse*time_step*100
+	return tick, tick_parc
 
 
 #### Tentative de correction de la différence de vitesse entre les deux roues ####
@@ -465,18 +473,17 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 		#droite est ensuite déterminé par le ratio de distance qu'elle a à parcourir par rapport à l'autre roue (notamment si les deux roues tournent
 		# dans des sens opposés, le ratio est négatif)
 
-		left_acc_tick = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
-		left_dec_tick = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
-		right_acc_tick = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
-		right_dec_tick = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
+		left_acc_tick, lftpa = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
+		left_dec_tick, lftpd = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])[0]
+		right_acc_tick, rgtpa = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])[0]
+		right_dec_tick, rgtpd = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])[0]
 		#calcul des ticks pris sur le déplacement total par l'accélération et la décélération
 
-		left_parc_tick = left_tick - left_acc_tick - left_dec_tick
-		right_parc_tick = right_tick - right_acc_tick - right_dec_tick
+		left_parc_tick = left_tick - left_acc_tick - left_dec_tick + lftpa + lftpd
+		right_parc_tick = right_tick - right_acc_tick - right_dec_tick + rgtpa + rgtpd
 
 		left_legit = (not(forward_left) and left_parc_tick < 0) or (forward_left and left_parc_tick > 0)
 		right_legit = (not(forward_right) and right_parc_tick < 0) or (forward_right and right_parc_tick > 0)
-
 		
 		#On vérifie juste que le nombre de ticks en cumulé de l'accélération et la décélération ne dépasse pas le nombre de ticks total, et donc que la roue
 		#ne change pas de sens en plein milieu du mouvement théorique, si la roue change de sens, on baisse la vitesse en continuant la boucle for
