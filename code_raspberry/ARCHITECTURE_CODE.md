@@ -62,7 +62,7 @@ This module enables the robot to know its position and its orientation from aruc
 
 ## `position_robot.py`
 
-This file contains a python class which is used to represents the position of the robot. A single instance of this class is created in webpage.py. The other programms have to use a method of this instance to update the position of the robot every time they move the robot.  The user also has to set the initial position of the robot when he puts it on the grid.
+This file contains a python class which is used to represents the position of the robot and its status (is it moving or not, do have motors to correct its position ?). A single instance of this class is created in webpage.py. The other programms have to use a method of this instance to update the position of the robot every time they move the robot. The user also has to set the initial position of the robot when he puts it on the grid.
  
  
  
