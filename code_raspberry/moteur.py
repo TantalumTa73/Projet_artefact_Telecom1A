@@ -21,6 +21,7 @@ CM_TO_TICK = 183.6 #Nombre de ticks de roue nécessaires pour parcourir un cm à
 DIST_INTER_ROUES = 7.85 #Demi-distance entre les deux roues, permettant notamment de connaitre le nombre de ticks nécessaires pour faire tourner le robot
 						#d'un nombre donné de degrés 
 
+MIN_SPEED = 1
 #### Début de code, non utilisé durant les évaluations ####
 
 def set_speed(lspeed, rspeed):
@@ -121,7 +122,7 @@ def calc_tick_accel(vitesse, time_step, temps_accel):
 	n_debut = 0
 	for k in range(0, n + 1):
 		dvitesse = (k * vitesse / n)
-		if abs(dvitesse) < 2:
+		if abs(dvitesse) < MIN_SPEED:
 			tick_parc += dvitesse*time_step*100
 		else: 
 			if n_debut == 0:
@@ -136,7 +137,7 @@ def calc_tick_decel(vitesse, time_step, temps_accel):
 	n_fin = 0
 	for k in range(0, n + 1):
 		dvitesse = (k * vitesse / n)
-		if abs(vitesse - dvitesse) < 2:
+		if abs(vitesse - dvitesse) < MIN_SPEED:
 			if n_fin == 0:
 				n_fin = k
 			tick_parc += (vitesse - dvitesse)*time_step*100
@@ -512,9 +513,9 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			for k in range(n_accel,n_accel_decel + 1):
 				dvitesse_left = (k * left_speed / n_accel_decel)
 				dvitesse_right =(k * right_speed / n_accel_decel)
-				if abs(dvitesse_left) < 2:
+				if abs(dvitesse_left) < MIN_SPEED:
 					dvitesse_left = 0
-				if abs(dvitesse_right) < 2:
+				if abs(dvitesse_right) < MIN_SPEED:
 					dvitesse_right = 0
 				supposed_ticks.append([dvitesse_left*time_step*100 + supposed_ticks[-1][0], dvitesse_right*time_step*100 + supposed_ticks[-1][1]])
 
@@ -524,9 +525,9 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			for k in range(0, n_decel):
 				dvitesse_left = (k * left_speed / n_accel_decel)
 				dvitesse_right =(k * right_speed / n_accel_decel)
-				if abs(left_speed - dvitesse_left) < 2:
+				if abs(left_speed - dvitesse_left) < MIN_SPEED:
 					dvitesse_left = left_speed
-				if abs(right_speed - dvitesse_right) < 2:
+				if abs(right_speed - dvitesse_right) < MIN_SPEED:
 					dvitesse_right = right_speed
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
@@ -550,7 +551,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				moteur.set_motor_speed(speed_left, speed_right)
 				t.sleep(time_step)
 			moteur.set_motor_speed(0,0)
-			t.sleep(1)
+			t.sleep(1.5)
 			ticks = list(moteur.get_encoder_ticks())
 			curr_ticks_reel[0] += ticks[0]
 			curr_ticks_reel[1] += ticks[1]   

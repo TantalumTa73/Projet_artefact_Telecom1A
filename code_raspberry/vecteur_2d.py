@@ -67,7 +67,7 @@ def angle_vect(u,v):
     x,y = u 
     a,b = v 
     prod_scal = x*a + y*b
-    alpha = acos(prod_scal)
+    alpha = acos(min(1,max(-1,prod_scal)))
     prod_vect_z = x*b -y*a 
     if prod_vect_z >= 0 :
         return degrees(-alpha)

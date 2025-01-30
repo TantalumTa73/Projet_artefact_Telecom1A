@@ -58,8 +58,8 @@ initialised = False
 c = controller.Controller()
 c.standby()
 
-CASE_MAX_DISTANCE = 75
-SELFCORRECTING = True 
+CASE_MAX_DISTANCE = 50
+SELFCORRECTING = False 
 
 ################################################
 ######### Communication serveur suivi ##########
@@ -423,7 +423,7 @@ def goto_case(case: Cell):
 	print(f"¤ Going to {''.join(case_to_string(cell_to_case(case)))}")
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} before moving")
 	#main.aller_case(*case_to_pos(cell_to_case(case)),current_pos)
-    main.aller_case_opti_zonion(*case_to_pos(cell_to_case(case)), current_pos)
+	main.aller_case_opti_zonion(*case_to_pos(cell_to_case(case)), current_pos)
 	print(f"Currently in {''.join(case_to_string(pos_to_case(current_pos.get_pos())))} after moving")
 
 def scan_direction(flag : Flag) -> Flag:
@@ -460,7 +460,7 @@ def scan_direction(flag : Flag) -> Flag:
 		print("No flag found")
 		return_flag = Flag(case_to_cell(pos_to_case(current_pos.get_pos())),direction,Flag.NO_FLAG)
 
-	moteur.rota_deg(-to_turn, current_pos)
+	#moteur.rota_deg(-to_turn, current_pos)
 
 	print(return_flag)
 	return return_flag
@@ -473,22 +473,19 @@ def capture(flag: Flag):
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
 	print("Request to /master_control")
-	try:
-		for instruction in receive_instructions(CASE_DEPART):
-			print("Instruction received")
-			print("--------------------------------------------------")
-			match instruction.type():
-				case MsgType.INSTRUCTION_GOTO:
-					goto_case(instruction.content)
-				case MsgType.INSTRUCTION_SCAN:
-					send_flag(scan_direction(instruction.content))
-				case MsgType.INSTRUCTION_CAPTURE:
-					capture(instruction.content)
-			print("--------------------------------------------------")
-			print("\n\n==================================================")
-			print("¤ Awaiting for instruction... ", end="")
-	except Exception:
-		print("Connection crashed")
+	for instruction in receive_instructions(CASE_DEPART):
+		print("Instruction received")
+		print("--------------------------------------------------")
+		match instruction.type():
+			case MsgType.INSTRUCTION_GOTO:
+				goto_case(instruction.content)
+			case MsgType.INSTRUCTION_SCAN:
+				send_flag(scan_direction(instruction.content))
+			case MsgType.INSTRUCTION_CAPTURE:
+				capture(instruction.content)
+		print("--------------------------------------------------")
+		print("\n\n==================================================")
+		print("¤ Awaiting for instruction... ", end="")
 	return render_template("page.html")	
 
 ################################################################################
@@ -564,10 +561,10 @@ def update():
 						#print(f"real pos	 {real_x,real_y}, {real_angle}")
 						#print(f"imagined case {case_to_string(pos_to_case((x,y)))}")
 						#print(f"real case	 {case_to_string(pos_to_case((real_x,real_y)))}")
-						if error_x**2 + error_y**2 >= 5**2:
+						if error_x**2 + error_y**2 >= 5**2 and error_x**2 + error_y**2 <= 50**2:
 							print(f"Correcting position {x,y} --> {real_x,real_y}")
 							current_pos.set_pos(real_x,real_y)
-						if abs(error_angle) >= 5: 
+						if abs(real_angle-angle) >= 5 and abs(real_angle-angle) <= 130: 
 							print(f"Correcting angle {angle} --> {real_angle}")
 							current_pos.set_angle_orientation(real_angle)
 
