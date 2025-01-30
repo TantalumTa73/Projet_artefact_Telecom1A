@@ -23,6 +23,8 @@ DIST_INTER_ROUES = 7.85 #Demi-distance entre les deux roues, permettant notammen
 
 #### Début de code, non utilisé durant les évaluations ####
 
+def set_speed(lspeed, rspeed):
+	moteur.set_motor_speed(lspeed, rspeed)
 """
 def action_moteur(type_action):
 
@@ -31,9 +33,6 @@ def action_moteur(type_action):
 		dist = int(type_action[1:])
 		# CALCUL SAVANT POUR CONVERTIR CENTIMETRE EN TICK
 		avance_corrige("left", 1, dist)
-
-def set_speed(lspeed, rspeed):
-	moteur.set_motor_speed(lspeed, rspeed)
 
 def acceleration(vitesse,time_step=0.01, temps_accel=2):
 
@@ -409,11 +408,11 @@ def rota_deg(deg, position_robot, time_step=TIMESTEP):
 		ticks = int(CM_TO_TICK * (2 * PI * DIST_INTER_ROUES) * (deg / 360)) #calcul simple du perimètre avec 2*pi*r
 
 		if side == "right":
-			avance_tick(position_robot, -ticks, ticks)
+			avance_tick(position_robot, ticks, -ticks)
 			moteur.set_motor_speed(0,0)
 			position_robot.tourner(deg)
 		else:
-			avance_tick(position_robot, ticks, -ticks)
+			avance_tick(position_robot, -ticks, ticks)
 			moteur.set_motor_speed(0,0)
 			position_robot.tourner(-deg)
 		position_robot.stop_moving()
@@ -430,6 +429,7 @@ def tour_sur_soi_meme(position_robot):
 
 
 def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
+	print(f"avance_tick {left_tick} {right_tick}")
 	poss_speed = [70, 60, 50, 40, 30, 20, 15, 10, 5, 3] #Tableau des différentes vitesses que le robot peut prendre, on les limite afin de ne pas avoir
 	#à tester toutes les vitesses entre 70 et 0
 	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0.15} #Les temps d'accélération et de décélération
@@ -509,6 +509,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				#que l'on divise ensuite par le dt (= TIMESTEP)
 				speed_left = int((supposed_ticks[k+1][0] - curr_ticks_reel[0]) / (time_step * 100))
 				speed_right = int((supposed_ticks[k+1][1] - curr_ticks_reel[1]) / (time_step * 100))
+				print(f"moteur {speed_left} {speed_right}")
 				moteur.set_motor_speed(speed_left, speed_right)
 				t.sleep(time_step)
 			moteur.set_motor_speed(0,0)
