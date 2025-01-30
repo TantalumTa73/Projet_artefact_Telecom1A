@@ -128,23 +128,23 @@ def calc_tick_accel(vitesse, time_step, temps_accel):
 			if n_debut == 0:
 				n_debut = k
 			tick += dvitesse*time_step*100
-	return tick, tick_parc, n_debut
+	return tick, n_debut
 
 def calc_tick_decel(vitesse, time_step, temps_accel):
 	vitesse = round(vitesse)
 	n = round(temps_accel/time_step)
 	tick = 0
 	tick_parc = 0
-	n_debut = 0
+	n_fin = 0
 	for k in range(0, n + 1):
 		dvitesse = round(k * vitesse / n)
-		if abs(dvitesse) < 2:
-			tick_parc += dvitesse*time_step*100
+		if abs(vitesse - dvitesse) < 2:
+            if n_fin == 0:
+                n_fin = k
+			tick_parc += (vitesse - dvitesse)*time_step*100
 		else: 
-			if n_debut == 0:
-				n_debut = k
-			tick += dvitesse*time_step*100
-	return tick, tick_parc, n_debut
+			tick += (vitesse - dvitesse)*time_step*100
+	return tick, n_fin
 
 
 #### Tentative de correction de la différence de vitesse entre les deux roues ####
@@ -462,7 +462,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 	print(f"corrected ticks {left_tick} {right_tick}")
 
 
-	forward_left = left_tick > e
+	forward_left = left_tick > 0
 	forward_right = right_tick > 0
 	for spd in poss_speed: 
 		if forward_left:
@@ -479,14 +479,14 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 		#droite est ensuite déterminé par le ratio de distance qu'elle a à parcourir par rapport à l'autre roue (notamment si les deux roues tournent
 		# dans des sens opposés, le ratio est négatif)
 
-		left_acc_tick, lftpa, ndal = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
-		left_dec_tick, lftpd, nddl = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
-		right_acc_tick, rgtpa, ndar = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
-		right_dec_tick, rgtpd, nddr = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
+		left_acc_tick, ndal = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
+		left_dec_tick, nddl = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
+		right_acc_tick, ndar = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
+		right_dec_tick, nddr = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
 		#calcul des ticks pris sur le déplacement total par l'accélération et la décélération
 
-		left_parc_tick = left_tick - left_acc_tick - left_dec_tick + lftpa + lftpd
-		right_parc_tick = right_tick - right_acc_tick - right_dec_tick + rgtpa + rgtpd
+		left_parc_tick = left_tick - left_acc_tick - left_dec_tick
+		right_parc_tick = right_tick - right_acc_tick - right_dec_tick
 
 		left_legit = (not(forward_left) and left_parc_tick < 0) or (forward_left and left_parc_tick > 0)
 		right_legit = (not(forward_right) and right_parc_tick < 0) or (forward_right and right_parc_tick > 0)
@@ -497,7 +497,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			temps_parc = left_parc_tick/(left_speed*100)
 			n_accel_decel = round(temps_accel_decel[spd]/time_step)
 			n_accel = min(ndal, ndar)
-			n_decel = min(nddl, nddr)
+			n_decel = max(nddl, nddr)
 			n_parcours = round(temps_parc/time_step)
 			curr_ticks_reel = [0,0] #Correspond au nombre de ticks que le robot a parcouru depuis le début du déplacement (roue gauche et droite)
 			supposed_ticks = [[0,0]] #C'est un trajet théorique, à chaque instant dt(= TIMESTEP), on annonce au robot qu'il doit atteindre un certain nombre de 
@@ -505,8 +505,8 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 
 			#Construction du trajet théorique
 			for k in range(n_accel,n_accel_decel + 1):
-				dvitesse_left = k * left_speed / n_accel_decel
-				dvitesse_right = k * right_speed / n_accel_decel
+				dvitesse_left = round(k * left_speed / n_accel_decel)
+				dvitesse_right = round(k * right_speed / n_accel_decel)
 				if abs(dvitesse_left) < 2:
 					dvitesse_left = 0
 				if abs(dvitesse_right) < 2:
@@ -514,22 +514,23 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				supposed_ticks.append([dvitesse_left*time_step*100 + supposed_ticks[-1][0], dvitesse_right*time_step*100 + supposed_ticks[-1][1]])
 
 			for k in range(0,n_parcours):
-				supposed_ticks.append([left_speed*time_step*100 + supposed_ticks[-1][0], right_speed*time_step*100 + supposed_ticks[-1][1]])
+				supposed_ticks.append([left_parc_tick/n_parcours + supposed_ticks[-1][0], right_parc_tick/n_parcours + supposed_ticks[-1][1]])
 
-			for k in range(n_decel, n_accel_decel + 1):
-				dvitesse_left = k * left_speed / n_accel_decel
-				dvitesse_right = k * right_speed / n_accel_decel
-				if abs(dvitesse_left) < 2:
-					dvitesse_left = 0
-				if abs(dvitesse_right) < 2:
-					dvitesse_right = 0
+			for k in range(0, n_decel):
+				dvitesse_left = round(k * left_speed / n_accel_decel)
+				dvitesse_right = round(k * right_speed / n_accel_decel)
+				if abs(left_speed - dvitesse_left) < 2:
+					dvitesse_left = left_speed
+				if abs(right_speed - dvitesse_right) < 2:
+					dvitesse_right = right_speed
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
-			#print(list(map(lambda x : list(map(int, x)),supposed_ticks)))
+			print(list(map(lambda x : list(map(int, x)),supposed_ticks)))
 			print(supposed_ticks[-1])
+            print("\n")
 
 			#On parcourt le trajet théorique
-			for k in range(0, 2 * n_accel_decel - n_accel - n_decel + n_parcours  + 2):
+			for k in range(0, len(supposed_ticks)):
 
 				#On update les ticks réels du robot, afin qu'il puisse se placer dans le trajet théorique
 				ticks = moteur.get_encoder_ticks()
