@@ -474,9 +474,9 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 		# dans des sens opposés, le ratio est négatif)
 
 		left_acc_tick, lftpa = calc_tick_accel(left_speed, time_step, temps_accel_decel[spd])
-		left_dec_tick, lftpd = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])[0]
-		right_acc_tick, rgtpa = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])[0]
-		right_dec_tick, rgtpd = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])[0]
+		left_dec_tick, lftpd = calc_tick_decel(left_speed, time_step, temps_accel_decel[spd])
+		right_acc_tick, rgtpa = calc_tick_accel(right_speed, time_step, temps_accel_decel[spd])
+		right_dec_tick, rgtpd = calc_tick_decel(right_speed, time_step, temps_accel_decel[spd])
 		#calcul des ticks pris sur le déplacement total par l'accélération et la décélération
 
 		left_parc_tick = left_tick - left_acc_tick - left_dec_tick + lftpa + lftpd
