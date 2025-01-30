@@ -454,7 +454,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			left_speed = - spd
 
 		if right_tick != 0:
-			ratio = left_tick / right_tick
+			ratio = right_tick / left_tick
 			right_speed = ratio * left_speed
 		else: 
 			right_speed = 0
@@ -509,7 +509,6 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				#que l'on divise ensuite par le dt (= TIMESTEP)
 				speed_left = int((supposed_ticks[k+1][0] - curr_ticks_reel[0]) / (time_step * 100))
 				speed_right = int((supposed_ticks[k+1][1] - curr_ticks_reel[1]) / (time_step * 100))
-				print(f"moteur {speed_left} {speed_right}")
 				moteur.set_motor_speed(speed_left, speed_right)
 				t.sleep(time_step)
 			moteur.set_motor_speed(0,0)
