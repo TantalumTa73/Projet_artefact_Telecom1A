@@ -443,7 +443,7 @@ def tour_sur_soi_meme(position_robot):
 
 
 def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
-	print(f"avance_tick {left_tick} {right_tick}")
+	#print(f"avance_tick {left_tick} {right_tick}")
 	poss_speed = [70, 60, 50, 40, 30, 20, 15, 10, 5, 3] #Tableau des différentes vitesses que le robot peut prendre, on les limite afin de ne pas avoir
 	#à tester toutes les vitesses entre 70 et 0
 	temps_accel_decel = {70: 3.5, 60: 3, 50: 2.5, 40: 2, 30: 1.5, 20: 1, 15: 0.75, 10: 0.5, 5: 0.25, 3: 0.15} #Les temps d'accélération et de décélération
@@ -459,7 +459,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 
 	position_robot.set_tick_offset([0,0])
 
-	print(f"corrected ticks {left_tick} {right_tick}")
+	#print(f"corrected ticks {left_tick} {right_tick}")
 
 
 	forward_left = left_tick > 0
@@ -526,9 +526,9 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				supposed_ticks.append([(left_speed - dvitesse_left)*time_step*100 + supposed_ticks[-1][0], (right_speed - dvitesse_right)*time_step*100 + supposed_ticks[-1][1]])
 
 			#print(list(map(lambda x : list(map(int, x)),supposed_ticks)))
-			print(supposed_ticks[-1])
-			print(left_tick,right_tick)
-			print("\n")
+			#print(supposed_ticks[-1])
+			#print(left_tick,right_tick)
+			#print("\n")
 
 			#On parcourt le trajet théorique
 			for k in range(0, len(supposed_ticks)-1):
