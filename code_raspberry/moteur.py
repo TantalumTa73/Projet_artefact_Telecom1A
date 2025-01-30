@@ -462,7 +462,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 	print(f"corrected ticks {left_tick} {right_tick}")
 
 
-	forward_left = left_tick > 0
+	forward_left = left_tick > e
 	forward_right = right_tick > 0
 	for spd in poss_speed: 
 		if forward_left:
