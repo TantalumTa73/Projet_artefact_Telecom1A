@@ -542,7 +542,6 @@ def update():
 		last_update_time = now
 	#####################################################
 
-	print(current_pos.get_tick_offset())
 		
 	# Contenu renvoyé
 	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
