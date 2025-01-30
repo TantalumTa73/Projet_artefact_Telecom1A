@@ -309,10 +309,52 @@ Choix du design (Seamoth de subnautica) et création de plans / début de la con
 
 Travail avec Lothaire pour tester la communication entre robot.
 
-### DESIGN DE LA PAGEWEB (Alice)
+### DESIGN DE LA PAGE WEB (Alice)
 
-Ajout d'un fichier CSS à la page de la raspberry
+Ajout d'un fichier CSS à la page web de la raspberry.
 
 ### PERFECTION DU CONTRÔLE DES MOTEURS / AMÉLIORATION DES FONCTIONS MOTEURS (Martin)
 
+
+
+## 29/01/2025
+
+### FABRICATION DE LA DECORATION DU ROBOT (Martin, Alice)
+
+abandon de la coque 3D par manque de temps. Choix d'une décoration en papier
+sur le thème du fond marin.
+
+### CREATION FLYER ROBOT (Martin, Jeffrey)
+
+Il roule droit.
+
+## 30/01/2025
+
+
+### AJOUT DE DECORATIONs (Alice)
+
+coloriage des revetement en papier, decoupage des algues, collage des algues.
+
+### PEINTURE DES DECORATIONS (Joshua, Edouard, Alice)
+
+Peinture en rouge des algues autour de la camera.
+
+### DEBUG ASSERVISSEMENT MOTEUR (Martin, Jeffrey)
+
+Debug du nouveau code qui retient les ticks de retard (erreur dans le déplacement) d'un déplacement à l'autre.
+Le robot accumulait des erreurs en tournant. Le problème a été résolu en autorisant 
+les vitesses très basses pour corriger les erreurs.
+
+### CODE POUR ALLER A UNE POSITION (Edouard, Alice)
+
+Nouvelle fonction qui autorise les deplacements ou la distance
+selon l'axe x ou y est faible : dans ce cas, le robot avance uniquement
+dans une direction en deviant legerement pour parcourir aussi
+la distance selon l'autre axe.
+
+### REPERAGE GRACE AUX MARKERS (Jeffrey)
+
+Le robot peut desormais se reperer grâce à un seul marker.
+
+### TESTS STRATEGIE DE GROUPE (Jeffrey, Martin, Alice)
 
