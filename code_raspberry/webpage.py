@@ -105,7 +105,7 @@ def case_to_pos(case):
 def pos_to_case(pos):
 	"""renvoie la case (i,j) à paritr de la pos (x,y)  en centimètres"""
 	x,y = pos 
-	return (int(x)//50, (25+int(y))//50)
+	return (int(x/50), int((25+y)/50))
 
 def case_to_string(case):
 	"""renvoie le string lettre+chiffre à partir de la case (i,j)"""
@@ -541,10 +541,21 @@ def update():
 				for a in analyse:
 
 					if a[0] in corner_flags.keys():
-						flag_x,flag_y = analyse_image.position_drapeau([a],current_pos)
+						print("\n")
+						flag_x,flag_y = analyse_image.position_drapeau(a,current_pos)
 						real_flag_x, real_flag_y = corner_flags[a[0]]
 
-						print(f"offset {flag_x-real_flag_x,flag_y-real_flag_y}")
+						error_x,error_y =flag_x-real_flag_x,flag_y-real_flag_y
+
+						print(flag_x,flag_y)
+						print(real_flag_x,real_flag_y)
+						print(error_x,error_y)
+						#if abs(error_x) > 25 and abs(error_y) > 25:
+						x,y = current_pos.get_pos()
+						real_x,real_y = x-error_x,y-error_y
+						print(real_x,real_y)
+						print(case_to_string(pos_to_case((real_x,real_y))))
+						#current_pos.set_pos(real_x,real_y)
 
 
 
