@@ -51,6 +51,8 @@ image_view = True
 
 aruco_detectes = []
 
+corner_flags = {1: (0,300), 2: (300,300), 3: (300, 0), 4 : (0,0)}
+
 c = controller.Controller()
 c.standby()
 
@@ -121,6 +123,8 @@ def string_to_case(case):
 	if j==-1:
 		"gfedcba".find(case[0])
 	return (int(case[1])-1,j)
+
+
 
 ################################################################################
 ################################################################################
@@ -533,6 +537,15 @@ def update():
 				analyse = analyse_image.detect_aruco_markers(image,current_pos)
 				last_analyse=""
 				for a in analyse:
+
+					if a[0] in corner_flags.keys():
+						flag_x,flag_y = analyse_image.position_drapeau([a],current_pos)
+						real_flag_x, real_flag_y = corner_flags[a[0]]
+
+						print(f"offset {flag_x-real_flag_x,flag_y-real_flag_y}")
+
+
+
 					last_analyse += f"<li>id:{a[0]} distance:{a[1]} angle:{a[2]} coord_centre:{a[3]} coord drapeau:{a[4]}</li>"
 			else:
 				print("Image did not save")
