@@ -34,7 +34,7 @@ class Position_robot:
 		return self.__is_moving
 
 	def get_tick_offset(self):
-		return self.__tick_offset 
+		return self.__tick_offset
 
 	### SETTER
 

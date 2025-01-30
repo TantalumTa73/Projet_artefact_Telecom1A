@@ -443,6 +443,8 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 	left_tick += - ticks[0]
 	right_tick += - ticks[1]
 
+	position_robot.set_tick_offset([0,0])
+
 	forward_left = left_tick > 0
 	forward_right = right_tick > 0
 	for spd in poss_speed: 
@@ -472,7 +474,6 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 		left_legit = (not(forward_left) and left_parc_tick < 0) or (forward_left and left_parc_tick > 0)
 		right_legit = (not(forward_right) and right_parc_tick < 0) or (forward_right and right_parc_tick > 0)
 
-		curr_ticks_reel = [0,0] #Correspond au nombre de ticks que le robot a parcouru depuis le début du déplacement (roue gauche et droite)
 		
 		#On vérifie juste que le nombre de ticks en cumulé de l'accélération et la décélération ne dépasse pas le nombre de ticks total, et donc que la roue
 		#ne change pas de sens en plein milieu du mouvement théorique, si la roue change de sens, on baisse la vitesse en continuant la boucle for
@@ -480,6 +481,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 			temps_parc = left_parc_tick/(left_speed*100)
 			n_accel_decel = int(temps_accel_decel[spd]/time_step)
 			n_parcours = int(temps_parc/time_step)
+			curr_ticks_reel = [0,0] #Correspond au nombre de ticks que le robot a parcouru depuis le début du déplacement (roue gauche et droite)
 			supposed_ticks = [[0,0]] #C'est un trajet théorique, à chaque instant dt(= TIMESTEP), on annonce au robot qu'il doit atteindre un certain nombre de 
 			#ticks en dt, cela lui permet d'ajuster sa vitesse en fonction de s'il est en avance ou en retard
 
@@ -511,11 +513,12 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 				t.sleep(time_step)
 			moteur.set_motor_speed(0,0)
 			t.sleep(0.2)
-			ticks = moteur.get_encoder_ticks()
+			ticks = list(moteur.get_encoder_ticks())
 			curr_ticks_reel[0] += ticks[0]
 			curr_ticks_reel[1] += ticks[1]   
+
+			ticks[0] = curr_ticks_reel[0] - left_tick
+			ticks[1] = curr_ticks_reel[1] - right_tick
 			break
-		ticks[0] = curr_ticks_reel[0] - left_tick
-		ticks[1] = curr_ticks_reel[1] - right_tick
 		position_robot.set_tick_offset(ticks)
 

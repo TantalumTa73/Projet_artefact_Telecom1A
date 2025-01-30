@@ -288,7 +288,7 @@ def go_to():
 
 	if epreuve_intermediaire:
 		found_flag(5, target_x, target_y)
-		moteur.tour_sur_soi_meme(current_pos)
+		#moteur.tour_sur_soi_meme(current_pos)
 
 	return render_template("page.html")	
 
@@ -540,6 +540,7 @@ def update():
 		last_update_time = now
 	#####################################################
 
+	print(current_pos.get_tick_offset())
 		
 	# Contenu renvoyé
 	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
