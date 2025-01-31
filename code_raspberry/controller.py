@@ -96,13 +96,11 @@ class Controller:
 		def convert(v: Optional[float], arg: str):
 			if v is None:
 				return -128
-			"""
 			if not isinstance(v, Real) or v < -127 or v > 127:
 				raise ValueError(
 					f"{arg} motor speed "
 					"must be a number between -127 and 127, or None"
 				)
-			"""
 			return round(v)
 
 		self._write(
@@ -121,12 +119,10 @@ class Controller:
 		must be comprised between -32767 and 32767."""
 
 		def check(v: int, arg: str):
-			"""
 			if v < -32767 or v > 32767:
 				raise ValueError(
 					f"{arg} motor speed must be a number " + "between -32767 and 32767"
 				)
-			"""
 			return v
 
 		self._write(
