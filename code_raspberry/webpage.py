@@ -82,8 +82,8 @@ def get_status():
 		return r.json()
 
 def found_flag(marquer_id,col,row):
-	print(f"Sending request {url+f'/api/marker?id={marquer_id}&col={col}&row={row}'}")
-	r = requests.post(url+f"/api/marker?id={marquer_id}&col={col}&row={row}")
+	print(f"Sending request {url+f'/api/marker?id={marquer_id}&col={row}&row={col}'}")
+	r = requests.post(url+f"/api/marker?id={marquer_id}&col={row}&row={col}")
 
 	if r.status_code != 200: 
 		print(f"Failed to send data to server {r.status_code}")
@@ -466,9 +466,9 @@ def scan_direction(flag : Flag) -> Flag:
 	return return_flag
 
 def capture(flag: Flag):
-	print(f"¤ Capturing {flag.id} at {cell_to_case(flag.cell)}")
+	print(f"¤ Capturing {flag.id} at {''.join(case_to_string(pos_to_case(current_pos.get_pos())))}")
 	moteur.tour_sur_soi_meme(current_pos)
-	found_flag(flag.id, *case_to_string(pos_to_case(cell_to_case(flag.cell))))
+	found_flag(flag.id, *case_to_string(pos_to_case(current_pos.get_pos())))
 
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
