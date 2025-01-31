@@ -29,9 +29,11 @@ from strat.common.protocol import MsgType
 global vitesse
 global left_speed
 global right_speed
+global captured_flags
 vitesse = 0
 left_speed = 0
 right_speed = 0
+captured_flags = 0 
 
 ###################################
 ########## Configuration ##########
@@ -82,6 +84,8 @@ def get_status():
 		return r.json()
 
 def found_flag(marquer_id,col,row):
+	global captured_flags
+	captured_flags+=1
 	print(f"Sending request {url+f'/api/marker?id={marquer_id}&col={col}&row={row}'}")
 	r = requests.post(url+f"/api/marker?id={marquer_id}&col={col}&row={row}")
 
@@ -473,19 +477,24 @@ def capture(flag: Flag):
 @app.route('/master_control', methods=['POST'])
 def await_instruction():
 	print("Request to /master_control")
-	for instruction in receive_instructions(CASE_DEPART):
-		print("Instruction received")
-		print("--------------------------------------------------")
-		match instruction.type():
-			case MsgType.INSTRUCTION_GOTO:
-				goto_case(instruction.content)
-			case MsgType.INSTRUCTION_SCAN:
-				send_flag(scan_direction(instruction.content))
-			case MsgType.INSTRUCTION_CAPTURE:
-				capture(instruction.content)
-		print("--------------------------------------------------")
-		print("\n\n==================================================")
-		print("¤ Awaiting for instruction... ", end="")
+	try: 
+		for instruction in receive_instructions(CASE_DEPART):
+			print("Instruction received")
+			print("--------------------------------------------------")
+			match instruction.type():
+				case MsgType.INSTRUCTION_GOTO:
+					goto_case(instruction.content)
+				case MsgType.INSTRUCTION_SCAN:
+					send_flag(scan_direction(instruction.content))
+				case MsgType.INSTRUCTION_CAPTURE:
+					capture(instruction.content)
+			print("--------------------------------------------------")
+			print("\n\n==================================================")
+			print("¤ Awaiting for instruction... ", end="")
+	except ConnectionResetError:
+		print("\n[!] Connection disconnected")
+		print("Retrying...")
+		await_instruction()
 	return render_template("page.html")	
 
 ################################################################################
@@ -495,7 +504,7 @@ def await_instruction():
 
 @app.route('/update')
 def update():
-	global last_update_time, users_connected, cam, last_analyse, current_pos, initialised 
+	global last_update_time, users_connected, cam, last_analyse, current_pos, initialised, captured_flags
 	"""send current content"""
 
 	now = time.time()
@@ -577,6 +586,7 @@ def update():
 
 		
 	# Contenu renvoyé
+	updated_content+=f"<p>Drapeaux capturé {captured_flags}</p>"
 	updated_content+=f"<p>En mouvement: {current_pos.is_moving()}</p>"
 	updated_content+=f"<p>État des moteurs {c.get_motor_speed()}</p>"
 	updated_content+=f"<p>Vitesse actuelle: {vitesse}</p>"

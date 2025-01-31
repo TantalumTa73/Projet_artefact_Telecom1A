@@ -477,7 +477,7 @@ def avance_tick(position_robot, left_tick, right_tick, time_step = 0.01):
 		else:
 			left_speed = - spd
 
-		if right_tick != 0:
+		if left_tick != 0:
 			right_speed = (right_tick * left_speed) / left_tick
 		else: 
 			right_speed = 0
