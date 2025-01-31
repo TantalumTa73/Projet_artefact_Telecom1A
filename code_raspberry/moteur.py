@@ -25,7 +25,7 @@ MIN_SPEED = 1
 #### Début de code, non utilisé durant les évaluations ####
 
 def set_speed(lspeed, rspeed):
-	moteur.set_motor_speed(lspeed, rspeed)
+	moteur.set_raw_motor_speed(lspeed, rspeed)
 """
 def action_moteur(type_action):
 
