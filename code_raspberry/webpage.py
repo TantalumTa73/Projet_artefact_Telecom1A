@@ -194,6 +194,12 @@ def change_speed():
 	print(f"Setting speed to {vitesse}")
 	return render_template("page.html")	
 
+@app.route('/turbo-press', methods=['POST'])
+def turbo_press():
+	global vitesse, left_speed, right_speed
+	moteur.set_speed(int(left_speed + 100), int(right_speed + 100))
+	return render_template("page.html")	
+
 @app.route('/forward-press', methods=['POST'])
 def forward():
 	global vitesse, left_speed, right_speed
@@ -236,6 +242,12 @@ def left():
 	elif left_speed < 0 and right_speed < 0 and left_speed >= -vitesse:
 		left_speed -= vitesse
 	moteur.set_speed(int(left_speed), int(right_speed))
+	return render_template("page.html")	
+
+@app.route('/turbo-release', methods=['POST'])
+def turbo_release():
+	global vitesse, left_speed, right_speed
+	moteur.set_speed(int(left_speed - 100), int(right_speed - 100))
 	return render_template("page.html")	
 
 @app.route('/forward-release', methods=['POST'])

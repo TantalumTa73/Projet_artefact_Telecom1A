@@ -95,6 +95,12 @@
 <script> // Live control for robot
 	// Key press event
 	document.addEventListener('keydown', function(event) {
+		if (event.key === "Control") {
+			// Send a POST request to the Flask server to trigger the forward press function
+			fetch('/turbo-press', {
+				method: 'POST',
+			});
+		}
 		if (event.key === "ArrowUp") {
 			// Send a POST request to the Flask server to trigger the forward press function
 			fetch('/forward-press', {
@@ -146,6 +152,12 @@
 			fetch('/right-release', {
 				method: 'POST',
 			});
+		if (event.key === "Control") {
+			// Send a POST request to the Flask server to trigger the forward press function
+			fetch('/turbo-release', {
+				method: 'POST',
+			});
+		}
 		}
         });
 </script>
