@@ -49,7 +49,7 @@ last_analyse = ""
 last_update_time = time.time()
 users_connected = dict() 
 cam = None 
-image_view = True
+image_view = False
 
 aruco_detectes = []
 
@@ -62,6 +62,7 @@ c.standby()
 
 CASE_MAX_DISTANCE = 50
 SELFCORRECTING = False 
+RATIO = 0.85
 
 ################################################
 ######### Communication serveur suivi ##########
@@ -197,7 +198,7 @@ def change_speed():
 @app.route('/turbo-press', methods=['POST'])
 def turbo_press():
 	global vitesse, left_speed, right_speed
-	moteur.set_speed(int(left_speed + 100), int(right_speed + 100))
+	moteur.set_speed(int(left_speed + 100), int(RATIO*(right_speed + 100)))
 	return render_template("page.html")	
 
 @app.route('/forward-press', methods=['POST'])
@@ -206,7 +207,7 @@ def forward():
 	if left_speed < vitesse and right_speed < vitesse:
 		left_speed += vitesse
 		right_speed += vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/downward-press', methods=['POST'])
@@ -215,7 +216,7 @@ def backward():
 	if left_speed > - vitesse and right_speed > -vitesse:
 		left_speed -= vitesse
 		right_speed -= vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/right-press', methods=['POST'])
@@ -228,7 +229,7 @@ def right():
 		right_speed -= vitesse
 	elif left_speed < 0 and right_speed < 0 and right_speed >= -vitesse:
 		left_speed += vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/left-press', methods=['POST'])
@@ -241,13 +242,13 @@ def left():
 		right_speed += vitesse
 	elif left_speed < 0 and right_speed < 0 and left_speed >= -vitesse:
 		left_speed -= vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/turbo-release', methods=['POST'])
 def turbo_release():
 	global vitesse, left_speed, right_speed
-	moteur.set_speed(int(left_speed - 100), int(right_speed - 100))
+	moteur.set_speed(int(left_speed - 100), int(RATIO*(right_speed - 100)))
 	return render_template("page.html")	
 
 @app.route('/forward-release', methods=['POST'])
@@ -255,7 +256,7 @@ def forward_rel():
 	global vitesse, left_speed, right_speed
 	left_speed -= vitesse
 	right_speed -= vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/downward-release', methods=['POST'])
@@ -263,7 +264,7 @@ def backward_rel():
 	global vitesse, left_speed, right_speed
 	left_speed += vitesse
 	right_speed += vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/right-release', methods=['POST'])
@@ -277,7 +278,7 @@ def right_rel():
 		right_speed += vitesse
 	else:
 		left_speed -= vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 @app.route('/left-release', methods=['POST'])
@@ -291,7 +292,7 @@ def left_rel():
 		left_speed += vitesse
 	else:
 		right_speed -= vitesse
-	moteur.set_speed(int(left_speed), int(right_speed))
+	moteur.set_speed(int(left_speed), int(RATIO*(right_speed)))
 	return render_template("page.html")	
 
 
